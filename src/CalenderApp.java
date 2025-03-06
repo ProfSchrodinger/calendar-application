@@ -7,6 +7,7 @@ import view.UserView;
 
 public class CalenderApp {
   public static void main(String[] args) throws InvalidCommandException {
+    System.out.println(args.length);
     if (args.length < 2) {
       new InvalidCommandException("Invalid mode, use: --mode interactive " +
               "OR --mode headless <commandFile>");
