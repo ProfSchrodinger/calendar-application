@@ -1,4 +1,4 @@
-package control;
+package model;
 
 public interface ICalendarModel {
 }
