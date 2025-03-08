@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -14,8 +15,9 @@ public interface ICalendarModel {
   void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception;
   void editEvents(String property, String eventName, String newValue) throws Exception;
 
-  List<CalendarEvent> getEventsOn(LocalDateTime date);
-  List<CalendarEvent> getEventsBetween(LocalDateTime start, LocalDateTime end);
+  List<List> getEventsOn(LocalDate date);
+  List<List> getEventsBetween(LocalDateTime start, LocalDateTime end);
+  List<List> getAllEvents();
 
   boolean isBusy(LocalDateTime dateTime);
 

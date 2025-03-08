@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,17 +52,60 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public List<CalendarEvent> getEventsOn(LocalDateTime date) {
-    return List.of();
+  public List<List> getEventsOn(LocalDate date) {
+    List<List> result = new ArrayList<>();
+    for (CalendarEvent event : events) {
+      if (event.startDateTime.toLocalDate().equals(date)) {
+        List eventDetails = new ArrayList();
+        eventDetails.add(event.subject);
+        eventDetails.add(event.startDateTime);
+        eventDetails.add(event.endDateTime);
+        eventDetails.add(event.location);
+        result.add(eventDetails);
+      }
+    }
+    return result;
   }
 
   @Override
-  public List<CalendarEvent> getEventsBetween(LocalDateTime start, LocalDateTime end) {
-    return List.of();
+  public List<List> getEventsBetween(LocalDateTime start, LocalDateTime end) {
+    List<List> result = new ArrayList<>();
+    for (CalendarEvent event : events) {
+      if (event.startDateTime.compareTo(start) >= 0
+              && event.endDateTime.compareTo(end) <= 0) {
+        List eventDetails = new ArrayList();
+        eventDetails.add(event.subject);
+        eventDetails.add(event.startDateTime);
+        eventDetails.add(event.endDateTime);
+        eventDetails.add(event.location);
+        result.add(eventDetails);
+      }
+    }
+    return result;
+  }
+
+  @Override
+  public List<List> getAllEvents() {
+    List<List> result = new ArrayList<>();
+    for (CalendarEvent event : events) {
+      List eventDetails = new ArrayList();
+      eventDetails.add(event.subject);
+      eventDetails.add(event.startDateTime);
+      eventDetails.add(event.endDateTime);
+      eventDetails.add(event.location);
+      result.add(eventDetails);
+    }
+    return result;
   }
 
   @Override
   public boolean isBusy(LocalDateTime dateTime) {
+    for (CalendarEvent event : events) {
+      if (event.startDateTime.compareTo(dateTime) <= 0 &&
+              event.endDateTime.compareTo(dateTime) > 0) {
+        return true;
+      }
+    }
     return false;
   }
 
