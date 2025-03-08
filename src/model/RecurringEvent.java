@@ -1,4 +1,6 @@
 package model;
 
-public class RecurringEvent {
+import java.time.LocalDateTime;
+
+public class RecurringEvent{
 }
