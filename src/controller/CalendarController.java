@@ -109,11 +109,14 @@ public class CalendarController {
       if (tokens.contains("from")) {
         if (autoDecline) {
           if (checkDateValidity(tokens.get(6).toString())
-                  && checkDateValidity(tokens.get(8).toString())) {
-            new SingleEvent(tokens.get(4).toString(),
+                  && checkDateValidity(tokens.get(8).toString())
+                  && LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER).
+                  isBefore(LocalDateTime.parse(tokens.get(8).toString(), DATE_TIME_FORMATTER))) {
+
+            model.createSingleEvent(new SingleEvent(tokens.get(4).toString(),
                     LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER),
                     LocalDateTime.parse(tokens.get(8).toString(), DATE_TIME_FORMATTER),
-                    "", "", false);
+                    "", "", false), true);
           }
           else {
             throw new InvalidCommandException("Invalid date format");
@@ -121,11 +124,14 @@ public class CalendarController {
         }
         else {
           if (checkDateValidity(tokens.get(5).toString())
-                  && checkDateValidity(tokens.get(7).toString())) {
-            new SingleEvent(tokens.get(3).toString(),
+                  && checkDateValidity(tokens.get(7).toString())
+                  && LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER).
+                  isBefore(LocalDateTime.parse(tokens.get(7).toString(), DATE_TIME_FORMATTER))) {
+
+            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
                     LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER),
                     LocalDateTime.parse(tokens.get(7).toString(), DATE_TIME_FORMATTER),
-                    "", "", false);
+                    "", "", false), false);
           }
           else {
             throw new InvalidCommandException("Invalid date format");
@@ -135,9 +141,10 @@ public class CalendarController {
       else {
         if (autoDecline) {
           if (checkDateValidity(tokens.get(6).toString())) {
-            new SingleEvent(tokens.get(4).toString(),
+            model.createSingleEvent(new SingleEvent(tokens.get(4).toString(),
                     LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER),
-                    null, "", "", false);
+                    LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER).plusDays(1).withHour(0).withMinute(0),
+                    "", "", false), true);
           }
           else {
             throw new InvalidCommandException("Invalid date format");
@@ -145,9 +152,10 @@ public class CalendarController {
         }
         else {
           if (checkDateValidity(tokens.get(5).toString())) {
-            new SingleEvent(tokens.get(3).toString(),
+            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
                     LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER),
-                    null, "", "", false);
+                    LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER).plusDays(1).withHour(0).withMinute(0),
+                    "", "", false), false);
           }
           else {
             throw new InvalidCommandException("Invalid date format");
@@ -156,7 +164,7 @@ public class CalendarController {
       }
     }
     else {
-
+      tokens.remove("--autoDecline");
     }
   }
 

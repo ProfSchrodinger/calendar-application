@@ -7,31 +7,31 @@ import java.util.List;
 import exception.EventConflictException;
 
 public class CalendarModel implements ICalendarModel{
-  private List<CalendarEvent> calendar;
+  private List<CalendarEvent> events;
 
   public CalendarModel() {
-    this.calendar = new ArrayList<CalendarEvent>();
+    this.events = new ArrayList<CalendarEvent>();
   }
 
   @Override
   public CalendarEvent createSingleEvent(CalendarEvent event, boolean autoDecline) throws EventConflictException {
-    for (CalendarEvent existing : calendar) {
-      if (existing.conflictsWith(event) && autoDecline) {
-        throw new EventConflictException("Event Conflict Occured");
+    for (CalendarEvent existing : events) {
+      if (event.conflictsWith(existing) && autoDecline) {
+        throw new EventConflictException("Event Conflict Occurred");
       }
     }
-    calendar.add(event);
+    events.add(event);
     return event;
   }
 
   @Override
   public CalendarEvent createRecurringEvent(CalendarEvent event) throws EventConflictException {
-    for (CalendarEvent existing : calendar) {
-      if (existing.conflictsWith(event)) {
-        throw new EventConflictException("Event Conflict Occured");
+    for (CalendarEvent existing : events) {
+      if (event.conflictsWith(existing)) {
+        throw new EventConflictException("Event Conflict Occurred");
       }
     }
-    calendar.add(event);
+    events.add(event);
     return event;
   }
 

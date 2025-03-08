@@ -26,11 +26,12 @@ public class CalendarEvent {
     LocalDateTime otherStart = other.startDateTime;
     LocalDateTime otherEnd = other.endDateTime;
 
-    // Simplified conflict check: if both have end times.
-    if (thisEnd != null && otherEnd != null) {
-      return thisStart.isBefore(otherEnd) && otherStart.isBefore(thisEnd);
+    boolean condition =  (thisStart.compareTo(otherStart) > 0 && thisStart.compareTo(otherEnd) >= 0) ||
+            (thisEnd.compareTo(otherStart) <= 0 && thisEnd.compareTo(otherEnd) < 0);
+
+    if (condition) {
+      return false;
     }
-    // Handle cases where one or both events are all-day (end time is null)
-    return thisStart.equals(otherStart);
+    return true;
   }
 }
