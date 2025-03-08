@@ -1,12 +1,15 @@
 package controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 import exception.InvalidCommandException;
+import model.CalendarEvent;
 import model.CalendarModel;
 import model.ICalendarModel;
 import model.SingleEvent;
@@ -18,6 +21,8 @@ public class CalendarController {
   private UserView view;
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
           DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.ENGLISH);
+  private static final DateTimeFormatter DATE_FORMATTER =
+          DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
 
   public CalendarController() {
     model = new CalendarModel();
@@ -82,7 +87,7 @@ public class CalendarController {
     return tokens;
   }
 
-  private boolean checkDateValidity(String date) {
+  private boolean checkDateTimeValidity(String date) {
     try {
       LocalDateTime.parse(date, DATE_TIME_FORMATTER);
       return true;
@@ -92,30 +97,42 @@ public class CalendarController {
     }
   }
 
+  private boolean checkDateValidity(String date) {
+    try {
+      LocalDate.parse(date, DATE_FORMATTER);
+      return true;
+    }
+    catch (Exception e) {
+      return false;
+    }
+  }
+
+  private LocalDateTime getDateTime(String date) {
+    return LocalDateTime.parse(date, DATE_TIME_FORMATTER);
+  }
+
+  private LocalDate getDate(String date) {
+    return LocalDate.parse(date, DATE_FORMATTER);
+  }
+
   private void processCreate(String command) {
     List tokens = extractDataFromCommand(command);
 
-    boolean recurring = false;
-    if (tokens.contains("repeats")) {
-      recurring = true;
-    }
+    System.out.println(tokens);
+    boolean recurring = tokens.contains("repeats");
 
     if (!recurring) {
-      boolean autoDecline = false;
-      if (tokens.get(2).equals("--autoDecline")) {
-        autoDecline = true;
-      }
+      boolean autoDecline = tokens.get(2).equals("--autoDecline");
 
       if (tokens.contains("from")) {
         if (autoDecline) {
-          if (checkDateValidity(tokens.get(6).toString())
-                  && checkDateValidity(tokens.get(8).toString())
-                  && LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER).
-                  isBefore(LocalDateTime.parse(tokens.get(8).toString(), DATE_TIME_FORMATTER))) {
+          if (checkDateTimeValidity(tokens.get(5).toString())
+                  && checkDateTimeValidity(tokens.get(7).toString())
+                  && getDateTime(tokens.get(5).toString()).isBefore(getDateTime(tokens.get(7).toString()))) {
 
-            model.createSingleEvent(new SingleEvent(tokens.get(4).toString(),
-                    LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER),
-                    LocalDateTime.parse(tokens.get(8).toString(), DATE_TIME_FORMATTER),
+            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
+                    getDateTime(tokens.get(5).toString()),
+                    getDateTime(tokens.get(7).toString()),
                     "", "", false), true);
           }
           else {
@@ -123,14 +140,13 @@ public class CalendarController {
           }
         }
         else {
-          if (checkDateValidity(tokens.get(5).toString())
-                  && checkDateValidity(tokens.get(7).toString())
-                  && LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER).
-                  isBefore(LocalDateTime.parse(tokens.get(7).toString(), DATE_TIME_FORMATTER))) {
+          if (checkDateTimeValidity(tokens.get(4).toString())
+                  && checkDateTimeValidity(tokens.get(6).toString())
+                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
 
-            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                    LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER),
-                    LocalDateTime.parse(tokens.get(7).toString(), DATE_TIME_FORMATTER),
+            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                    getDateTime(tokens.get(4).toString()),
+                    getDateTime(tokens.get(6).toString()),
                     "", "", false), false);
           }
           else {
@@ -140,10 +156,10 @@ public class CalendarController {
       }
       else {
         if (autoDecline) {
-          if (checkDateValidity(tokens.get(6).toString())) {
-            model.createSingleEvent(new SingleEvent(tokens.get(4).toString(),
-                    LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER),
-                    LocalDateTime.parse(tokens.get(6).toString(), DATE_TIME_FORMATTER).plusDays(1).withHour(0).withMinute(0),
+          if (checkDateTimeValidity(tokens.get(5).toString())) {
+            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
+                    getDateTime(tokens.get(5).toString()),
+                    getDateTime(tokens.get(5).toString()).plusDays(1).withHour(0).withMinute(0),
                     "", "", false), true);
           }
           else {
@@ -151,10 +167,10 @@ public class CalendarController {
           }
         }
         else {
-          if (checkDateValidity(tokens.get(5).toString())) {
-            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                    LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER),
-                    LocalDateTime.parse(tokens.get(5).toString(), DATE_TIME_FORMATTER).plusDays(1).withHour(0).withMinute(0),
+          if (checkDateTimeValidity(tokens.get(4).toString())) {
+            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                    getDateTime(tokens.get(4).toString()),
+                    getDateTime(tokens.get(4).toString()).plusDays(1).withHour(0).withMinute(0),
                     "", "", false), false);
           }
           else {
@@ -172,12 +188,51 @@ public class CalendarController {
     List tokens = extractDataFromCommand(command);
   }
 
-  private void processPrint(String command) {
+  private void processPrint(String command) throws InvalidCommandException{
     List tokens = extractDataFromCommand(command);
+    List<List> result = new ArrayList<>();
+
+    try {
+      if (tokens.contains("on")) {
+        if (checkDateValidity(tokens.get(3).toString())) {
+          result = model.getEventsOn(getDate(tokens.get(3).toString()));
+        }
+      }
+      else if (tokens.contains("from")) {
+        if (checkDateTimeValidity(tokens.get(3).toString())
+                && checkDateTimeValidity(tokens.get(5).toString())
+                && getDateTime(tokens.get(3).toString()).isBefore(getDateTime(tokens.get(5).toString()))) {
+          result = model.getEventsBetween(getDateTime(tokens.get(3).toString()),
+                  getDateTime(tokens.get(5).toString()));
+        }
+      }
+      else if (tokens.contains("all")) {
+        result = model.getAllEvents();
+      }
+
+      view.displayMessage(result.toString());
+    }
+    catch (Exception e) {
+      throw new InvalidCommandException("Unknown command: " + command);
+    }
   }
 
   private void processShow(String command) {
     List tokens = extractDataFromCommand(command);
+    boolean isBusy = false;
+
+    try {
+      if (tokens.contains("on")) {
+        if (checkDateTimeValidity(tokens.get(3).toString())) {
+          isBusy = model.isBusy(getDateTime(tokens.get(3).toString()));
+        }
+      }
+
+      view.displayMessage(String.valueOf(isBusy));
+    }
+    catch (Exception e) {
+      throw new InvalidCommandException("Unknown command: " + command);
+    }
   }
 
   private void processExport(String command) {
