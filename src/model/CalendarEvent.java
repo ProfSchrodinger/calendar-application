@@ -3,12 +3,12 @@ package model;
 import java.time.LocalDateTime;
 
 public class CalendarEvent {
-  private String subject;
-  private LocalDateTime startDateTime;
-  private LocalDateTime endDateTime;
-  private String description;
-  private String location;
-  private boolean isPublic;
+  protected String subject;
+  protected LocalDateTime startDateTime;
+  protected LocalDateTime endDateTime;
+  protected String description;
+  protected String location;
+  protected boolean isPublic;
 
   public CalendarEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
                        String description, String location, boolean isPublic) {
