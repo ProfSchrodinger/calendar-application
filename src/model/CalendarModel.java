@@ -1,14 +1,18 @@
 package model;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import exception.EventConflictException;
+import exception.InvalidCommandException;
 
 public class CalendarModel implements ICalendarModel{
   private List<CalendarEvent> events;
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
   public CalendarModel() {
     this.events = new ArrayList<CalendarEvent>();
@@ -36,19 +40,67 @@ public class CalendarModel implements ICalendarModel{
     return event;
   }
 
-  @Override
-  public void editEvent(String property, String eventName, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
-
+  private void editHelper (String property, String originalValue, String newValue, CalendarEvent event) throws EventConflictException {
+    if (property.equals("subject")) {
+      if (event.subject.equals(originalValue)) {
+        event.subject = newValue;
+      }
+    }
+    else if (property.equals("description")) {
+      if (event.description.equals(originalValue)) {
+        event.description = newValue;
+      }
+    }
+    else if (property.equals("location")) {
+      if (event.location.equals(originalValue)) {
+        event.location = newValue;
+      }
+    }
+    else if (property.equals("startDateTime")) {
+      if (event.startDateTime.equals(LocalDateTime.parse(originalValue, formatter))
+              && LocalDateTime.parse(newValue, formatter).isBefore(event.endDateTime)) {
+        event.startDateTime = LocalDateTime.parse(newValue, formatter);
+      }
+    }
+    else if (property.equals("endDateTime")) {
+      if (event.endDateTime.equals(LocalDateTime.parse(originalValue, formatter))
+              && LocalDateTime.parse(newValue, formatter).isAfter(event.startDateTime)) {
+        event.endDateTime = LocalDateTime.parse(newValue, formatter);
+      }
+    }
+    else if (property.equals("isPublic")) {
+      if (event.isPublic == Boolean.parseBoolean(originalValue)) {
+        event.isPublic = Boolean.parseBoolean(newValue);
+      }
+    }
+    else {
+      throw new InvalidCommandException("Invalid property: " + property);
+    }
   }
 
   @Override
-  public void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception {
-
+  public void editEvents(String property, String originalValue, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
+    for (CalendarEvent event : events) {
+      if (event.startDateTime.isEqual(startDateTime) && event.endDateTime.isEqual(endDateTime)) {
+        editHelper(property, originalValue, newValue, event);
+      }
+    }
   }
 
   @Override
-  public void editEvents(String property, String eventName, String newValue) throws Exception {
+  public void editEvents(String property, String originalValue, LocalDateTime startDateTime, String newValue) throws Exception {
+    for (CalendarEvent event : events) {
+      if (event.startDateTime.isEqual(startDateTime)) {
+        editHelper(property, originalValue, newValue, event);
+      }
+    }
+  }
 
+  @Override
+  public void editEvents(String property, String originalValue, String newValue) throws Exception {
+    for (CalendarEvent event : events) {
+      editHelper(property, originalValue, newValue, event);
+    }
   }
 
   @Override
@@ -85,7 +137,7 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public List<List> getAllEvents() {
+  public List<List> getEventsAll() {
     List<List> result = new ArrayList<>();
     for (CalendarEvent event : events) {
       List eventDetails = new ArrayList();
