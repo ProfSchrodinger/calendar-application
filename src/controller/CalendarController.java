@@ -6,10 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Objects;
 
 import exception.InvalidCommandException;
-import model.CalendarEvent;
 import model.CalendarModel;
 import model.ICalendarModel;
 import model.SingleEvent;
@@ -19,10 +17,20 @@ import view.UserView;
 public class CalendarController {
   private ICalendarModel model;
   private UserView view;
+
   private static final DateTimeFormatter DATE_TIME_FORMATTER =
           DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.ENGLISH);
   private static final DateTimeFormatter DATE_FORMATTER =
           DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
+  private enum Properties {
+    subject,
+    startDateTime,
+    endDateTime,
+    description,
+    location,
+    isPublic
+  };
 
   public CalendarController() {
     model = new CalendarModel();
@@ -115,10 +123,26 @@ public class CalendarController {
     return LocalDate.parse(date, DATE_FORMATTER);
   }
 
+  private boolean checkValidPropertyValues(String property, String originalValue, String newValue) {
+    try {
+      Properties prop = Properties.valueOf(property);
+      if (prop == Properties.startDateTime || prop == Properties.endDateTime) {
+        return checkDateTimeValidity(originalValue) && checkDateTimeValidity(newValue);
+      }
+      else if (Properties.valueOf(property) == Properties.isPublic) {
+        return (originalValue.equalsIgnoreCase("false") || originalValue.equalsIgnoreCase("true"))
+                && (newValue.equalsIgnoreCase("false") || newValue.equalsIgnoreCase("true"));
+      }
+      return true;
+    }
+    catch (Exception e) {
+      return false;
+    }
+  }
+
   private void processCreate(String command) {
     List tokens = extractDataFromCommand(command);
 
-    System.out.println(tokens);
     boolean recurring = tokens.contains("repeats");
 
     if (!recurring) {
@@ -186,6 +210,42 @@ public class CalendarController {
 
   private void processEdit(String command) {
     List tokens = extractDataFromCommand(command);
+
+    try {
+      if (tokens.size() == 10) {
+        String property = tokens.get(2).toString();
+        String originalValue = tokens.get(3).toString();
+        String startDateTime = tokens.get(5).toString();
+        String endDateTime = tokens.get(7).toString();
+        String newValue = tokens.get(9).toString();
+
+        checkDateTimeValidity(startDateTime);
+        checkDateTimeValidity(endDateTime);
+        checkValidPropertyValues(property, originalValue, newValue);
+        model.editEvents(property, originalValue, getDateTime(startDateTime), getDateTime(endDateTime), newValue);
+      }
+      else if (tokens.size() == 8) {
+        String property = tokens.get(2).toString();
+        String originalValue = tokens.get(3).toString();
+        String dateTime = tokens.get(5).toString();
+        String newValue = tokens.get(7).toString();
+
+        checkDateTimeValidity(dateTime);
+        checkValidPropertyValues(property, originalValue, newValue);
+        model.editEvents(property, originalValue, getDateTime(dateTime), newValue);
+      }
+      else if (tokens.size() == 5) {
+        String property = tokens.get(2).toString();
+        String originalValue = tokens.get(3).toString();
+        String newValue = tokens.get(4).toString();
+
+        checkValidPropertyValues(property, originalValue, newValue);
+        model.editEvents(property, originalValue, newValue);
+      }
+    }
+    catch (Exception e) {
+      throw new InvalidCommandException("Unknown command: " + command);
+    }
   }
 
   private void processPrint(String command) throws InvalidCommandException{
@@ -207,7 +267,7 @@ public class CalendarController {
         }
       }
       else if (tokens.contains("all")) {
-        result = model.getAllEvents();
+        result = model.getEventsAll();
       }
 
       view.displayMessage(result.toString());
