@@ -10,6 +10,7 @@ import java.util.Locale;
 import exception.InvalidCommandException;
 import model.CalendarModel;
 import model.ICalendarModel;
+import model.RecurringEvent;
 import model.SingleEvent;
 import view.ConsoleView;
 import view.UserView;
@@ -140,6 +141,32 @@ public class CalendarController {
     }
   }
 
+  private boolean checkWeekDays(String weekDays) {
+    String allowed = "MTWRFSU";
+    for (char c : weekDays.toCharArray()) {
+      if (allowed.indexOf(c) == -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean checkNvalue(String nvalue) {
+    boolean isPositiveInteger = false;
+    try {
+      int value = Integer.parseInt(nvalue);
+      isPositiveInteger = (value > 0);
+    }
+    catch (NumberFormatException e) {
+      isPositiveInteger = false;
+    }
+
+    if (isPositiveInteger) {
+      return true;
+    }
+    return false;
+  }
+
   private void singleEventCreationHelper(List tokens, boolean autoDecline) {
     if (tokens.contains("from")) {
       if (autoDecline) {
@@ -198,7 +225,57 @@ public class CalendarController {
   }
 
   private void recurringEventCreationHelper(List tokens) {
-
+    if (tokens.contains("times")) {
+      if (tokens.contains("to")) {
+        if (checkDateTimeValidity(tokens.get(4).toString())
+                && checkDateTimeValidity(tokens.get(6).toString())
+                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
+                && checkWeekDays(tokens.get(8).toString()) && checkNvalue(tokens.get(10).toString())) {
+          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                  getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
+                  "", "", false, tokens.get(8).toString(),
+                  Integer.parseInt(tokens.get(10).toString()),null));
+        }
+      }
+      else {
+        if (checkDateValidity(tokens.get(4).toString())
+                && checkWeekDays(tokens.get(6).toString())
+                && checkNvalue(tokens.get(8).toString())) {
+          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                  getDate(tokens.get(4).toString()).atStartOfDay(),
+                  getDate(tokens.get(4).toString()).plusDays(1).atStartOfDay(),
+                  "", "", false, tokens.get(6).toString(),
+                  Integer.parseInt(tokens.get(8).toString()),null));
+        }
+      }
+    }
+    else if (tokens.contains("until")) {
+      if (tokens.contains("to")) {
+        if (checkDateTimeValidity(tokens.get(4).toString())
+                && checkDateTimeValidity(tokens.get(6).toString())
+                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
+                && checkWeekDays(tokens.get(8).toString()) && checkDateTimeValidity(tokens.get(10).toString())) {
+          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                  getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
+                  "", "", false, tokens.get(8).toString(),
+                  0, getDateTime(tokens.get(10).toString())));
+        }
+      }
+      else {
+        if (checkDateValidity(tokens.get(4).toString())
+                && checkWeekDays(tokens.get(6).toString())
+                && checkDateValidity(tokens.get(8).toString())) {
+          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                  getDate(tokens.get(4).toString()).atStartOfDay(),
+                  getDate(tokens.get(4).toString()).plusDays(1).atStartOfDay(),
+                  "", "", false, tokens.get(6).toString(),
+                  0,getDateTime(tokens.get(8).toString())));
+        }
+      }
+    }
+    else {
+      throw new InvalidCommandException("Invalid create command");
+    }
   }
 
   private void processCreate(String command) {
