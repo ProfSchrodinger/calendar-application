@@ -140,6 +140,67 @@ public class CalendarController {
     }
   }
 
+  private void singleEventCreationHelper(List tokens, boolean autoDecline) {
+    if (tokens.contains("from")) {
+      if (autoDecline) {
+        if (checkDateTimeValidity(tokens.get(5).toString())
+                && checkDateTimeValidity(tokens.get(7).toString())
+                && getDateTime(tokens.get(5).toString()).isBefore(getDateTime(tokens.get(7).toString()))) {
+
+          model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
+                  getDateTime(tokens.get(5).toString()),
+                  getDateTime(tokens.get(7).toString()),
+                  "", "", false), true);
+        }
+        else {
+          throw new InvalidCommandException("Invalid date format");
+        }
+      }
+      else {
+        if (checkDateTimeValidity(tokens.get(4).toString())
+                && checkDateTimeValidity(tokens.get(6).toString())
+                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
+
+          model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                  getDateTime(tokens.get(4).toString()),
+                  getDateTime(tokens.get(6).toString()),
+                  "", "", false), false);
+        }
+        else {
+          throw new InvalidCommandException("Invalid date format");
+        }
+      }
+    }
+    else {
+      if (autoDecline) {
+        if (checkDateTimeValidity(tokens.get(5).toString())) {
+          model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
+                  getDateTime(tokens.get(5).toString()),
+                  getDateTime(tokens.get(5).toString()).plusDays(1).withHour(0).withMinute(0),
+                  "", "", false), true);
+        }
+        else {
+          throw new InvalidCommandException("Invalid date format");
+        }
+      }
+      else {
+        if (checkDateTimeValidity(tokens.get(4).toString())) {
+          model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                  getDateTime(tokens.get(4).toString()),
+                  getDateTime(tokens.get(4).toString()).plusDays(1).withHour(0).withMinute(0),
+                  "", "", false), false);
+        }
+        else {
+          throw new InvalidCommandException("Invalid date format");
+        }
+      }
+    }
+  }
+
+  private void recurringEventCreationHelper(List tokens) {
+
+  }
+
   private void processCreate(String command) {
     List tokens = extractDataFromCommand(command);
 
@@ -147,64 +208,11 @@ public class CalendarController {
 
     if (!recurring) {
       boolean autoDecline = tokens.get(2).equals("--autoDecline");
-
-      if (tokens.contains("from")) {
-        if (autoDecline) {
-          if (checkDateTimeValidity(tokens.get(5).toString())
-                  && checkDateTimeValidity(tokens.get(7).toString())
-                  && getDateTime(tokens.get(5).toString()).isBefore(getDateTime(tokens.get(7).toString()))) {
-
-            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                    getDateTime(tokens.get(5).toString()),
-                    getDateTime(tokens.get(7).toString()),
-                    "", "", false), true);
-          }
-          else {
-            throw new InvalidCommandException("Invalid date format");
-          }
-        }
-        else {
-          if (checkDateTimeValidity(tokens.get(4).toString())
-                  && checkDateTimeValidity(tokens.get(6).toString())
-                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
-
-            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
-                    getDateTime(tokens.get(4).toString()),
-                    getDateTime(tokens.get(6).toString()),
-                    "", "", false), false);
-          }
-          else {
-            throw new InvalidCommandException("Invalid date format");
-          }
-        }
-      }
-      else {
-        if (autoDecline) {
-          if (checkDateTimeValidity(tokens.get(5).toString())) {
-            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                    getDateTime(tokens.get(5).toString()),
-                    getDateTime(tokens.get(5).toString()).plusDays(1).withHour(0).withMinute(0),
-                    "", "", false), true);
-          }
-          else {
-            throw new InvalidCommandException("Invalid date format");
-          }
-        }
-        else {
-          if (checkDateTimeValidity(tokens.get(4).toString())) {
-            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
-                    getDateTime(tokens.get(4).toString()),
-                    getDateTime(tokens.get(4).toString()).plusDays(1).withHour(0).withMinute(0),
-                    "", "", false), false);
-          }
-          else {
-            throw new InvalidCommandException("Invalid date format");
-          }
-        }
-      }
+      singleEventCreationHelper(tokens, autoDecline);
     }
     else {
       tokens.remove("--autoDecline");
+      recurringEventCreationHelper(tokens);
     }
   }
 
