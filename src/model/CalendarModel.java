@@ -106,13 +106,28 @@ public class CalendarModel implements ICalendarModel{
   public List<List> getEventsOn(LocalDate date) {
     List<List> result = new ArrayList<>();
     for (CalendarEvent event : events) {
-      if (event.startDateTime.toLocalDate().equals(date)) {
-        List eventDetails = new ArrayList();
-        eventDetails.add(event.subject);
-        eventDetails.add(event.startDateTime);
-        eventDetails.add(event.endDateTime);
-        eventDetails.add(event.location);
-        result.add(eventDetails);
+      if (event instanceof SingleEvent) {
+        if (event.startDateTime.toLocalDate().equals(date)) {
+          List eventDetails = new ArrayList();
+          eventDetails.add(event.subject);
+          eventDetails.add(event.startDateTime);
+          eventDetails.add(event.endDateTime);
+          eventDetails.add(event.location);
+          result.add(eventDetails);
+        }
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          if (event.startDateTime.toLocalDate().equals(date)) {
+            List eventDetails = new ArrayList();
+            eventDetails.add(singleEvent.subject);
+            eventDetails.add(singleEvent.startDateTime);
+            eventDetails.add(singleEvent.endDateTime);
+            eventDetails.add(singleEvent.location);
+            result.add(eventDetails);
+          }
+        }
       }
     }
     return result;
@@ -122,14 +137,30 @@ public class CalendarModel implements ICalendarModel{
   public List<List> getEventsBetween(LocalDateTime start, LocalDateTime end) {
     List<List> result = new ArrayList<>();
     for (CalendarEvent event : events) {
-      if (event.startDateTime.compareTo(start) >= 0
-              && event.endDateTime.compareTo(end) <= 0) {
-        List eventDetails = new ArrayList();
-        eventDetails.add(event.subject);
-        eventDetails.add(event.startDateTime);
-        eventDetails.add(event.endDateTime);
-        eventDetails.add(event.location);
-        result.add(eventDetails);
+      if (event instanceof SingleEvent) {
+        if (event.startDateTime.compareTo(start) >= 0
+                && event.endDateTime.compareTo(end) <= 0) {
+          List eventDetails = new ArrayList();
+          eventDetails.add(event.subject);
+          eventDetails.add(event.startDateTime);
+          eventDetails.add(event.endDateTime);
+          eventDetails.add(event.location);
+          result.add(eventDetails);
+        }
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          if (singleEvent.startDateTime.compareTo(start) >= 0
+                  && singleEvent.endDateTime.compareTo(end) <= 0) {
+            List eventDetails = new ArrayList();
+            eventDetails.add(singleEvent.subject);
+            eventDetails.add(singleEvent.startDateTime);
+            eventDetails.add(singleEvent.endDateTime);
+            eventDetails.add(singleEvent.location);
+            result.add(eventDetails);
+          }
+        }
       }
     }
     return result;
@@ -139,12 +170,25 @@ public class CalendarModel implements ICalendarModel{
   public List<List> getEventsAll() {
     List<List> result = new ArrayList<>();
     for (CalendarEvent event : events) {
-      List eventDetails = new ArrayList();
-      eventDetails.add(event.subject);
-      eventDetails.add(event.startDateTime);
-      eventDetails.add(event.endDateTime);
-      eventDetails.add(event.location);
-      result.add(eventDetails);
+      if (event instanceof SingleEvent) {
+        List eventDetails = new ArrayList();
+        eventDetails.add(event.subject);
+        eventDetails.add(event.startDateTime);
+        eventDetails.add(event.endDateTime);
+        eventDetails.add(event.location);
+        result.add(eventDetails);
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          List eventDetails = new ArrayList();
+          eventDetails.add(singleEvent.subject);
+          eventDetails.add(singleEvent.startDateTime);
+          eventDetails.add(singleEvent.endDateTime);
+          eventDetails.add(singleEvent.location);
+          result.add(eventDetails);
+        }
+      }
     }
     return result;
   }
