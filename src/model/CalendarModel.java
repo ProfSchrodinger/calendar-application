@@ -196,9 +196,20 @@ public class CalendarModel implements ICalendarModel{
   @Override
   public boolean isBusy(LocalDateTime dateTime) {
     for (CalendarEvent event : events) {
-      if (event.startDateTime.compareTo(dateTime) <= 0 &&
-              event.endDateTime.compareTo(dateTime) > 0) {
-        return true;
+      if (event instanceof SingleEvent) {
+        if (event.startDateTime.compareTo(dateTime) <= 0 &&
+                event.endDateTime.compareTo(dateTime) > 0) {
+          return true;
+        }
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          if (singleEvent.startDateTime.compareTo(dateTime) <= 0 &&
+                  singleEvent.endDateTime.compareTo(dateTime) > 0) {
+            return true;
+          }
+        }
       }
     }
     return false;

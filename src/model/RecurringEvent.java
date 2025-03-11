@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +13,21 @@ public class RecurringEvent extends CalendarEvent{
                         int n, LocalDateTime untilDateTime) {
     super(subject, startDateTime, endDateTime, description, location, isPublic);
 
+    boolean isEntireDay = startDateTime.toLocalTime().equals(LocalTime.MIDNIGHT);
     recurringEventList = new ArrayList<SingleEvent>();
     LocalDateTime currentDateTime = startDateTime;
+
     if (n == 0) {
       while (currentDateTime.isBefore(untilDateTime)) {
         if (checkWeekDayValidity(currentDateTime.getDayOfWeek().toString(), weekDays)) {
-          recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
-                  LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+          if (isEntireDay) {
+            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.plusDays(1).toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+          }
+          else {
+            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+          }
         }
         currentDateTime = currentDateTime.plusDays(1);
       }
@@ -26,8 +35,14 @@ public class RecurringEvent extends CalendarEvent{
     else {
       while (n > 0) {
         if (checkWeekDayValidity(currentDateTime.getDayOfWeek().toString(), weekDays)) {
-          recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
-                  LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+          if (isEntireDay) {
+            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.plusDays(1).toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+          }
+          else {
+            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+          }
           n--;
         }
         currentDateTime = currentDateTime.plusDays(1);

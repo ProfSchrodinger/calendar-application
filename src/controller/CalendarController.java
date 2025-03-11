@@ -269,7 +269,7 @@ public class CalendarController {
                   getDate(tokens.get(4).toString()).atStartOfDay(),
                   getDate(tokens.get(4).toString()).plusDays(1).atStartOfDay(),
                   "", "", false, tokens.get(6).toString(),
-                  0,getDateTime(tokens.get(8).toString())));
+                  0,getDate(tokens.get(8).toString()).atStartOfDay()));
         }
       }
     }
