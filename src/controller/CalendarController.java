@@ -230,7 +230,8 @@ public class CalendarController {
         if (checkDateTimeValidity(tokens.get(4).toString())
                 && checkDateTimeValidity(tokens.get(6).toString())
                 && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
-                && checkWeekDays(tokens.get(8).toString()) && checkNvalue(tokens.get(10).toString())) {
+                && checkWeekDays(tokens.get(8).toString()) && checkNvalue(tokens.get(10).toString())
+                && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
           model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
                   getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
                   "", "", false, tokens.get(8).toString(),
@@ -254,7 +255,8 @@ public class CalendarController {
         if (checkDateTimeValidity(tokens.get(4).toString())
                 && checkDateTimeValidity(tokens.get(6).toString())
                 && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
-                && checkWeekDays(tokens.get(8).toString()) && checkDateTimeValidity(tokens.get(10).toString())) {
+                && checkWeekDays(tokens.get(8).toString()) && checkDateTimeValidity(tokens.get(10).toString())
+                && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
           model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
                   getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
                   "", "", false, tokens.get(8).toString(),

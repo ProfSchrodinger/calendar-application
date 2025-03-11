@@ -1,3 +1,9 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+
 import exception.InvalidCommandException;
 import model.ICalendarModel;
 import model.CalendarModel;
@@ -25,8 +31,26 @@ public class CalenderApp {
           String command = view.getInput();
           controller.processCommand(command);
         }
-      } else if (mode.equals("headless")) {
-        // Yet to implement
+      }
+      else if (mode.equals("headless")) {
+        view.displayMessage("Headless mode on. Provide the absolute path to the command.txt file");
+        String filePath = view.getInput();
+        List<String> lines;
+        try {
+          lines = Files.readAllLines(Paths.get(filePath));
+        }
+        catch (Exception e) {
+          throw new InvalidCommandException("Invalid Path: " + e.getMessage());
+        }
+        if (lines.size() >= 2
+                && lines.get(lines.size() - 1).trim().equalsIgnoreCase("exit")) {
+          for (String command : lines) {
+            controller.processCommand(command);
+          }
+        }
+        else {
+          throw new InvalidCommandException("File does not contain exit command or less than 2 commands");
+        }
       }
       else {
         new InvalidCommandException("Invalid mode: " + mode);

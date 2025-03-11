@@ -1,0 +1,6 @@
+create event MeetingOne on 2025-03-10 repeats TWR until 2025-03-25
+print events on 2025-03-12
+edit events subject MeetingOne Meeting1
+edit events subject Meeting1 from 2025-03-12T00:00 to 2025-03-13T00:00 with MeetingOne
+export cal events.csv 
+exit
