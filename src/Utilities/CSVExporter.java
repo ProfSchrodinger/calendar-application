@@ -3,34 +3,44 @@ package Utilities;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.time.LocalDateTime;
 
 public class CSVExporter {
   public String exportCSV(List<List> eventList, String fileName) {
 
     String absolutePath = Paths.get(fileName).toAbsolutePath().toString();
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+    DateTimeFormatter csvDateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+    DateTimeFormatter csvTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 
     try (FileWriter writer = new FileWriter(absolutePath)) {
-      writer.write("Subject,StartDateTime,EndDateTime,Description,Location,Public\n");
+      writer.write("Subject, Start Date, Start Time, End Date, End Time, All Day Event, Description, Location, Private\n");
 
       for (List<Object> eventDetails : eventList) {
         String subject = (String) eventDetails.get(0);
-        LocalDateTime startDateTime = (LocalDateTime) eventDetails.get(1);
-        LocalDateTime endDateTime = (LocalDateTime) eventDetails.get(2);
-        String description = (String) eventDetails.get(3);
-        String location = (String) eventDetails.get(4);
-        Boolean isPublic = (Boolean) eventDetails.get(5);
+        LocalDate startDate = (LocalDate) eventDetails.get(1);
+        LocalTime startTime = (LocalTime) eventDetails.get(2);
+        LocalDate endDate = (LocalDate) eventDetails.get(3);
+        LocalTime endTime = (LocalTime) eventDetails.get(4);
+        Boolean isAllDay = (Boolean) eventDetails.get(5);
+        String description = (String) eventDetails.get(6);
+        String location = (String) eventDetails.get(7);
+        Boolean isPublic = (Boolean) eventDetails.get(8);
 
-        String startStr = (startDateTime != null) ? startDateTime.format(formatter) : "";
-        String endStr = (endDateTime != null) ? endDateTime.format(formatter) : "";
+        String startDateStr = (startDate != null) ? startDate.format(csvDateFormatter) : "";
+        String startTimeStr = (startTime != null) ? startTime.format(csvTimeFormatter) : "";
+        String endDateStr = (endDate != null) ? endDate.format(csvDateFormatter) : "";
+        String endTimeStr = (endTime != null) ? endTime.format(csvTimeFormatter) : "";
 
-        writer.write(String.format("\"%s\",%s,%s,\"%s\",\"%s\",%b\n",
+        writer.write(String.format("\"%s\",%s,%s,\"%s\",\"%s\",%b,\"%s\",\"%s\",%b\n",
                 subject,
-                startStr,
-                endStr,
+                startDateStr,
+                startTimeStr,
+                endDateStr,
+                endTimeStr,
+                isAllDay,
                 description,
                 location,
                 isPublic));

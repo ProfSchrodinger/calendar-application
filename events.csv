@@ -1,7 +1,7 @@
-Subject,StartDateTime,EndDateTime,Description,Location,Public
-"MeetingOne",2025-03-11T00:00,2025-03-12T00:00,"","",false
-"MeetingOne",2025-03-12T00:00,2025-03-13T00:00,"","",false
-"MeetingOne",2025-03-13T00:00,2025-03-14T00:00,"","",false
-"MeetingOne",2025-03-18T00:00,2025-03-19T00:00,"","",false
-"MeetingOne",2025-03-19T00:00,2025-03-20T00:00,"","",false
-"MeetingOne",2025-03-20T00:00,2025-03-21T00:00,"","",false
+Subject, Start Date, Start Time, End Date, End Time, All Day Event, Description, Location, Private
+"MeetingOne",03/11/2025,12:00 AM,"03/12/2025","12:00 AM",true,"","",true
+"MeetingOne",03/12/2025,12:00 AM,"03/13/2025","12:00 AM",true,"","",true
+"MeetingOne",03/13/2025,12:00 AM,"03/14/2025","12:00 AM",true,"","",true
+"MeetingOne",03/18/2025,12:00 AM,"03/19/2025","12:00 AM",true,"","",true
+"MeetingOne",03/19/2025,12:00 AM,"03/20/2025","12:00 AM",true,"","",true
+"MeetingOne",03/20/2025,12:00 AM,"03/21/2025","12:00 AM",true,"","",true

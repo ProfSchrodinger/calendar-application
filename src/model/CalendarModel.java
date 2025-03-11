@@ -277,12 +277,22 @@ public class CalendarModel implements ICalendarModel{
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
         List eventDetails = new ArrayList();
+
         eventDetails.add(event.subject);
-        eventDetails.add(event.startDateTime);
-        eventDetails.add(event.endDateTime);
+        eventDetails.add(event.startDateTime.toLocalDate());
+        eventDetails.add(event.startDateTime.toLocalTime());
+        eventDetails.add(event.endDateTime.toLocalDate());
+        eventDetails.add(event.endDateTime.toLocalTime());
+        if (event.startDateTime.toLocalDate().plusDays(1).equals(event.endDateTime.toLocalDate()) &&
+                event.startDateTime.toLocalTime().equals(event.endDateTime.toLocalTime())) {
+          eventDetails.add(true);
+        }
+        else {
+          eventDetails.add(false);
+        }
         eventDetails.add(event.description);
         eventDetails.add(event.location);
-        eventDetails.add(event.isPublic);
+        eventDetails.add(!event.isPublic);
         exportEvents.add(eventDetails);
       }
       else if (event instanceof RecurringEvent) {
@@ -290,11 +300,20 @@ public class CalendarModel implements ICalendarModel{
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
           List eventDetails = new ArrayList();
           eventDetails.add(singleEvent.subject);
-          eventDetails.add(singleEvent.startDateTime);
-          eventDetails.add(singleEvent.endDateTime);
+          eventDetails.add(singleEvent.startDateTime.toLocalDate());
+          eventDetails.add(singleEvent.startDateTime.toLocalTime());
+          eventDetails.add(singleEvent.endDateTime.toLocalDate());
+          eventDetails.add(singleEvent.endDateTime.toLocalTime());
+          if (singleEvent.startDateTime.toLocalDate().plusDays(1).equals(singleEvent.endDateTime.toLocalDate()) &&
+                  singleEvent.startDateTime.toLocalTime().equals(singleEvent.endDateTime.toLocalTime())) {
+            eventDetails.add(true);
+          }
+          else {
+            eventDetails.add(false);
+          }
           eventDetails.add(singleEvent.description);
           eventDetails.add(singleEvent.location);
-          eventDetails.add(singleEvent.isPublic);
+          eventDetails.add(!singleEvent.isPublic);
           exportEvents.add(eventDetails);
         }
       }
