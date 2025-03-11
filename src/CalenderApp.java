@@ -15,7 +15,6 @@ public class CalenderApp {
 
     String mode = args[1].toLowerCase();
 
-    ICalendarModel model = new CalendarModel();
     UserView view = new ConsoleView();
     CalendarController controller = new CalendarController();
 

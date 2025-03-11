@@ -382,5 +382,16 @@ public class CalendarController {
 
   private void processExport(String command) {
     List tokens = extractDataFromCommand(command);
+
+    try {
+      if (tokens.get(2).toString().toLowerCase().endsWith(".csv") && tokens.get(2).toString().length() > 4) {
+        String filePath = model.exportCalendar(tokens.get(2).toString());
+
+        view.displayMessage("File available at: " + filePath);
+      }
+    }
+    catch (Exception e) {
+      throw new InvalidCommandException("Invalid fileName or extension: " + command);
+    }
   }
 }

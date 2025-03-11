@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import Utilities.CSVExporter;
 import exception.EventConflictException;
 import exception.InvalidCommandException;
 
@@ -271,6 +272,37 @@ public class CalendarModel implements ICalendarModel{
 
   @Override
   public String exportCalendar(String fileName) throws Exception {
-    return "";
+    List<List> exportEvents = new ArrayList<>();
+
+    for (CalendarEvent event : events) {
+      if (event instanceof SingleEvent) {
+        List eventDetails = new ArrayList();
+        eventDetails.add(event.subject);
+        eventDetails.add(event.startDateTime);
+        eventDetails.add(event.endDateTime);
+        eventDetails.add(event.description);
+        eventDetails.add(event.location);
+        eventDetails.add(event.isPublic);
+        exportEvents.add(eventDetails);
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          List eventDetails = new ArrayList();
+          eventDetails.add(singleEvent.subject);
+          eventDetails.add(singleEvent.startDateTime);
+          eventDetails.add(singleEvent.endDateTime);
+          eventDetails.add(singleEvent.description);
+          eventDetails.add(singleEvent.location);
+          eventDetails.add(singleEvent.isPublic);
+          exportEvents.add(eventDetails);
+        }
+      }
+    }
+
+    CSVExporter exporter = new CSVExporter();
+    String filePath = exporter.exportCSV(exportEvents, fileName);
+
+    return filePath;
   }
 }
