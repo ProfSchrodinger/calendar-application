@@ -20,8 +20,18 @@ public class CalendarModel implements ICalendarModel{
   @Override
   public CalendarEvent createSingleEvent(CalendarEvent event, boolean autoDecline) throws EventConflictException {
     for (CalendarEvent existing : events) {
-      if (event.conflictsWith(existing) && autoDecline) {
-        throw new EventConflictException("Event Conflict Occurred");
+      if (existing instanceof SingleEvent) {
+        if (event.conflictsWith(existing) && autoDecline) {
+          throw new EventConflictException("Event Conflict Occurred");
+        }
+      }
+      else if (existing instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) existing;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          if (event.conflictsWith(singleEvent) && autoDecline) {
+            throw new EventConflictException("Event Conflict Occurred");
+          }
+        }
       }
     }
     events.add(event);
@@ -30,9 +40,25 @@ public class CalendarModel implements ICalendarModel{
 
   @Override
   public CalendarEvent createRecurringEvent(CalendarEvent event) throws EventConflictException {
+    RecurringEvent recurringToBeCreatedEvent = (RecurringEvent) event;
+
     for (CalendarEvent existing : events) {
-      if (event.conflictsWith(existing)) {
-        throw new EventConflictException("Event Conflict Occurred");
+      if (existing instanceof SingleEvent) {
+        for (SingleEvent singleEvent : recurringToBeCreatedEvent.recurringEventList) {
+          if (singleEvent.conflictsWith(existing)) {
+            throw new EventConflictException("Event Conflict Occurred");
+          }
+        }
+      }
+      else if (existing instanceof RecurringEvent) {
+        RecurringEvent recurringExistingEvent = (RecurringEvent) existing;
+        for (SingleEvent singleExistingEvent : recurringExistingEvent.recurringEventList) {
+          for (SingleEvent singleToBeCreatedEvent : recurringToBeCreatedEvent.recurringEventList) {
+            if (singleToBeCreatedEvent.conflictsWith(singleExistingEvent)) {
+              throw new EventConflictException("Event Conflict Occurred");
+            }
+          }
+        }
       }
     }
     events.add(event);
@@ -80,8 +106,18 @@ public class CalendarModel implements ICalendarModel{
   @Override
   public void editEvents(String property, String originalValue, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
-      if (event.startDateTime.isEqual(startDateTime) && event.endDateTime.isEqual(endDateTime)) {
-        editHelper(property, originalValue, newValue, event);
+      if (event instanceof SingleEvent) {
+        if (event.startDateTime.isEqual(startDateTime) && event.endDateTime.isEqual(endDateTime)) {
+          editHelper(property, originalValue, newValue, event);
+        }
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          if (singleEvent.startDateTime.isEqual(startDateTime) && singleEvent.endDateTime.isEqual(endDateTime)) {
+            editHelper(property, originalValue, newValue, singleEvent);
+          }
+        }
       }
     }
   }
@@ -89,8 +125,18 @@ public class CalendarModel implements ICalendarModel{
   @Override
   public void editEvents(String property, String originalValue, LocalDateTime startDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
-      if (event.startDateTime.isEqual(startDateTime)) {
-        editHelper(property, originalValue, newValue, event);
+      if (event instanceof SingleEvent) {
+        if (event.startDateTime.isEqual(startDateTime)) {
+          editHelper(property, originalValue, newValue, event);
+        }
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          if (singleEvent.startDateTime.isEqual(startDateTime)) {
+            editHelper(property, originalValue, newValue, singleEvent);
+          }
+        }
       }
     }
   }
@@ -98,7 +144,15 @@ public class CalendarModel implements ICalendarModel{
   @Override
   public void editEvents(String property, String originalValue, String newValue) throws Exception {
     for (CalendarEvent event : events) {
-      editHelper(property, originalValue, newValue, event);
+      if (event instanceof SingleEvent) {
+        editHelper(property, originalValue, newValue, event);
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          editHelper(property, originalValue, newValue, singleEvent);
+        }
+      }
     }
   }
 
@@ -119,7 +173,7 @@ public class CalendarModel implements ICalendarModel{
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
-          if (event.startDateTime.toLocalDate().equals(date)) {
+          if (singleEvent.startDateTime.toLocalDate().equals(date)) {
             List eventDetails = new ArrayList();
             eventDetails.add(singleEvent.subject);
             eventDetails.add(singleEvent.startDateTime);
