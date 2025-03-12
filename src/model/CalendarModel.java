@@ -11,7 +11,7 @@ import exception.EventConflictException;
 import exception.InvalidCommandException;
 
 public class CalendarModel implements ICalendarModel{
-  private List<CalendarEvent> events;
+  List<CalendarEvent> events;
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
   public CalendarModel() {
@@ -66,38 +66,39 @@ public class CalendarModel implements ICalendarModel{
     return event;
   }
 
-  private void editHelper (String property, String originalValue, String newValue, CalendarEvent event) throws EventConflictException {
+  private void editHelper (String property, String newValue, CalendarEvent event, String eventType) throws EventConflictException {
     if (property.equals("subject")) {
-      if (event.subject.equals(originalValue)) {
-        event.subject = newValue;
-      }
+      event.subject = newValue;
     }
     else if (property.equals("description")) {
-      if (event.description.equals(originalValue)) {
-        event.description = newValue;
-      }
+      event.description = newValue;
     }
     else if (property.equals("location")) {
-      if (event.location.equals(originalValue)) {
-        event.location = newValue;
-      }
+      event.location = newValue;
     }
     else if (property.equals("startDateTime")) {
-      if (event.startDateTime.equals(LocalDateTime.parse(originalValue, formatter))
-              && LocalDateTime.parse(newValue, formatter).isBefore(event.endDateTime)) {
-        event.startDateTime = LocalDateTime.parse(newValue, formatter);
+      if (LocalDateTime.parse(newValue, formatter).isBefore(event.endDateTime)) {
+        if (eventType.equals("Recurring")
+                && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.startDateTime.toLocalDate())) {
+          event.startDateTime = LocalDateTime.parse(newValue, formatter);
+        }
+        else if (eventType.equals("Single")){
+          event.startDateTime = LocalDateTime.parse(newValue, formatter);
+        }
       }
     }
     else if (property.equals("endDateTime")) {
-      if (event.endDateTime.equals(LocalDateTime.parse(originalValue, formatter))
-              && LocalDateTime.parse(newValue, formatter).isAfter(event.startDateTime)) {
-        event.endDateTime = LocalDateTime.parse(newValue, formatter);
+      if (LocalDateTime.parse(newValue, formatter).isAfter(event.startDateTime)) {
+        if (eventType.equals("Recurring") && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.endDateTime.toLocalDate())) {
+          event.endDateTime = LocalDateTime.parse(newValue, formatter);
+        }
+        else if (eventType.equals("Single")){
+          event.endDateTime = LocalDateTime.parse(newValue, formatter);
+        }
       }
     }
     else if (property.equals("isPublic")) {
-      if (event.isPublic == Boolean.parseBoolean(originalValue)) {
-        event.isPublic = Boolean.parseBoolean(newValue);
-      }
+      event.isPublic = Boolean.parseBoolean(newValue);
     }
     else {
       throw new InvalidCommandException("Invalid property: " + property);
@@ -105,18 +106,22 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public void editEvents(String property, String originalValue, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
+  public void editEvents(String property, String eventName, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
         if (event.startDateTime.isEqual(startDateTime) && event.endDateTime.isEqual(endDateTime)) {
-          editHelper(property, originalValue, newValue, event);
+          if (event.subject.equals(eventName)) {
+            editHelper(property, newValue, event, "Single");
+          }
         }
       }
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
           if (singleEvent.startDateTime.isEqual(startDateTime) && singleEvent.endDateTime.isEqual(endDateTime)) {
-            editHelper(property, originalValue, newValue, singleEvent);
+            if (singleEvent.subject.equals(eventName)) {
+              editHelper(property, newValue, singleEvent, "Recurring");
+            }
           }
         }
       }
@@ -124,18 +129,22 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public void editEvents(String property, String originalValue, LocalDateTime startDateTime, String newValue) throws Exception {
+  public void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
         if (event.startDateTime.isEqual(startDateTime)) {
-          editHelper(property, originalValue, newValue, event);
+          if (event.subject.equals(eventName)) {
+            editHelper(property, newValue, event, "Single");
+          }
         }
       }
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
           if (singleEvent.startDateTime.isEqual(startDateTime)) {
-            editHelper(property, originalValue, newValue, singleEvent);
+            if (singleEvent.subject.equals(eventName)) {
+              editHelper(property, newValue, singleEvent, "Recurring");
+            }
           }
         }
       }
@@ -143,15 +152,19 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public void editEvents(String property, String originalValue, String newValue) throws Exception {
+  public void editEvents(String property, String eventName, String newValue) throws Exception {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
-        editHelper(property, originalValue, newValue, event);
+        if (event.subject.equals(eventName)) {
+          editHelper(property, newValue, event, "Single");
+        }
       }
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
-          editHelper(property, originalValue, newValue, singleEvent);
+          if (singleEvent.subject.equals(eventName)) {
+            editHelper(property, newValue, singleEvent, "Recurring");
+          }
         }
       }
     }

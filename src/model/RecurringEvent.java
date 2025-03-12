@@ -13,7 +13,7 @@ public class RecurringEvent extends CalendarEvent{
                         int n, LocalDateTime untilDateTime) {
     super(subject, startDateTime, endDateTime, description, location, isPublic);
 
-    boolean isEntireDay = startDateTime.toLocalTime().equals(LocalTime.MIDNIGHT);
+    boolean isEntireDay = startDateTime.toLocalTime().equals(LocalTime.MIDNIGHT) && endDateTime.toLocalTime().equals(LocalTime.MIDNIGHT);
     recurringEventList = new ArrayList<SingleEvent>();
     LocalDateTime currentDateTime = startDateTime;
 
