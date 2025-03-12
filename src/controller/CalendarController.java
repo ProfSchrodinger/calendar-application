@@ -72,6 +72,7 @@ public class CalendarController {
     }
     catch (Exception e) {
       view.displayMessage(e.getMessage());
+      throw e;
     }
   }
 
@@ -97,7 +98,7 @@ public class CalendarController {
     return tokens;
   }
 
-  private boolean checkDateTimeValidity(String date) {
+  boolean checkDateTimeValidity(String date) {
     try {
       LocalDateTime.parse(date, DATE_TIME_FORMATTER);
       return true;
@@ -456,6 +457,7 @@ public class CalendarController {
         view.displayMessage("File available at: " + filePath);
       }
       else {
+        System.out.println("Invalid file name");
         throw new InvalidCommandException("Invalid filename or extension");
       }
     }

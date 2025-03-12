@@ -28,7 +28,7 @@ public class CalendarControllerTest {
     controller.processCommand(command);
   }
 
-  @Test(expected = IllegalArgumentException.class)
+  @Test(expected = InvalidCommandException.class)
   public void testProcessCommand_CreateEvent_InvalidDate() {
     // Arrange: Invalid date-time format
     String command = "create event \"Meeting\" from 2025T10:00 to 2025T11:00";
