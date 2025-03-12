@@ -18,9 +18,4 @@ public class ConsoleView extends UserView{
   public String getInput() {
     return scanner.nextLine();
   }
-
-  @Override
-  public void displayError(String error) {
-   System.out.println(error);
-  }
 }

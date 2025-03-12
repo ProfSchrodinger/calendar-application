@@ -8,6 +8,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import exception.InvalidCommandException;
+
 public class CSVExporter {
   public String exportCSV(List<List> eventList, String fileName) {
 
@@ -48,7 +50,7 @@ public class CSVExporter {
       return absolutePath;
     }
     catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new InvalidCommandException("Error writing CSV file");
     }
   }
 }

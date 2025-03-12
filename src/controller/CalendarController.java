@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import exception.EventConflictException;
 import exception.InvalidCommandException;
 import model.CalendarModel;
 import model.ICalendarModel;
@@ -66,11 +67,11 @@ public class CalendarController {
         processExport(command);
       }
       else {
-        throw new InvalidCommandException("Unknown command: " + command);
+        throw new InvalidCommandException("Invalid command");
       }
     }
     catch (Exception e) {
-      view.displayError("Unexpected error: " + e.getMessage());
+      view.displayMessage(e.getMessage());
     }
   }
 
@@ -168,115 +169,146 @@ public class CalendarController {
   }
 
   private void singleEventCreationHelper(List tokens, boolean autoDecline) {
-    if (tokens.contains("from")) {
-      if (autoDecline) {
-        if (checkDateTimeValidity(tokens.get(5).toString())
-                && checkDateTimeValidity(tokens.get(7).toString())
-                && getDateTime(tokens.get(5).toString()).isBefore(getDateTime(tokens.get(7).toString()))) {
+    try {
+      if (tokens.contains("from")) {
+        if (autoDecline) {
+          if (checkDateTimeValidity(tokens.get(5).toString())
+                  && checkDateTimeValidity(tokens.get(7).toString())
+                  && getDateTime(tokens.get(5).toString()).isBefore(getDateTime(tokens.get(7).toString()))) {
 
-          model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                  getDateTime(tokens.get(5).toString()),
-                  getDateTime(tokens.get(7).toString()),
-                  "", "", false), true);
+            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
+                    getDateTime(tokens.get(5).toString()),
+                    getDateTime(tokens.get(7).toString()),
+                    "", "", false), true);
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
         }
         else {
-          throw new InvalidCommandException("Invalid date format");
+          if (checkDateTimeValidity(tokens.get(4).toString())
+                  && checkDateTimeValidity(tokens.get(6).toString())
+                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
+
+            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                    getDateTime(tokens.get(4).toString()),
+                    getDateTime(tokens.get(6).toString()),
+                    "", "", false), false);
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
+        }
+      }
+      else if (tokens.contains("on")) {
+        if (autoDecline) {
+          if (checkDateTimeValidity(tokens.get(5).toString())) {
+            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
+                    getDateTime(tokens.get(5).toString()),
+                    getDateTime(tokens.get(5).toString()).plusDays(1).withHour(0).withMinute(0),
+                    "", "", false), true);
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
+        }
+        else {
+          if (checkDateTimeValidity(tokens.get(4).toString())) {
+            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                    getDateTime(tokens.get(4).toString()),
+                    getDateTime(tokens.get(4).toString()).plusDays(1).withHour(0).withMinute(0),
+                    "", "", false), false);
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
         }
       }
       else {
-        if (checkDateTimeValidity(tokens.get(4).toString())
-                && checkDateTimeValidity(tokens.get(6).toString())
-                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
-
-          model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
-                  getDateTime(tokens.get(4).toString()),
-                  getDateTime(tokens.get(6).toString()),
-                  "", "", false), false);
-        }
-        else {
-          throw new InvalidCommandException("Invalid date format");
-        }
+        throw new InvalidCommandException("Invalid command");
       }
     }
-    else {
-      if (autoDecline) {
-        if (checkDateTimeValidity(tokens.get(5).toString())) {
-          model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                  getDateTime(tokens.get(5).toString()),
-                  getDateTime(tokens.get(5).toString()).plusDays(1).withHour(0).withMinute(0),
-                  "", "", false), true);
-        }
-        else {
-          throw new InvalidCommandException("Invalid date format");
-        }
-      }
-      else {
-        if (checkDateTimeValidity(tokens.get(4).toString())) {
-          model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
-                  getDateTime(tokens.get(4).toString()),
-                  getDateTime(tokens.get(4).toString()).plusDays(1).withHour(0).withMinute(0),
-                  "", "", false), false);
-        }
-        else {
-          throw new InvalidCommandException("Invalid date format");
-        }
-      }
+    catch (InvalidCommandException e) {
+      throw e;
+    }
+    catch (Exception e) {
+      throw new InvalidCommandException("Invalid command");
     }
   }
 
   private void recurringEventCreationHelper(List tokens) {
-    if (tokens.contains("times")) {
-      if (tokens.contains("to")) {
-        if (checkDateTimeValidity(tokens.get(4).toString())
-                && checkDateTimeValidity(tokens.get(6).toString())
-                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
-                && checkWeekDays(tokens.get(8).toString()) && checkNvalue(tokens.get(10).toString())
-                && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
-          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
-                  getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
-                  "", "", false, tokens.get(8).toString(),
-                  Integer.parseInt(tokens.get(10).toString()),null));
+    try{
+      if (tokens.contains("times")) {
+        if (tokens.contains("to")) {
+          if (checkDateTimeValidity(tokens.get(4).toString())
+                  && checkDateTimeValidity(tokens.get(6).toString())
+                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
+                  && checkWeekDays(tokens.get(8).toString()) && checkNvalue(tokens.get(10).toString())
+                  && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
+            model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                    getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
+                    "", "", false, tokens.get(8).toString(),
+                    Integer.parseInt(tokens.get(10).toString()),null));
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
+        }
+        else {
+          if (checkDateValidity(tokens.get(4).toString())
+                  && checkWeekDays(tokens.get(6).toString())
+                  && checkNvalue(tokens.get(8).toString())) {
+            model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                    getDate(tokens.get(4).toString()).atStartOfDay(),
+                    getDate(tokens.get(4).toString()).plusDays(1).atStartOfDay(),
+                    "", "", false, tokens.get(6).toString(),
+                    Integer.parseInt(tokens.get(8).toString()),null));
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
+        }
+      }
+      else if (tokens.contains("until")) {
+        if (tokens.contains("to")) {
+          if (checkDateTimeValidity(tokens.get(4).toString())
+                  && checkDateTimeValidity(tokens.get(6).toString())
+                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
+                  && checkWeekDays(tokens.get(8).toString()) && checkDateTimeValidity(tokens.get(10).toString())
+                  && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
+            model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                    getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
+                    "", "", false, tokens.get(8).toString(),
+                    0, getDateTime(tokens.get(10).toString())));
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
+        }
+        else {
+          if (checkDateValidity(tokens.get(4).toString())
+                  && checkWeekDays(tokens.get(6).toString())
+                  && checkDateValidity(tokens.get(8).toString())) {
+            model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
+                    getDate(tokens.get(4).toString()).atStartOfDay(),
+                    getDate(tokens.get(4).toString()).plusDays(1).atStartOfDay(),
+                    "", "", false, tokens.get(6).toString(),
+                    0,getDate(tokens.get(8).toString()).atStartOfDay()));
+          }
+          else {
+            throw new InvalidCommandException("Invalid datetime or property");
+          }
         }
       }
       else {
-        if (checkDateValidity(tokens.get(4).toString())
-                && checkWeekDays(tokens.get(6).toString())
-                && checkNvalue(tokens.get(8).toString())) {
-          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
-                  getDate(tokens.get(4).toString()).atStartOfDay(),
-                  getDate(tokens.get(4).toString()).plusDays(1).atStartOfDay(),
-                  "", "", false, tokens.get(6).toString(),
-                  Integer.parseInt(tokens.get(8).toString()),null));
-        }
+        throw new InvalidCommandException("Invalid command");
       }
     }
-    else if (tokens.contains("until")) {
-      if (tokens.contains("to")) {
-        if (checkDateTimeValidity(tokens.get(4).toString())
-                && checkDateTimeValidity(tokens.get(6).toString())
-                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
-                && checkWeekDays(tokens.get(8).toString()) && checkDateTimeValidity(tokens.get(10).toString())
-                && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
-          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
-                  getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
-                  "", "", false, tokens.get(8).toString(),
-                  0, getDateTime(tokens.get(10).toString())));
-        }
-      }
-      else {
-        if (checkDateValidity(tokens.get(4).toString())
-                && checkWeekDays(tokens.get(6).toString())
-                && checkDateValidity(tokens.get(8).toString())) {
-          model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
-                  getDate(tokens.get(4).toString()).atStartOfDay(),
-                  getDate(tokens.get(4).toString()).plusDays(1).atStartOfDay(),
-                  "", "", false, tokens.get(6).toString(),
-                  0,getDate(tokens.get(8).toString()).atStartOfDay()));
-        }
-      }
+    catch (InvalidCommandException | EventConflictException e) {
+      throw e;
     }
-    else {
-      throw new InvalidCommandException("Invalid create command");
+    catch (Exception e) {
+      throw new InvalidCommandException("Invalid command");
     }
   }
 
@@ -306,10 +338,14 @@ public class CalendarController {
         String endDateTime = tokens.get(7).toString();
         String newValue = tokens.get(9).toString();
 
-        checkDateTimeValidity(startDateTime);
-        checkDateTimeValidity(endDateTime);
-        checkValidPropertyValues(property, originalValue, newValue);
-        model.editEvents(property, originalValue, getDateTime(startDateTime), getDateTime(endDateTime), newValue);
+        if (checkDateTimeValidity(startDateTime)
+                && checkDateTimeValidity(endDateTime)
+                && checkValidPropertyValues(property, originalValue, newValue)) {
+          model.editEvents(property, originalValue, getDateTime(startDateTime), getDateTime(endDateTime), newValue);
+        }
+        else {
+          throw new InvalidCommandException("Invalid datetime or property");
+        }
       }
       else if (tokens.size() == 8) {
         String property = tokens.get(2).toString();
@@ -317,21 +353,31 @@ public class CalendarController {
         String dateTime = tokens.get(5).toString();
         String newValue = tokens.get(7).toString();
 
-        checkDateTimeValidity(dateTime);
-        checkValidPropertyValues(property, originalValue, newValue);
-        model.editEvents(property, originalValue, getDateTime(dateTime), newValue);
+        if (checkDateTimeValidity(dateTime) && checkValidPropertyValues(property, originalValue, newValue)) {
+          model.editEvents(property, originalValue, getDateTime(dateTime), newValue);
+        }
+        else {
+          throw new InvalidCommandException("Invalid datetime or property");
+        }
       }
       else if (tokens.size() == 5) {
         String property = tokens.get(2).toString();
         String originalValue = tokens.get(3).toString();
         String newValue = tokens.get(4).toString();
 
-        checkValidPropertyValues(property, originalValue, newValue);
-        model.editEvents(property, originalValue, newValue);
+        if (checkValidPropertyValues(property, originalValue, newValue)) {
+          model.editEvents(property, originalValue, newValue);
+        }
+        else {
+          throw new InvalidCommandException("Invalid datetime or property");
+        }
       }
     }
+    catch (InvalidCommandException e) {
+      throw e;
+    }
     catch (Exception e) {
-      throw new InvalidCommandException("Unknown command: " + command);
+      throw new InvalidCommandException("Invalid command");
     }
   }
 
@@ -344,6 +390,9 @@ public class CalendarController {
         if (checkDateValidity(tokens.get(3).toString())) {
           result = model.getEventsOn(getDate(tokens.get(3).toString()));
         }
+        else {
+          throw new InvalidCommandException("Invalid datetime or property");
+        }
       }
       else if (tokens.contains("from")) {
         if (checkDateTimeValidity(tokens.get(3).toString())
@@ -352,15 +401,24 @@ public class CalendarController {
           result = model.getEventsBetween(getDateTime(tokens.get(3).toString()),
                   getDateTime(tokens.get(5).toString()));
         }
+        else {
+          throw new InvalidCommandException("Invalid datetime or property");
+        }
       }
       else if (tokens.contains("all")) {
         result = model.getEventsAll();
       }
+      else {
+        throw new InvalidCommandException("Invalid command");
+      }
 
       view.displayMessage(result.toString());
     }
+    catch (InvalidCommandException e) {
+      throw e;
+    }
     catch (Exception e) {
-      throw new InvalidCommandException("Unknown command: " + command);
+      throw new InvalidCommandException("Invalid Command");
     }
   }
 
@@ -374,11 +432,17 @@ public class CalendarController {
           isBusy = model.isBusy(getDateTime(tokens.get(3).toString()));
         }
       }
+      else {
+        throw new InvalidCommandException("Invalid command");
+      }
 
       view.displayMessage(String.valueOf(isBusy));
     }
+    catch (InvalidCommandException e) {
+      throw e;
+    }
     catch (Exception e) {
-      throw new InvalidCommandException("Unknown command: " + command);
+      throw new InvalidCommandException("Invalid Command");
     }
   }
 
@@ -391,9 +455,15 @@ public class CalendarController {
 
         view.displayMessage("File available at: " + filePath);
       }
+      else {
+        throw new InvalidCommandException("Invalid filename or extension");
+      }
+    }
+    catch (InvalidCommandException e) {
+      throw e;
     }
     catch (Exception e) {
-      throw new InvalidCommandException("Invalid fileName or extension: " + command);
+      throw new InvalidCommandException("Invalid command");
     }
   }
 }
