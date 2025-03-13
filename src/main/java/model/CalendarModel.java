@@ -10,13 +10,31 @@ import utilities.CSVExporter;
 import exception.EventConflictException;
 import exception.InvalidCommandException;
 
+/**
+ * Calendar model that manages events.
+ * It implements the ICalendarModel interface.
+ */
+
 public class CalendarModel implements ICalendarModel{
   List<CalendarEvent> events;
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
+  /**
+   * Constructs an empty calendar model.
+   */
+
   public CalendarModel() {
     this.events = new ArrayList<CalendarEvent>();
   }
+
+  /**
+   * Creates a single event and adds it to the calendar.
+   * If autodecline is enabled, event conflict exception is thrown,
+   * in case of conflict.
+   * @param event the single event to be created.
+   * @param autoDecline if enabled, conflict throws exception.
+   * @throws EventConflictException if event conflicts with existing event.
+   */
 
   @Override
   public void createSingleEvent(CalendarEvent event, boolean autoDecline) throws EventConflictException {
@@ -37,6 +55,12 @@ public class CalendarModel implements ICalendarModel{
     }
     events.add(event);
   }
+
+  /**
+   * Creates recurring event and adds it to the calendar.
+   * @param event the recurring event to be created.
+   * @throws EventConflictException if event conflicts with existing event.
+   */
 
   @Override
   public void createRecurringEvent(CalendarEvent event) throws EventConflictException {
@@ -63,6 +87,15 @@ public class CalendarModel implements ICalendarModel{
     }
     events.add(event);
   }
+
+  /**
+   * Edits an event by modifying its properties.
+   * @param property The property to be changed.
+   * @param newValue The new value for the property.
+   * @param event The event to be modified.
+   * @param eventType The type of event.
+   * @throws EventConflictException if conflict occurs due to editing.
+   */
 
   private void editHelper (String property, String newValue, CalendarEvent event, String eventType) throws EventConflictException {
     if (property.equals("subject")) {
@@ -103,6 +136,16 @@ public class CalendarModel implements ICalendarModel{
     }
   }
 
+  /**
+   * Edits an event by modifying a specific property for an event.
+   * @param property The property of the event to modify.
+   * @param eventName The name of the event to be edited.
+   * @param startDateTime The start date and time of the event.
+   * @param endDateTime The end date and time of the event.
+   * @param newValue The new value to be set.
+   * @throws Exception If an error occurs.
+   */
+
   @Override
   public void editEvents(String property, String eventName, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
@@ -125,6 +168,15 @@ public class CalendarModel implements ICalendarModel{
       }
     }
   }
+
+  /**
+   * Edits an event by modifying a specific property for an event.
+   * @param property The property of the event to modify.
+   * @param eventName The name of the event to be edited.
+   * @param startDateTime The start date and time of the event.
+   * @param newValue The new value to be set.
+   * @throws Exception If an error occurs.
+   */
 
   @Override
   public void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception {
@@ -149,6 +201,14 @@ public class CalendarModel implements ICalendarModel{
     }
   }
 
+  /**
+   * Edits an event by modifying a specific property for an event.
+   * @param property The property of the event to modify.
+   * @param eventName The name of the event to be edited.
+   * @param newValue The new value to be set.
+   * @throws Exception If an error occurs.
+   */
+
   @Override
   public void editEvents(String property, String eventName, String newValue) throws Exception {
     for (CalendarEvent event : events) {
@@ -167,6 +227,12 @@ public class CalendarModel implements ICalendarModel{
       }
     }
   }
+
+  /**
+   * Retrieves all events occurring on a given date.
+   * @param date date to check for events.
+   * @return list of events on the given date.
+   */
 
   @Override
   public List<List> getEventsOn(LocalDate date) {
@@ -198,6 +264,13 @@ public class CalendarModel implements ICalendarModel{
     }
     return result;
   }
+
+  /**
+   * Retrieves all events occurring within a specified time range.
+   * @param start The start of the time range.
+   * @param end The end of the time range.
+   * @return List of events occurring on the specified time range.
+   */
 
   @Override
   public List<List> getEventsBetween(LocalDateTime start, LocalDateTime end) {
@@ -232,6 +305,12 @@ public class CalendarModel implements ICalendarModel{
     return result;
   }
 
+  /**
+   * Checks whether the user is busy at a given date and time.
+   * @param dateTime date and time to check.
+   * @return true if there is an event at the time, else false.
+   */
+
   @Override
   public boolean isBusy(LocalDateTime dateTime) {
     for (CalendarEvent event : events) {
@@ -253,6 +332,12 @@ public class CalendarModel implements ICalendarModel{
     }
     return false;
   }
+
+  /**
+   * Exports the calendar to a CSV file.
+   * @param fileName The name of the CSV file to be created.
+   * @throws Exception If an error occurs during file export.
+   */
 
   @Override
   public void exportCalendar(String fileName) throws Exception {

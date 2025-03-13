@@ -8,8 +8,16 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 
+/**
+ * Tests for editing events.
+ */
+
 public class CalendarControllerEditTest {
   private CalendarController controller;
+
+  /**
+   * Initialize the calendar controller.
+   */
 
   @Before
   public void setUp() {

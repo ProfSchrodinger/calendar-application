@@ -10,8 +10,16 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Tests for event creation.
+ */
+
 public class CalendarControllerCreateTest {
   private CalendarController controller;
+
+  /**
+   * Initialize the calendar controller.
+   */
 
   @Before
   public void setUp() {

@@ -12,6 +12,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test class for ConsoleView.
+ */
+
 public class ConsoleViewTest {
 
   private final PrintStream originalOut = System.out;
@@ -19,17 +23,29 @@ public class ConsoleViewTest {
 
   private ByteArrayOutputStream outContent;
 
+  /**
+   * Sets up System.out capture before each test.
+   */
+
   @Before
   public void setUp() {
     outContent = new ByteArrayOutputStream();
     System.setOut(new PrintStream(outContent));
   }
 
+  /**
+   * Restores System.out and System.in after each test.
+   */
+
   @After
   public void tearDown() {
     System.setOut(originalOut);
     System.setIn(originalIn);
   }
+
+  /**
+   * Tests that displayMessage prints the given message to System.out.
+   */
 
   @Test
   public void testDisplayMessage() {
@@ -40,6 +56,10 @@ public class ConsoleViewTest {
     String output = outContent.toString();
     assertTrue("Output should contain the message", output.contains(message));
   }
+
+  /**
+   * Tests that getInput returns the simulated input string.
+   */
 
   @Test
   public void testGetInput() {

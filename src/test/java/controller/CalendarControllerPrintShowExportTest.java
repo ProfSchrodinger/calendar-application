@@ -12,8 +12,17 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Tests for printing list of events , checking busy status
+ * and exporting calendar.
+ */
+
 public class CalendarControllerPrintShowExportTest {
   private CalendarController controller;
+
+  /**
+   * Initialize the calendar controller.
+   */
 
   @Before
   public void setUp() {
@@ -429,6 +438,10 @@ public class CalendarControllerPrintShowExportTest {
 
     Assert.assertTrue(controller.model.isBusy(LocalDateTime.of(2020, 1, 1, 11, 0)));
   }
+
+  /**
+   * Tests exporting calendar with multiple calendar events.
+   */
 
   @Test
   public void testCreateAndExportCalendarWithMultipleEvents() {

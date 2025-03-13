@@ -5,8 +5,25 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class represents a recurring event in the calendar.
+ */
+
 public class RecurringEvent extends CalendarEvent{
   List<SingleEvent> recurringEventList;
+
+  /**
+   * Constructs a recurring event.
+   * @param subject the subject of the event.
+   * @param startDateTime The start date and time of the first occurrence.
+   * @param endDateTime The end date and time of the first occurrence.
+   * @param description small description of event.
+   * @param location location of event.
+   * @param isPublic indicates whether event is public or private.
+   * @param weekDays a string representing the days the event repeats on.
+   * @param n number of occurrences.
+   * @param untilDateTime date until which the event repeats.
+   */
 
   public RecurringEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,
                         String description, String location, boolean isPublic, String weekDays,
@@ -49,6 +66,13 @@ public class RecurringEvent extends CalendarEvent{
       }
     }
   }
+
+  /**
+   * Checks if the given day is included in the specified pattern.
+   * @param currentDay The name of the current day.
+   * @param weekDays string representing valid recurrence days.
+   * @return true or false.
+   */
 
   private boolean checkWeekDayValidity(String currentDay, String weekDays) {
     if (currentDay.equals("MONDAY") && weekDays.contains(String.valueOf('M'))) {

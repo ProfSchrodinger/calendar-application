@@ -14,7 +14,16 @@ import org.junit.Test;
 
 import exception.InvalidCommandException;
 
+/**
+ * Tests for exporting calendar
+ */
+
 public class CSVExporterTest {
+
+  /**
+   * Test to check header and import value match
+   * @throws Exception if errored when processing
+   */
 
   @Test
   public void testExportCSV() throws Exception {
@@ -46,6 +55,10 @@ public class CSVExporterTest {
 
     Files.deleteIfExists(tempFile);
   }
+
+  /**
+   * Invalid file name
+   */
 
   @Test(expected = InvalidCommandException.class)
   public void testExportCSVIOExceptionThrowsException() {

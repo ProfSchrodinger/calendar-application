@@ -9,19 +9,48 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test class for the CalenderApp main method.
+ * This class tests different branches of the application including interactive and headless modes.
+ */
+
 public class CalenderAppTest {
   private final PrintStream originalOut = System.out;
   private final java.io.InputStream originalIn = System.in;
   private SecurityManager originalSecurityManager;
   private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
 
+  /**
+   * Custom SecurityManager to intercept calls to System.exit.
+   * When System.exit is called, this SecurityManager throws a SecurityException,
+   * allowing tests to verify that System.exit was attempted.
+   */
+
   private static class NoExitSecurityManager extends SecurityManager {
+
+    /**
+     * Allow all permissions
+     * @param perm   the requested permission.
+     */
+
     @Override
     public void checkPermission(java.security.Permission perm) {
     }
+
+    /**
+     * Allow all permissions
+     * @param perm   the requested permission.
+     */
+
     @Override
     public void checkPermission(java.security.Permission perm, Object context) {
     }
+
+    /**
+     * function to check exit.
+     * @param status   the exit status.
+     */
+
     @Override
     public void checkExit(int status) {
       super.checkExit(status);
@@ -29,12 +58,19 @@ public class CalenderAppTest {
     }
   }
 
+  /**
+   * Setup of the securityManager object
+   */
   @Before
   public void setUp() {
     originalSecurityManager = System.getSecurityManager();
     System.setSecurityManager(new NoExitSecurityManager());
     System.setOut(new PrintStream(outContent));
   }
+
+  /**
+   * Restores the original System.out, System.in, and SecurityManager after tests.
+   */
 
   @After
   public void tearDown() {
@@ -72,6 +108,10 @@ public class CalenderAppTest {
     String output = outContent.toString();
     assertTrue(output.contains("First argument must be --mode"));
   }
+
+  /**
+   * Test interactive mode by simulating user input "exit".
+   */
 
   @Test
   public void testInteractiveModeExit() {

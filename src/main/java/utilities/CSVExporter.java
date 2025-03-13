@@ -10,7 +10,18 @@ import java.util.List;
 
 import exception.InvalidCommandException;
 
+/**
+ * Utility class for exporting calendar events to a CSV file.
+ */
+
 public class CSVExporter {
+
+  /**
+   * Exports a list of events to a CSV file.
+   * @param eventList A list of event details.
+   * @param fileName The name of the CSV file to be created.
+   */
+
   public void exportCSV(List<List> eventList, String fileName) {
 
     String absolutePath = Paths.get(fileName).toAbsolutePath().toString();

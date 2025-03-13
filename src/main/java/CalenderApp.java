@@ -8,7 +8,19 @@ import view.ConsoleView;
 import controller.CalendarController;
 import view.UserView;
 
+/**
+ * This class represents the main entry point of the calendar application.
+ * It supports two modes : interactive and headless.
+ */
+
 public class CalenderApp {
+
+  /**
+   * The main method that starts the calendar application.
+   * @param args Command line arguments.
+   * @throws InvalidCommandException If an invalid command is encountered.
+   */
+
   public static void main(String[] args) throws InvalidCommandException {
     UserView view = new ConsoleView();
     CalendarController controller = new CalendarController();

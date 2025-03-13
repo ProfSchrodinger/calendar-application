@@ -16,14 +16,33 @@ import model.SingleEvent;
 import view.ConsoleView;
 import view.UserView;
 
+/**
+ * CalendarController class manages input from user,
+ * processes commands and displays result to user.
+ * It manages interaction between calendar model and user view.
+ */
+
 public class CalendarController {
   ICalendarModel model;
   UserView view;
 
+  /**
+   * Formatter for date and time.
+   */
+
   static final DateTimeFormatter DATE_TIME_FORMATTER =
           DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm", Locale.ENGLISH);
+
+  /**
+   * Formatter for date.
+   */
+
   static final DateTimeFormatter DATE_FORMATTER =
           DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+
+  /**
+   * Enum representing the properties of the event.
+   */
 
   enum Properties {
     subject,
@@ -34,10 +53,19 @@ public class CalendarController {
     isPublic
   };
 
+  /**
+   * Constructs a calendar controller with model and view.
+   */
+
   public CalendarController() {
     model = new CalendarModel();
     view = new ConsoleView();
   }
+
+  /**
+   * Method to process the user's command and perform the action needed.
+   * @param command the user's command.
+   */
 
   public void processCommand(String command) {
     if (command.equalsIgnoreCase("exit")) {
@@ -80,6 +108,12 @@ public class CalendarController {
     }
   }
 
+  /**
+   * Extracts command arguments from the input string.
+   * @param command the input command string.
+   * @return list of tokens extracted.
+   */
+
   private List extractDataFromCommand(String command) {
     List<String> tokens = new ArrayList<>();
     boolean insideQuotes = false;
@@ -102,6 +136,12 @@ public class CalendarController {
     return tokens;
   }
 
+  /**
+   * Checks if given date and time is in valid format.
+   * @param date date and time string.
+   * @return true if valid, false if not valid.
+   */
+
   boolean checkDateTimeValidity(String date) {
     try {
       LocalDateTime.parse(date, DATE_TIME_FORMATTER);
@@ -111,6 +151,12 @@ public class CalendarController {
       return false;
     }
   }
+
+  /**
+   * Checks if date is in valid format.
+   * @param date date string.
+   * @return true if valid, false if not valid.
+   */
 
   private boolean checkDateValidity(String date) {
     try {
@@ -122,13 +168,32 @@ public class CalendarController {
     }
   }
 
+  /**
+   * Parses date and time string into LocalDateTime object.
+   * @param date date time string.
+   * @return LocalDateTime object.
+   */
+
   private LocalDateTime getDateTime(String date) {
     return LocalDateTime.parse(date, DATE_TIME_FORMATTER);
   }
 
+  /**
+   * Parses date string into LocalDate object.
+   * @param date date string.
+   * @return LocalDate object
+   */
+
   private LocalDate getDate(String date) {
     return LocalDate.parse(date, DATE_FORMATTER);
   }
+
+  /**
+   * Checks if the property and value is valid.
+   * @param property property name.
+   * @param newValue new value .
+   * @return true if valid, false if not valid.
+   */
 
   private boolean checkValidPropertyValues(String property, String newValue) {
     try {
@@ -146,6 +211,12 @@ public class CalendarController {
     }
   }
 
+  /**
+   * Check if weekdays string is valid.
+   * @param weekDays the weekdays string.
+   * @return true if valid, false if not.
+   */
+
   private boolean checkWeekDays(String weekDays) {
     String allowed = "MTWRFSU";
     for (char c : weekDays.toCharArray()) {
@@ -155,6 +226,12 @@ public class CalendarController {
     }
     return true;
   }
+
+  /**
+   * Checks if the Nvalue string is a positive integer.
+   * @param nvalue string to check.
+   * @return true or false.
+   */
 
   private boolean checkNvalue(String nvalue) {
     boolean isPositiveInteger = false;
@@ -167,6 +244,12 @@ public class CalendarController {
     }
     return isPositiveInteger;
   }
+
+  /**
+   * Method to create a single event based on user input.
+   * @param tokens the list of commands.
+   * @param autoDecline whether to automatically decline conflicts.
+   */
 
   private void singleEventCreationHelper(List tokens, boolean autoDecline) {
     try {
@@ -237,6 +320,11 @@ public class CalendarController {
       throw new InvalidCommandException("Invalid command");
     }
   }
+
+  /**
+   * Method to create a recurring event based on user input.
+   * @param tokens the list of command arguments.
+   */
 
   private void recurringEventCreationHelper(List tokens) {
     try{
@@ -320,6 +408,11 @@ public class CalendarController {
     }
   }
 
+  /**
+   * Processes the creation of event based on user input.
+   * @param command the create event command.
+   */
+
   private void processCreate(String command) {
     List tokens = extractDataFromCommand(command);
 
@@ -334,6 +427,11 @@ public class CalendarController {
       recurringEventCreationHelper(tokens);
     }
   }
+
+  /**
+   * Processes the command to modify an event.
+   * @param command edit event command.
+   */
 
   private void processEdit(String command) {
     List tokens = extractDataFromCommand(command);
@@ -392,6 +490,12 @@ public class CalendarController {
     }
   }
 
+  /**
+   * Formats and returns a list of events as string.
+   * @param result list of events.
+   * @return formatted list of event details.
+   */
+
   List returnResult(List<List> result) {
     List<String> printResult = new ArrayList<>();
     for (List event : result) {
@@ -409,6 +513,12 @@ public class CalendarController {
     }
     return printResult;
   }
+
+  /**
+   * Processes command to print events on a specific date range.
+   * @param command print events command.
+   * @throws InvalidCommandException if command is invalid.
+   */
 
   private void processPrint(String command) throws InvalidCommandException{
     List tokens = extractDataFromCommand(command);
@@ -449,6 +559,11 @@ public class CalendarController {
     }
   }
 
+  /**
+   * Processes command to check if user is busy at a specific date and time.
+   * @param command the show status command.
+   */
+
   private void processShow(String command) {
     List tokens = extractDataFromCommand(command);
     boolean isBusy = false;
@@ -472,6 +587,11 @@ public class CalendarController {
       throw new InvalidCommandException("Invalid Command");
     }
   }
+
+  /**
+   * Processes the export command to save the calendar as a CSV file.
+   * @param command export calendar command.
+   */
 
   private void processExport(String command) {
     List tokens = extractDataFromCommand(command);
