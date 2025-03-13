@@ -16,4 +16,17 @@ public class CalendarControllerPrintShowExportTest {
     controller = new CalendarController();
   }
 
+  /**
+   * Invalid print command
+   */
+
+  @Test (expected = InvalidCommandException.class)
+  public void testInvalidEditCommand1() {
+    try {
+      controller.processCommand("print events blah");
+    } catch (Exception e) {
+      Assert.assertEquals("Invalid command", e.getMessage());
+      throw e;
+    }
+  }
 }
