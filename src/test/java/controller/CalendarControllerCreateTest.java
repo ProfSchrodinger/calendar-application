@@ -525,11 +525,11 @@ public class CalendarControllerCreateTest {
 
   @Test
   public void testValidRecurringCreateCommand8() {
-    controller.processCommand("create event MeetingOne on 2025-03-12 repeats MWF until 2025-03-20");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-13T00:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-15T00:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-18T00:00, ], " +
-                    "[MeetingOne, 2025-03-19T00:00, 2025-03-20T00:00, ]]",
+    controller.processCommand("create event MeetingOne on 2025-03-12 repeats TRSU until 2025-03-20");
+    Assert.assertEquals("[[MeetingOne, 2025-03-13T00:00, 2025-03-14T00:00, ], " +
+                    "[MeetingOne, 2025-03-15T00:00, 2025-03-16T00:00, ], " +
+                    "[MeetingOne, 2025-03-16T00:00, 2025-03-17T00:00, ], " +
+                    "[MeetingOne, 2025-03-18T00:00, 2025-03-19T00:00, ]]",
             controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
                     , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
@@ -670,6 +670,36 @@ public class CalendarControllerCreateTest {
     try {
       controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
       controller.processCommand("create event --autoDecline MeetingTwo on 2025-03-12T00:00");
+    } catch (Exception e) {
+      Assert.assertEquals("Event Conflict Occurred", e.getMessage());
+      throw e;
+    }
+  }
+
+  /**
+   * Invalid 2 Single events overlapping declined due to autoDecline
+   */
+
+  @Test (expected = EventConflictException.class)
+  public void testInvalidSingleSingleCommand3() {
+    try {
+      controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-11T23:30 to 2025-03-12T00:30");
+    } catch (Exception e) {
+      Assert.assertEquals("Event Conflict Occurred", e.getMessage());
+      throw e;
+    }
+  }
+
+  /**
+   * Invalid 2 Single events overlapping declined due to autoDecline
+   */
+
+  @Test (expected = EventConflictException.class)
+  public void testInvalidSingleSingleCommand4() {
+    try {
+      controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-12T00:30 to 2025-03-12T01:30");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;

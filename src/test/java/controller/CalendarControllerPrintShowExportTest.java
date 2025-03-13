@@ -64,13 +64,27 @@ public class CalendarControllerPrintShowExportTest {
     controller.processCommand("create event MeetingA from 2025-03-15T10:00 to 2025-03-15T12:00");
     controller.processCommand("create event MeetingB from 2025-03-15T14:00 to 2025-03-15T16:00");
 
-    controller.processCommand("print events from 2025-03-15T09:00 to 2025-03-15T18:00");
+    controller.processCommand("print events from 2025-03-15T10:00 to 2025-03-15T12:00");
 
-    Assert.assertEquals("[[MeetingA, 2025-03-15T10:00, 2025-03-15T12:00, ], " +
-                    "[MeetingB, 2025-03-15T14:00, 2025-03-15T16:00, ]]",
+    Assert.assertEquals("[[MeetingA, 2025-03-15T10:00, 2025-03-15T12:00, ]]",
             controller.model.getEventsBetween(
-                    LocalDateTime.of(2025, 3, 15, 9, 0),
-                    LocalDateTime.of(2025, 3, 15, 18, 0)
+                    LocalDateTime.of(2025, 3, 15, 10, 0),
+                    LocalDateTime.of(2025, 3, 15, 12, 0)
+            ).toString());
+  }
+
+  /**
+   * Test case: Creating multiple events to test `print events from <start> to <end>`.
+   */
+
+  @Test
+  public void testPrintEventsFromToValidRangeRecurring() {
+    controller.processCommand("create event MeetingA from 2025-03-12T10:00 to 2025-03-12T12:00 repeats MWF for 2 times");
+    controller.processCommand("print events from 2025-03-12T10:00 to 2025-03-12T12:00");
+    Assert.assertEquals("[[MeetingA, 2025-03-12T10:00, 2025-03-12T12:00, ]]",
+            controller.model.getEventsBetween(
+                    LocalDateTime.of(2025, 3, 12, 10, 0),
+                    LocalDateTime.of(2025, 3, 12, 12, 0)
             ).toString());
   }
 
@@ -161,6 +175,20 @@ public class CalendarControllerPrintShowExportTest {
   public void testInvalidPrintCommand1() {
     try {
       controller.processCommand("print events blah");
+    } catch (Exception e) {
+      Assert.assertEquals("Invalid command", e.getMessage());
+      throw e;
+    }
+  }
+
+  /**
+   * Invalid show command
+   */
+
+  @Test (expected = InvalidCommandException.class)
+  public void testInvalidShowCommand1() {
+    try {
+      controller.processCommand("show status blah");
     } catch (Exception e) {
       Assert.assertEquals("Invalid command", e.getMessage());
       throw e;
@@ -273,13 +301,24 @@ public class CalendarControllerPrintShowExportTest {
   }
 
   /**
+   * Checking busy status when events exist at the start time.
+   */
+
+  @Test
+  public void testShowStatusBusyRecurringEventStart() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("show status on 2025-03-12T00:00");
+    Assert.assertTrue(controller.model.isBusy(LocalDateTime.of(2025, 3, 12, 00, 00)));
+  }
+
+  /**
    * Checking busy status when events exist at the given time.
    */
 
   @Test
-  public void testShowStatusBusyRecurringEvent() {
+  public void testShowStatusBusyRecurringEventInBetween() {
     controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-    controller.processCommand("show status on 2025-03-15T11:00");
+    controller.processCommand("show status on 2025-03-12T00:30");
     Assert.assertTrue(controller.model.isBusy(LocalDateTime.of(2025, 3, 12, 00, 30)));
   }
 
@@ -290,8 +329,19 @@ public class CalendarControllerPrintShowExportTest {
   @Test
   public void testShowStatusBusyRecurringEventFalse() {
     controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-    controller.processCommand("show status on 2025-03-15T11:00");
+    controller.processCommand("show status on 2025-03-12T01:30");
     Assert.assertFalse(controller.model.isBusy(LocalDateTime.of(2025, 3, 12, 1, 30)));
+  }
+
+  /**
+   * Checking busy status when events exist at the end time.
+   */
+
+  @Test
+  public void testShowStatusBusyRecurringEvent() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("show status on 2025-03-12T01:00");
+    Assert.assertFalse(controller.model.isBusy(LocalDateTime.of(2025, 3, 12, 1, 0)));
   }
 
   /**

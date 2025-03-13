@@ -202,6 +202,22 @@ public class CalendarControllerEditTest {
   }
 
   /**
+   * Valid edit command across all events same eventNames (for subject)
+   */
+
+  @Test
+  public void testValidEditCommand10() {
+    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("edit events subject MeetingOne MeetingTwo");
+    Assert.assertEquals("[[MeetingTwo, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+  }
+
+  /**
    * Invalid edit command
    */
 

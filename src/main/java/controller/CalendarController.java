@@ -41,7 +41,7 @@ public class CalendarController {
 
   public void processCommand(String command) {
     if (command.equalsIgnoreCase("exit")) {
-//      view.displayMessage("Exiting application.");
+      view.displayMessage("Exiting application.");
       System.exit(0);
     }
 

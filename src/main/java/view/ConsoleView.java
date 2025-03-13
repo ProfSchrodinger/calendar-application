@@ -12,6 +12,7 @@ public class ConsoleView extends UserView{
   @Override
   public void displayMessage(String message) {
     System.out.println(message);
+//    System.out.flush();
   }
 
   @Override
