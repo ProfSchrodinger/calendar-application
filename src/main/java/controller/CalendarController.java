@@ -41,41 +41,41 @@ public class CalendarController {
 
   public void processCommand(String command) {
     if (command.equalsIgnoreCase("exit")) {
-      view.displayMessage("Exiting application.");
+//      view.displayMessage("Exiting application.");
       System.exit(0);
     }
 
     try {
       if (command.toLowerCase().startsWith("create event")) {
         processCreate(command);
-        view.displayMessage("Command processed: " + command);
+//        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("edit event")) {
         processEdit(command);
-        view.displayMessage("Command processed: " + command);
+//        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("print events")) {
         processPrint(command);
-        view.displayMessage("Command processed: " + command);
+//        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("show status")) {
         processShow(command);
-        view.displayMessage("Command processed: " + command);
+//        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("export cal")) {
         processExport(command);
-        view.displayMessage("Command processed: " + command);
+//        view.displayMessage("Command processed: " + command);
       }
       else {
         throw new InvalidCommandException("Invalid command");
       }
     }
     catch (InvalidCommandException | EventConflictException e) {
-      view.displayMessage(e.getMessage());
+//      view.displayMessage(e.getMessage());
       throw e;
     }
     catch (Exception e) {
-      view.displayMessage(e.getMessage());
+//      view.displayMessage(e.getMessage());
       throw new InvalidCommandException("Invalid command");
     }
   }
@@ -165,11 +165,7 @@ public class CalendarController {
     catch (NumberFormatException e) {
       isPositiveInteger = false;
     }
-
-    if (isPositiveInteger) {
-      return true;
-    }
-    return false;
+    return isPositiveInteger;
   }
 
   private void singleEventCreationHelper(List tokens, boolean autoDecline) {
@@ -438,9 +434,6 @@ public class CalendarController {
           throw new InvalidCommandException("Invalid datetime or property");
         }
       }
-      else if (tokens.contains("all")) {
-        result = model.getEventsAll();
-      }
       else {
         throw new InvalidCommandException("Invalid command");
       }
@@ -485,12 +478,11 @@ public class CalendarController {
 
     try {
       if (tokens.get(2).toString().toLowerCase().endsWith(".csv") && tokens.get(2).toString().length() > 4) {
-        String filePath = model.exportCalendar(tokens.get(2).toString());
+        model.exportCalendar(tokens.get(2).toString());
 
-        view.displayMessage("File available at: " + filePath);
+//        view.displayMessage("File available at: " + filePath);
       }
       else {
-        System.out.println("Invalid file name");
         throw new InvalidCommandException("Invalid filename or extension");
       }
     }

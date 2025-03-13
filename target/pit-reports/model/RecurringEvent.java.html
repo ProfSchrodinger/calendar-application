@@ -1,0 +1,1467 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" type="text/css" href="../style.css">
+</head>
+<body>
+
+
+<h1>RecurringEvent.java</h1>
+
+<table class="src">
+
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_1'/>
+1
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_1'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>package model;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_2'/>
+2
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_2'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_3'/>
+3
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_3'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.time.LocalDateTime;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_4'/>
+4
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_4'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.time.LocalTime;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_5'/>
+5
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_5'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.util.ArrayList;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_6'/>
+6
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_6'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>import java.util.List;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_7'/>
+7
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_7'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_8'/>
+8
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_8'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>public class RecurringEvent extends CalendarEvent{</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_9'/>
+9
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_9'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>  List&#60;SingleEvent&#62; recurringEventList;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_10'/>
+10
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_10'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_11'/>
+11
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_11'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>  public RecurringEvent(String subject, LocalDateTime startDateTime, LocalDateTime endDateTime,</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_12'/>
+12
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_12'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                        String description, String location, boolean isPublic, String weekDays,</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_13'/>
+13
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_13'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>                        int n, LocalDateTime untilDateTime) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_14'/>
+14
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_14'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    super(subject, startDateTime, endDateTime, description, location, isPublic);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_15'/>
+15
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_15'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_16'/>
+16
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_16'>2</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+2. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    boolean isEntireDay = startDateTime.toLocalTime().equals(LocalTime.MIDNIGHT) &#38;&#38; endDateTime.toLocalTime().equals(LocalTime.MIDNIGHT);</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_17'/>
+17
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_17'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    recurringEventList = new ArrayList&#60;SingleEvent&#62;();</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_18'/>
+18
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_18'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>    LocalDateTime currentDateTime = startDateTime;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_19'/>
+19
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_19'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_20'/>
+20
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_20'>1</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    if (n == 0) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_21'/>
+21
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_21'>1</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      while (currentDateTime.isBefore(untilDateTime)) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_22'/>
+22
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_22'>1</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (checkWeekDayValidity(currentDateTime.getDayOfWeek().toString(), weekDays)) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_23'/>
+23
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_23'>1</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>          if (isEntireDay) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_24'/>
+24
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_24'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_25'/>
+25
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_25'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    LocalDateTime.of(currentDateTime.plusDays(1).toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_26'/>
+26
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_26'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>          }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_27'/>
+27
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_27'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>          else {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_28'/>
+28
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_28'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_29'/>
+29
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_29'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_30'/>
+30
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_30'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>          }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_31'/>
+31
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_31'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_32'/>
+32
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_32'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        currentDateTime = currentDateTime.plusDays(1);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_33'/>
+33
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_33'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>      }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_34'/>
+34
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_34'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_35'/>
+35
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_35'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    else {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_36'/>
+36
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_36'>2</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+2. &#60;init&#62; : changed conditional boundary &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      while (n &#62; 0) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_37'/>
+37
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_37'>1</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>        if (checkWeekDayValidity(currentDateTime.getDayOfWeek().toString(), weekDays)) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_38'/>
+38
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_38'>1</a>
+<span>
+1. &#60;init&#62; : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>          if (isEntireDay) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_39'/>
+39
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_39'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_40'/>
+40
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_40'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    LocalDateTime.of(currentDateTime.plusDays(1).toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_41'/>
+41
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_41'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>          }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_42'/>
+42
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_42'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>          else {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_43'/>
+43
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_43'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_44'/>
+44
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_44'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_45'/>
+45
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_45'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>          }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_46'/>
+46
+</td>
+<td class='uncertain'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_46'>1</a>
+<span>
+1. &#60;init&#62; : Changed increment from -1 to 1 &rarr; MEMORY_ERROR<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='uncertain'>          n--;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_47'/>
+47
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_47'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>        }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_48'/>
+48
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_48'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>        currentDateTime = currentDateTime.plusDays(1);</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_49'/>
+49
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_49'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>      }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_50'/>
+50
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_50'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_51'/>
+51
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_51'></a>
+<span>
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class=''>  }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_52'/>
+52
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_52'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''></span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_53'/>
+53
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_53'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>  private boolean checkWeekDayValidity(String currentDay, String weekDays) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_54'/>
+54
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_54'>2</a>
+<span>
+1. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+2. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    if (currentDay.equals(&#34;MONDAY&#34;) &#38;&#38; weekDays.contains(String.valueOf(&#39;M&#39;))) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_55'/>
+55
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_55'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      return true;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_56'/>
+56
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_56'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_57'/>
+57
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_57'>2</a>
+<span>
+1. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+2. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    else if (currentDay.equals(&#34;TUESDAY&#34;) &#38;&#38; weekDays.contains(String.valueOf(&#39;T&#39;))) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_58'/>
+58
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_58'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      return true;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_59'/>
+59
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_59'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_60'/>
+60
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_60'>2</a>
+<span>
+1. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+2. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    else if (currentDay.equals(&#34;WEDNESDAY&#34;) &#38;&#38; weekDays.contains(String.valueOf(&#39;W&#39;))) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_61'/>
+61
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_61'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      return true;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_62'/>
+62
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_62'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_63'/>
+63
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_63'>2</a>
+<span>
+1. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+2. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    else if (currentDay.equals(&#34;THURSDAY&#34;) &#38;&#38; weekDays.contains(String.valueOf(&#39;R&#39;))) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_64'/>
+64
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_64'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      return true;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_65'/>
+65
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_65'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_66'/>
+66
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_66'>2</a>
+<span>
+1. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+2. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    else if (currentDay.equals(&#34;FRIDAY&#34;) &#38;&#38; weekDays.contains(String.valueOf(&#39;F&#39;))) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_67'/>
+67
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_67'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      return true;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_68'/>
+68
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_68'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_69'/>
+69
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_69'>2</a>
+<span>
+1. checkWeekDayValidity : negated conditional &rarr; SURVIVED<br/>
+2. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>    else if (currentDay.equals(&#34;SATURDAY&#34;) &#38;&#38; weekDays.contains(String.valueOf(&#39;S&#39;))) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_70'/>
+70
+</td>
+<td class='survived'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_70'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; SURVIVED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='survived'>      return true;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_71'/>
+71
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_71'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_72'/>
+72
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_72'>2</a>
+<span>
+1. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+2. checkWeekDayValidity : negated conditional &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    else if (currentDay.equals(&#34;SUNDAY&#34;) &#38;&#38; weekDays.contains(String.valueOf(&#39;U&#39;))) {</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_73'/>
+73
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_73'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>      return true;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_74'/>
+74
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_74'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>    }</span></pre></td></tr>
+
+<tr>
+<td class='covered'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_75'/>
+75
+</td>
+<td class='killed'>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_75'>1</a>
+<span>
+1. checkWeekDayValidity : replaced boolean return with true for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED<br/>
+
+</span>
+</span>
+</td>
+<td class='covered'><pre><span  class='killed'>    return false;</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_76'/>
+76
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_76'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>  }</span></pre></td></tr>
+
+<tr>
+<td class='na'>
+<a name='org.pitest.mutationtest.report.html.SourceFile@467cd4b9_77'/>
+77
+</td>
+<td class=''>
+<span class='pop'>
+<a href='#grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_77'></a>
+<span>
+</span>
+</span>
+</td>
+<td class=''><pre><span  class=''>}</span></pre></td></tr>
+
+
+
+<tr><td></td><td></td><td><h2>Mutations</h2></td></tr>
+
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_16'>16</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_16'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_20'>20</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_20'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_21'>21</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_21'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand8(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_22'>22</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_22'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand8(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_23'>23</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_23'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand8(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_36'>36</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_36'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> changed conditional boundary &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_37'>37</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_37'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_38'>38</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_38'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_46'>46</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_46'/> 
+
+<p class='MEMORY_ERROR'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>&#60;init&#62;<br/><b>Killed by : </b>none</span></span> Changed increment from -1 to 1 &rarr; MEMORY_ERROR</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_54'>54</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_54'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_55'>55</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_55'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_57'>57</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_57'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand2(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand8(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_58'>58</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_58'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand2(controller.CalendarControllerCreateTest)</span></span> replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_60'>60</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_60'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_61'>61</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_61'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_63'>63</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_63'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand2(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_64'>64</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_64'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand2(controller.CalendarControllerCreateTest)</span></span> replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_66'>66</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_66'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_67'>67</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_67'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_69'>69</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_69'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>none</span></span> negated conditional &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=model.RecurringEvent,-method=checkWeekDayValidity,-methodDesc=(Ljava/lang/String;Ljava/lang/String;)Z],-indexes=[86],-mutator=org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=model.RecurringEvent,-method=checkWeekDayValidity,-methodDesc=(Ljava/lang/String;Ljava/lang/String;)Z],-indexes=[86],-mutator=org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=model.RecurringEvent,-method=checkWeekDayValidity,-methodDesc=(Ljava/lang/String;Ljava/lang/String;)Z],-indexes=[86],-mutator=org.pitest.mutationtest.engine.gregor.mutators.NegateConditionalsMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand8(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand3(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand2(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerPrintShowExportTest.testPrintEventsFromToRecurringEvent(controller.CalendarControllerPrintShowExportTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand7(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand8(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand5(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand6(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand1(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand9(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand4(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand11(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerPrintShowExportTest.testShowStatusBusyRecurringEvent(controller.CalendarControllerPrintShowExportTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand10(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerCreateTest.testInvalidSingleRecurringCommand1(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerPrintShowExportTest.testShowStatusBusyRecurringEventFalse(controller.CalendarControllerPrintShowExportTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand1(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testInvalidRecurringRecurringCommand2(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testInvalidRecurringSingleCommand1(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerPrintShowExportTest.testExportCalendarWithEventsAllDayRecurring(controller.CalendarControllerPrintShowExportTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand4(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand6(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand1(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand4(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerCreateTest.testValidSingleRecurringCommand1(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand2(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand3(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand5(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringSingleCommand2(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand5(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testInvalidEditCommand6(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringSingleCommand1(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand3(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand2(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerCreateTest.testInvalidRecurringRecurringCommand1(controller.CalendarControllerCreateTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand7(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerEditTest.testValidEditCommand8(controller.CalendarControllerEditTest)</li> <li>controller.CalendarControllerPrintShowExportTest.testCreateAndExportCalendarWithMultipleEvents(controller.CalendarControllerPrintShowExportTest)</li> 
+</ul>
+</div></div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_70'>70</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_70'/> 
+
+<p class='SURVIVED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>none</span></span> replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; SURVIVED</span>
+<a title="Click to view covering tests" class="view-covered-by-tests" onClick="document.getElementById('MutationIdentifier-[location=Location-[clazz=model.RecurringEvent,-method=checkWeekDayValidity,-methodDesc=(Ljava/lang/String;Ljava/lang/String;)Z],-indexes=[95],-mutator=org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanFalseReturnValsMutator]').style.display=(document.getElementById('MutationIdentifier-[location=Location-[clazz=model.RecurringEvent,-method=checkWeekDayValidity,-methodDesc=(Ljava/lang/String;Ljava/lang/String;)Z],-indexes=[95],-mutator=org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanFalseReturnValsMutator]').style.display == 'block')?'none':'block';">Covering tests</a>
+<div class="covered-tests" id="MutationIdentifier-[location=Location-[clazz=model.RecurringEvent,-method=checkWeekDayValidity,-methodDesc=(Ljava/lang/String;Ljava/lang/String;)Z],-indexes=[95],-mutator=org.pitest.mutationtest.engine.gregor.mutators.returns.BooleanFalseReturnValsMutator]" style="display:none;">Covered by tests:
+<ul>
+<li>controller.CalendarControllerPrintShowExportTest.testPrintEventsFromToRecurringEvent(controller.CalendarControllerPrintShowExportTest)</li> 
+</ul>
+</div></div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_72'>72</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_72'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> <p class='KILLED'><span class='pop'>2.<span><b>2</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerPrintShowExportTest.testPrintEventsFromToRecurringEvent(controller.CalendarControllerPrintShowExportTest)</span></span> negated conditional &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_73'>73</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_73'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerPrintShowExportTest.testPrintEventsFromToRecurringEvent(controller.CalendarControllerPrintShowExportTest)</span></span> replaced boolean return with false for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+<tr>
+<td><a href='#org.pitest.mutationtest.report.html.SourceFile@467cd4b9_75'>75</a></td> 
+<td></td>
+<td>
+
+<a name='grouporg.pitest.mutationtest.report.html.SourceFile@467cd4b9_75'/> 
+
+<p class='KILLED'><span class='pop'>1.<span><b>1</b><br/><b>Location : </b>checkWeekDayValidity<br/><b>Killed by : </b>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest)</span></span> replaced boolean return with true for model/RecurringEvent::checkWeekDayValidity &rarr; KILLED</span>
+</div> 
+</td>
+</tr>
+
+</table>
+
+
+<h2>Active mutators</h2>
+<ul>
+<li class='mutator'>CONDITIONALS_BOUNDARY</li>
+<li class='mutator'>EMPTY_RETURNS</li>
+<li class='mutator'>FALSE_RETURNS</li>
+<li class='mutator'>INCREMENTS</li>
+<li class='mutator'>INVERT_NEGS</li>
+<li class='mutator'>MATH</li>
+<li class='mutator'>NEGATE_CONDITIONALS</li>
+<li class='mutator'>NULL_RETURNS</li>
+<li class='mutator'>PRIMITIVE_RETURNS</li>
+<li class='mutator'>TRUE_RETURNS</li>
+<li class='mutator'>VOID_METHOD_CALLS</li>
+
+</ul>
+
+<h2>Tests examined</h2>
+<ul>
+<li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand7(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand8(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand3(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand2(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerPrintShowExportTest.testPrintEventsFromToRecurringEvent(controller.CalendarControllerPrintShowExportTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand7(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand8(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand5(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand6(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand1(controller.CalendarControllerCreateTest) (1 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand9(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringCreateCommand4(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand11(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerPrintShowExportTest.testShowStatusBusyRecurringEvent(controller.CalendarControllerPrintShowExportTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand10(controller.CalendarControllerEditTest) (1 ms)</li><li>controller.CalendarControllerCreateTest.testInvalidSingleRecurringCommand1(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerPrintShowExportTest.testShowStatusBusyRecurringEventFalse(controller.CalendarControllerPrintShowExportTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand1(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testInvalidRecurringRecurringCommand2(controller.CalendarControllerCreateTest) (4 ms)</li><li>controller.CalendarControllerCreateTest.testInvalidRecurringSingleCommand1(controller.CalendarControllerCreateTest) (2 ms)</li><li>controller.CalendarControllerPrintShowExportTest.testExportCalendarWithEventsAllDayRecurring(controller.CalendarControllerPrintShowExportTest) (1 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand4(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand6(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand1(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand4(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidSingleRecurringCommand1(controller.CalendarControllerCreateTest) (1 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand2(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand3(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand5(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringSingleCommand2(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand5(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testInvalidEditCommand6(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringSingleCommand1(controller.CalendarControllerCreateTest) (1 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand3(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testValidRecurringRecurringCommand2(controller.CalendarControllerCreateTest) (0 ms)</li><li>controller.CalendarControllerCreateTest.testInvalidRecurringRecurringCommand1(controller.CalendarControllerCreateTest) (4 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand7(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerEditTest.testValidEditCommand8(controller.CalendarControllerEditTest) (0 ms)</li><li>controller.CalendarControllerPrintShowExportTest.testCreateAndExportCalendarWithMultipleEvents(controller.CalendarControllerPrintShowExportTest) (6 ms)</li>
+</ul>
+
+<br/>
+
+Report generated by <a href='https://pitest.org'>PIT</a> 1.17.2
+
+</body>
+</html>

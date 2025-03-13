@@ -11,14 +11,14 @@ import java.util.List;
 import exception.InvalidCommandException;
 
 public class CSVExporter {
-  public String exportCSV(List<List> eventList, String fileName) {
+  public void exportCSV(List<List> eventList, String fileName) {
 
     String absolutePath = Paths.get(fileName).toAbsolutePath().toString();
     DateTimeFormatter csvDateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
     DateTimeFormatter csvTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 
     try (FileWriter writer = new FileWriter(absolutePath)) {
-      writer.write("Subject, Start Date, Start Time, End Date, End Time, All Day Event, Description, Location, Private\n");
+      writer.write("Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private\n");
 
       for (List<Object> eventDetails : eventList) {
         String subject = (String) eventDetails.get(0);
@@ -26,28 +26,26 @@ public class CSVExporter {
         LocalTime startTime = (LocalTime) eventDetails.get(2);
         LocalDate endDate = (LocalDate) eventDetails.get(3);
         LocalTime endTime = (LocalTime) eventDetails.get(4);
-        Boolean isAllDay = (Boolean) eventDetails.get(5);
-        String description = (String) eventDetails.get(6);
-        String location = (String) eventDetails.get(7);
-        Boolean isPublic = (Boolean) eventDetails.get(8);
+        String description = (String) eventDetails.get(5);
+        String location = (String) eventDetails.get(6);
+        Boolean isPublic = (Boolean) eventDetails.get(7);
 
         String startDateStr = (startDate != null) ? startDate.format(csvDateFormatter) : "";
         String startTimeStr = (startTime != null) ? startTime.format(csvTimeFormatter) : "";
         String endDateStr = (endDate != null) ? endDate.format(csvDateFormatter) : "";
         String endTimeStr = (endTime != null) ? endTime.format(csvTimeFormatter) : "";
 
-        writer.write(String.format("\"%s\",%s,%s,\"%s\",\"%s\",%b,\"%s\",\"%s\",%b\n",
+        writer.write(String.format("\"%s\",%s,%s,\"%s\",\"%s\",\"%s\",\"%s\",%b\n",
                 subject,
                 startDateStr,
                 startTimeStr,
                 endDateStr,
                 endTimeStr,
-                isAllDay,
                 description,
                 location,
                 isPublic));
       }
-      return absolutePath;
+//      return absolutePath;
     }
     catch (IOException e) {
       throw new InvalidCommandException("Error writing CSV file");

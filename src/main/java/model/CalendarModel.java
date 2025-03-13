@@ -19,7 +19,7 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public CalendarEvent createSingleEvent(CalendarEvent event, boolean autoDecline) throws EventConflictException {
+  public void createSingleEvent(CalendarEvent event, boolean autoDecline) throws EventConflictException {
     for (CalendarEvent existing : events) {
       if (existing instanceof SingleEvent) {
         if (event.conflictsWith(existing) && autoDecline) {
@@ -36,11 +36,10 @@ public class CalendarModel implements ICalendarModel{
       }
     }
     events.add(event);
-    return event;
   }
 
   @Override
-  public CalendarEvent createRecurringEvent(CalendarEvent event) throws EventConflictException {
+  public void createRecurringEvent(CalendarEvent event) throws EventConflictException {
     RecurringEvent recurringToBeCreatedEvent = (RecurringEvent) event;
 
     for (CalendarEvent existing : events) {
@@ -63,7 +62,6 @@ public class CalendarModel implements ICalendarModel{
       }
     }
     events.add(event);
-    return event;
   }
 
   private void editHelper (String property, String newValue, CalendarEvent event, String eventType) throws EventConflictException {
@@ -235,33 +233,6 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public List<List> getEventsAll() {
-    List<List> result = new ArrayList<>();
-    for (CalendarEvent event : events) {
-      if (event instanceof SingleEvent) {
-        List eventDetails = new ArrayList();
-        eventDetails.add(event.subject);
-        eventDetails.add(event.startDateTime);
-        eventDetails.add(event.endDateTime);
-        eventDetails.add(event.location);
-        result.add(eventDetails);
-      }
-      else if (event instanceof RecurringEvent) {
-        RecurringEvent recurringEvent = (RecurringEvent) event;
-        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
-          List eventDetails = new ArrayList();
-          eventDetails.add(singleEvent.subject);
-          eventDetails.add(singleEvent.startDateTime);
-          eventDetails.add(singleEvent.endDateTime);
-          eventDetails.add(singleEvent.location);
-          result.add(eventDetails);
-        }
-      }
-    }
-    return result;
-  }
-
-  @Override
   public boolean isBusy(LocalDateTime dateTime) {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
@@ -284,7 +255,7 @@ public class CalendarModel implements ICalendarModel{
   }
 
   @Override
-  public String exportCalendar(String fileName) throws Exception {
+  public void exportCalendar(String fileName) throws Exception {
     List<List> exportEvents = new ArrayList<>();
 
     for (CalendarEvent event : events) {
@@ -296,19 +267,12 @@ public class CalendarModel implements ICalendarModel{
         eventDetails.add(event.startDateTime.toLocalTime());
         eventDetails.add(event.endDateTime.toLocalDate());
         eventDetails.add(event.endDateTime.toLocalTime());
-        if (event.startDateTime.toLocalDate().plusDays(1).equals(event.endDateTime.toLocalDate()) &&
-                event.startDateTime.toLocalTime().equals(event.endDateTime.toLocalTime())) {
-          eventDetails.add(true);
-        }
-        else {
-          eventDetails.add(false);
-        }
         eventDetails.add(event.description);
         eventDetails.add(event.location);
         eventDetails.add(!event.isPublic);
         exportEvents.add(eventDetails);
       }
-      else if (event instanceof RecurringEvent) {
+      else {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
           List eventDetails = new ArrayList();
@@ -317,13 +281,6 @@ public class CalendarModel implements ICalendarModel{
           eventDetails.add(singleEvent.startDateTime.toLocalTime());
           eventDetails.add(singleEvent.endDateTime.toLocalDate());
           eventDetails.add(singleEvent.endDateTime.toLocalTime());
-          if (singleEvent.startDateTime.toLocalDate().plusDays(1).equals(singleEvent.endDateTime.toLocalDate()) &&
-                  singleEvent.startDateTime.toLocalTime().equals(singleEvent.endDateTime.toLocalTime())) {
-            eventDetails.add(true);
-          }
-          else {
-            eventDetails.add(false);
-          }
           eventDetails.add(singleEvent.description);
           eventDetails.add(singleEvent.location);
           eventDetails.add(!singleEvent.isPublic);
@@ -333,8 +290,8 @@ public class CalendarModel implements ICalendarModel{
     }
 
     CSVExporter exporter = new CSVExporter();
-    String filePath = exporter.exportCSV(exportEvents, fileName);
+    exporter.exportCSV(exportEvents, fileName);
 
-    return filePath;
+//    return filePath;
   }
 }

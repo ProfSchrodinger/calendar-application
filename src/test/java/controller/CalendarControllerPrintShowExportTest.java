@@ -2,7 +2,6 @@ package controller;
 
 import exception.InvalidCommandException;
 import model.CalendarModel;
-import model.SingleEvent;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,12 +14,10 @@ import java.time.LocalDateTime;
 
 public class CalendarControllerPrintShowExportTest {
   private CalendarController controller;
-  private CalendarModel model;
 
   @Before
   public void setUp() {
     controller = new CalendarController();
-    model = new CalendarModel();
   }
 
   /**
@@ -36,6 +33,7 @@ public class CalendarControllerPrintShowExportTest {
     Assert.assertEquals("[[MeetingOne, 2025-03-12T10:00, 2025-03-12T11:00, ]]",
             controller.model.getEventsOn(LocalDate.of(2025, 3, 12)).toString());
   }
+
 
   /**
    * Printing events on a date where no events exist.
@@ -141,33 +139,32 @@ public class CalendarControllerPrintShowExportTest {
             ).toString());
   }
 
+  /**
+   * Test case: Printing recurring events with from and to
+   */
+
+  @Test
+  public void testPrintEventsFromToRecurringEvent() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats SU until 2025-03-18T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-16T00:00, 2025-03-16T01:00, ]]",
+            controller.model.getEventsOn(
+                    LocalDate.of(2025, 3, 16)
+            ).toString());
+  }
+
 
   /**
    * Invalid print command
    */
 
   @Test (expected = InvalidCommandException.class)
-  public void testInvalidEditCommand1() {
+  public void testInvalidPrintCommand1() {
     try {
       controller.processCommand("print events blah");
     } catch (Exception e) {
       Assert.assertEquals("Invalid command", e.getMessage());
       throw e;
     }
-  }
-
-  /**
-   * Test case: Printing all events when 'all'.
-   */
-
-  @Test
-  public void testPrintAllEvents() {
-    controller.processCommand("create event MeetingA from 2025-03-15T10:00 to 2025-03-15T12:00");
-    controller.processCommand("create event Workshop from 2025-04-10T14:00 to 2025-04-10T16:00");
-
-    controller.processCommand("print events all");
-
-    Assert.assertTrue(controller.model.getEventsAll().size() >= 2);
   }
 
 
@@ -177,7 +174,7 @@ public class CalendarControllerPrintShowExportTest {
 
   @Test
   public void testExportEmptyCalendar() {
-    controller.processCommand("export cal empty_calendar.csv");
+    controller.processCommand("export cal events.csv");
   }
 
   /**
@@ -188,8 +185,28 @@ public class CalendarControllerPrintShowExportTest {
   public void testExportCalendarWithEvents() {
     controller.processCommand("create event MeetingA from 2025-03-15T10:00 to 2025-03-15T12:00");
     controller.processCommand("create event MeetingB from 2025-03-16T14:00 to 2025-03-16T16:00");
+    controller.processCommand("export cal events.csv");
+  }
 
-    controller.processCommand("export cal myevent_calendar.csv");
+  /**
+   * Exporting a calendar with events present.
+   */
+
+  @Test
+  public void testExportCalendarWithEventsAllDaySingle() {
+    controller.processCommand("create event MeetingA on 2025-03-15T10:00");
+    controller.processCommand("create event MeetingB on 2025-03-16T14:00");
+    controller.processCommand("export cal events.csv");
+  }
+
+  /**
+   * Exporting a calendar with events present.
+   */
+
+  @Test
+  public void testExportCalendarWithEventsAllDayRecurring() {
+    controller.processCommand("create event MeetingA on 2025-03-15 repeats MFW for 3 times");
+    controller.processCommand("export cal events.csv");
   }
 
   /**
@@ -201,8 +218,7 @@ public class CalendarControllerPrintShowExportTest {
     for (int i = 1; i <= 1000; i++) {
       controller.processCommand("create event Event" + i + " from 2025-03-15T10:00 to 2025-03-15T11:00");
     }
-
-    controller.processCommand("export cal mylargeevents_calendar.csv");
+    controller.processCommand("export cal events.csv");
   }
 
   /**
@@ -212,9 +228,9 @@ public class CalendarControllerPrintShowExportTest {
   @Test
   public void testCreateExportEditExportOverwrite() {
     controller.processCommand("create event InitialMeeting from 2025-03-20T09:00 to 2025-03-20T10:00");
-    controller.processCommand("export cal calendaroverwritecase_calendar.csv");
+    controller.processCommand("export cal events.csv");
     controller.processCommand("edit events subject InitialMeeting UpdatedMeeting");
-    controller.processCommand("export cal calendaroverwritecase_calendar.csv");
+    controller.processCommand("export cal events.csv");
   }
 
   /**
@@ -224,7 +240,21 @@ public class CalendarControllerPrintShowExportTest {
   @Test(expected = InvalidCommandException.class)
   public void testExportCalendarInvalidFileExtension() {
     try {
-      controller.processCommand("export cal invalid_calendar.docx");
+      controller.processCommand("export cal events.docx");
+    } catch (Exception e) {
+      Assert.assertEquals("Invalid filename or extension", e.getMessage());
+      throw e;
+    }
+  }
+
+  /**
+   * Exporting as docx gives error.
+   */
+
+  @Test(expected = InvalidCommandException.class)
+  public void testExportCalendarInvalidFileExtension2() {
+    try {
+      controller.processCommand("export cal .csv");
     } catch (Exception e) {
       Assert.assertEquals("Invalid filename or extension", e.getMessage());
       throw e;
@@ -236,10 +266,32 @@ public class CalendarControllerPrintShowExportTest {
    */
 
   @Test
-  public void testShowStatusBusy() {
+  public void testShowStatusBusySingleEvent() {
     controller.processCommand("create event Workshop from 2025-03-15T10:00 to 2025-03-15T12:00");
     controller.processCommand("show status on 2025-03-15T11:00");
     Assert.assertTrue(controller.model.isBusy(LocalDateTime.of(2025, 3, 15, 11, 0)));
+  }
+
+  /**
+   * Checking busy status when events exist at the given time.
+   */
+
+  @Test
+  public void testShowStatusBusyRecurringEvent() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("show status on 2025-03-15T11:00");
+    Assert.assertTrue(controller.model.isBusy(LocalDateTime.of(2025, 3, 12, 00, 30)));
+  }
+
+  /**
+   * Checking busy status when events exist at the given time.
+   */
+
+  @Test
+  public void testShowStatusBusyRecurringEventFalse() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("show status on 2025-03-15T11:00");
+    Assert.assertFalse(controller.model.isBusy(LocalDateTime.of(2025, 3, 12, 1, 30)));
   }
 
   /**
@@ -344,10 +396,9 @@ public class CalendarControllerPrintShowExportTest {
     controller.processCommand("create event Hackathon from 2025-06-01T10:00 to 2025-06-03T18:00 at Innovation Hub description '48-hour coding challenge' public");
     controller.processCommand("create event SecretMeeting from 2025-03-20T16:00 to 2025-03-20T18:00 description 'Confidential Discussion' private");
     controller.processCommand("create event PrivateDinner from 2025-10-12T19:00 to 2025-10-12T22:00 at Rooftop description 'Family dinner' private");
-    controller.processCommand("export cal myevent_calendar.csv");
+    controller.processCommand("export cal events.csv");
 
-    Assert.assertTrue("Exported file should exist", Files.exists(Paths.get("myevent_calendar.csv")));
+    Assert.assertTrue("Exported file should exist", Files.exists(Paths.get("events.csv")));
   }
-
 }
 
