@@ -1,13 +1,11 @@
 package controller;
 
-import exception.EventConflictException;
 import exception.InvalidCommandException;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class CalendarControllerEditTest {
