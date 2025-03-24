@@ -2,14 +2,10 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import utilities.CSVExporter;
 import exception.EventConflictException;
 import exception.InvalidCommandException;
 
@@ -20,21 +16,6 @@ import exception.InvalidCommandException;
 
 public class CalendarModel implements ICalendarModel{
 
-//  private static class CalendarData {
-//    String calendarName;
-//    ZoneId timeZone;
-//    List<CalendarEvent> events;
-//
-//    CalendarData(String name, ZoneId timeZone) {
-//      this.calendarName = name;
-//      this.timeZone = timeZone;
-//      this.events = new ArrayList<>();
-//    }
-//  }
-
-//  private Map<String, CalendarData> calendars;
-//  private CalendarData currentCalendar;
-
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
   List<CalendarEvent> events;
 
@@ -43,15 +24,11 @@ public class CalendarModel implements ICalendarModel{
    */
 
   public CalendarModel() {
-//    calendars = new HashMap<>();
-//    currentCalendar = new CalendarData("Default", ZoneId.of("America/New_York"));
-//    calendars.put(currentCalendar.calendarName, currentCalendar);
     this.events = new ArrayList<CalendarEvent>();
   }
 
   /**
    * Creates a single event and adds it to the calendar.
-   * If autodecline is enabled, event conflict exception is thrown,
    * in case of conflict.
    * @param event the single event to be created.
    * @throws EventConflictException if event conflicts with existing event.

@@ -41,7 +41,8 @@ public class CalendarApp {
             String command = view.getInput();
             controller.processCommand(command);
           }
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
           view.displayMessage(e.getMessage());
           controller.processCommand("exit");
         }
