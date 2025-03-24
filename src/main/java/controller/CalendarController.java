@@ -13,6 +13,7 @@ import model.CalendarModel;
 import model.ICalendarModel;
 import model.RecurringEvent;
 import model.SingleEvent;
+import utilities.CSVExporter;
 import view.ConsoleView;
 import view.UserView;
 
@@ -68,7 +69,7 @@ public class CalendarController {
    */
 
   public void processCommand(String command) {
-    if (command.equalsIgnoreCase("exit")) {
+    if (command.trim().equalsIgnoreCase("exit")) {
       view.displayMessage("Exiting application.");
       System.exit(0);
     }
@@ -76,34 +77,32 @@ public class CalendarController {
     try {
       if (command.toLowerCase().startsWith("create event")) {
         processCreate(command);
-//        view.displayMessage("Command processed: " + command);
+        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("edit event")) {
         processEdit(command);
-//        view.displayMessage("Command processed: " + command);
+        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("print events")) {
         processPrint(command);
-//        view.displayMessage("Command processed: " + command);
+        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("show status")) {
         processShow(command);
-//        view.displayMessage("Command processed: " + command);
+        view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("export cal")) {
         processExport(command);
-//        view.displayMessage("Command processed: " + command);
+        view.displayMessage("Command processed: " + command);
       }
       else {
         throw new InvalidCommandException("Invalid command");
       }
     }
     catch (InvalidCommandException | EventConflictException e) {
-//      view.displayMessage(e.getMessage());
       throw e;
     }
     catch (Exception e) {
-//      view.displayMessage(e.getMessage());
       throw new InvalidCommandException("Invalid command");
     }
   }
@@ -248,65 +247,34 @@ public class CalendarController {
   /**
    * Method to create a single event based on user input.
    * @param tokens the list of commands.
-   * @param autoDecline whether to automatically decline conflicts.
    */
 
-  private void singleEventCreationHelper(List tokens, boolean autoDecline) {
+  private void singleEventCreationHelper(List tokens) {
     try {
       if (tokens.contains("from")) {
-        if (autoDecline) {
-          if (checkDateTimeValidity(tokens.get(5).toString())
-                  && checkDateTimeValidity(tokens.get(7).toString())
-                  && getDateTime(tokens.get(5).toString()).isBefore(getDateTime(tokens.get(7).toString()))) {
+        if (checkDateTimeValidity(tokens.get(4).toString())
+                && checkDateTimeValidity(tokens.get(6).toString())
+                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
 
-            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                    getDateTime(tokens.get(5).toString()),
-                    getDateTime(tokens.get(7).toString()),
-                    "", "", false), true);
-          }
-          else {
-            throw new InvalidCommandException("Invalid datetime or property");
-          }
+          model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                  getDateTime(tokens.get(4).toString()),
+                  getDateTime(tokens.get(6).toString()),
+                  "", "", false));
         }
         else {
-          if (checkDateTimeValidity(tokens.get(4).toString())
-                  && checkDateTimeValidity(tokens.get(6).toString())
-                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
-
-            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
-                    getDateTime(tokens.get(4).toString()),
-                    getDateTime(tokens.get(6).toString()),
-                    "", "", false), false);
-          }
-          else {
-            throw new InvalidCommandException("Invalid datetime or property");
-          }
+          throw new InvalidCommandException("Invalid datetime or property");
         }
       }
       else if (tokens.contains("on")) {
-        if (autoDecline) {
-          if (checkDateTimeValidity(tokens.get(5).toString())) {
+        if (checkDateTimeValidity(tokens.get(4).toString())) {
 
-            model.createSingleEvent(new SingleEvent(tokens.get(3).toString(),
-                    getDateTime(tokens.get(5).toString()),
-                    getDateTime(tokens.get(5).toString()).plusDays(1).withHour(0).withMinute(0),
-                    "", "", false), true);
-          }
-          else {
-            throw new InvalidCommandException("Invalid datetime or property");
-          }
+          model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
+                  getDateTime(tokens.get(4).toString()),
+                  getDateTime(tokens.get(4).toString()).plusDays(1).withHour(0).withMinute(0),
+                  "", "", false));
         }
         else {
-          if (checkDateTimeValidity(tokens.get(4).toString())) {
-
-            model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
-                    getDateTime(tokens.get(4).toString()),
-                    getDateTime(tokens.get(4).toString()).plusDays(1).withHour(0).withMinute(0),
-                    "", "", false), false);
-          }
-          else {
-            throw new InvalidCommandException("Invalid datetime or property");
-          }
+          throw new InvalidCommandException("Invalid datetime or property");
         }
       }
       else {
@@ -415,15 +383,14 @@ public class CalendarController {
 
   private void processCreate(String command) {
     List tokens = extractDataFromCommand(command);
+    tokens.remove("--autoDecline");
 
     boolean recurring = tokens.contains("repeats");
 
     if (!recurring) {
-      boolean autoDecline = tokens.get(2).equals("--autoDecline");
-      singleEventCreationHelper(tokens, autoDecline);
+      singleEventCreationHelper(tokens);
     }
     else {
-      tokens.remove("--autoDecline");
       recurringEventCreationHelper(tokens);
     }
   }
@@ -548,8 +515,13 @@ public class CalendarController {
         throw new InvalidCommandException("Invalid command");
       }
 
-      String resultString = String.join("\n", returnResult(result));
-      view.displayMessage(resultString);
+      if (result.size() >= 1) {
+        String resultString = String.join("\n", returnResult(result));
+        view.displayMessage(resultString);
+      }
+      else {
+        view.displayMessage("No events found");
+      }
     }
     catch (InvalidCommandException e) {
       throw e;
@@ -595,12 +567,14 @@ public class CalendarController {
 
   private void processExport(String command) {
     List tokens = extractDataFromCommand(command);
+    List<List> result;
 
     try {
       if (tokens.get(2).toString().toLowerCase().endsWith(".csv") && tokens.get(2).toString().length() > 4) {
-        model.exportCalendar(tokens.get(2).toString());
-
-//        view.displayMessage("File available at: " + filePath);
+        result = model.exportCalendar();
+        CSVExporter exporter = new CSVExporter();
+        String filePath = exporter.exportCSV(result, tokens.get(2).toString());
+        view.displayMessage("File available at: " + filePath);
       }
       else {
         throw new InvalidCommandException("Invalid filename or extension");

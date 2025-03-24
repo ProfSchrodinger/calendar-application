@@ -16,12 +16,12 @@ public interface ICalendarModel {
    * Creates a single event and adds it to the calendar.
    * If autoDecline is enabled,
    * an EventConflictException is thrown in case of a conflict.
+   *
    * @param event The single event to be created.
-   * @param autoDecline If enabled, conflicts will cause an exception.
    * @throws EventConflictException If the event conflicts with an existing event.
    */
 
-  void createSingleEvent(CalendarEvent event, boolean autoDecline) throws EventConflictException;
+  void createSingleEvent(CalendarEvent event) throws EventConflictException;
 
   /**
    * Creates a recurring event and adds it to the calendar.
@@ -98,10 +98,8 @@ public interface ICalendarModel {
 
   /**
    * Exports the calendar events to a CSV file.
-   *
-   * @param fileName The name of the CSV file to be created.
    * @throws Exception If an error occurs during file export.
    */
 
-  void exportCalendar(String fileName) throws Exception;
+  List<List> exportCalendar() throws Exception;
 }
