@@ -402,7 +402,6 @@ public class CalendarModel implements ICalendarModel{
 
   /**
    * Exports the calendar to a CSV file.
-   * @param fileName The name of the CSV file to be created.
    * @throws Exception If an error occurs during file export.
    */
 
