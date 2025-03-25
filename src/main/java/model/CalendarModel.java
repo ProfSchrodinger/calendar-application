@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +17,28 @@ import exception.InvalidCommandException;
 
 public class CalendarModel implements ICalendarModel{
 
-  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
   List<CalendarEvent> events;
+  private String calendarName;
+  private ZoneId timeZone;
+
+  DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
   /**
    * Constructs an empty calendar model.
    */
 
-  public CalendarModel() {
+  public CalendarModel(String calendarName, ZoneId timeZone) {
     this.events = new ArrayList<CalendarEvent>();
+    this.calendarName = calendarName;
+    this.timeZone = timeZone;
+  }
+
+  public void changeCalendarName(String newName) {
+    this.calendarName = newName;
+  }
+
+  public void changeCalendarTimeZone(String newTimeZone) {
+    this.timeZone = ZoneId.of(newTimeZone);
   }
 
   /**

@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import exception.EventConflictException;
 import exception.InvalidCommandException;
+import model.CalendarManager;
 import model.CalendarModel;
 import model.ICalendarModel;
 import model.RecurringEvent;
@@ -59,7 +60,7 @@ public class CalendarController {
    */
 
   public CalendarController() {
-    model = new CalendarModel();
+    model = new CalendarManager();
     view = new ConsoleView();
   }
 
@@ -75,7 +76,19 @@ public class CalendarController {
     }
 
     try {
-      if (command.toLowerCase().startsWith("create event")) {
+      if (command.toLowerCase().startsWith("create calendar")) {
+        processCreateCalendar(command);
+        view.displayMessage("Command processed: " + command);
+      }
+      else if (command.toLowerCase().startsWith("edit calendar")) {
+        processEditCalendar(command);
+        view.displayMessage("Command processed: " + command);
+      }
+      else if (command.toLowerCase().startsWith("use calendar")) {
+        processUseCalendar(command);
+        view.displayMessage("Command processed: " + command);
+      }
+      else if (command.toLowerCase().startsWith("create event")) {
         processCreate(command);
         view.displayMessage("Command processed: " + command);
       }
@@ -133,6 +146,23 @@ public class CalendarController {
     tokens.add(captured.toString());
 
     return tokens;
+  }
+
+  private void processCreateCalendar(String command) {
+    List<String> tokens = extractDataFromCommand(command);
+
+    if (!tokens.get(2).equalsIgnoreCase("--name")
+            || !tokens.get(4).equalsIgnoreCase("--timezone")
+            || tokens.size() != 6) {
+      throw new InvalidCommandException("Invalid create calendar command format.");
+    }
+
+    try {
+      model.createCalendar(calName, timeZone);
+    }
+    catch (Exception e) {
+      throw new InvalidCommandException();
+    }
   }
 
   /**
