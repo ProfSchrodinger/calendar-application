@@ -110,6 +110,10 @@ public class CalendarController {
         processExport(command);
         view.displayMessage("Command processed: " + command);
       }
+      else if (command.toLowerCase().startsWith("copy event")) {
+        processCopyEvents(command);
+        view.displayMessage("Command processed: " + command);
+      }
       else if (command.toLowerCase().startsWith("print calendars")) {
         model.printCalendars();
         view.displayMessage("Command processed: " + command);
@@ -257,6 +261,61 @@ public class CalendarController {
     }
     catch (InvalidCommandException e) {
       throw e;
+    }
+  }
+
+  private void processCopyEvents(String command) {
+    List<String> tokens = extractDataFromCommand(command);
+
+    try {
+      if (tokens.size() == 9) {
+        String eventName = tokens.get(2);
+        String copyDate = tokens.get(4);
+        String targetCalendar = tokens.get(6);
+        String targetDate = tokens.get(8);
+
+        if (checkDateTimeValidity(copyDate) && checkDateTimeValidity(targetDate)) {
+          model.copyEvents(eventName, getDateTime(copyDate), targetCalendar, getDateTime(targetDate));
+        }
+        else {
+          throw new InvalidCommandException("Invalid date formats");
+        }
+      }
+      else if (tokens.size() == 8) {
+        String copyDate = tokens.get(3);
+        String targetCalendar = tokens.get(5);
+        String targetDate = tokens.get(7);
+
+        if (checkDateValidity(copyDate) && checkDateValidity(targetDate)) {
+          model.copyEvents(getDate(copyDate), targetCalendar,
+                  getDate(targetDate));
+        }
+        else {
+          throw new InvalidCommandException("Invalid date formats");
+        }
+      }
+      else if (tokens.size() == 10) {
+        String copyDateStart = tokens.get(3);
+        String copyDateEnd = tokens.get(5);
+        String targetCalendar = tokens.get(7);
+        String targetDate = tokens.get(9);
+
+        if (checkDateValidity(copyDateStart) && checkDateValidity(copyDateEnd)
+                && checkDateValidity(targetDate)) {
+          model.copyEvents(getDate(copyDateStart), getDate(copyDateEnd),
+                  targetCalendar, getDate(targetDate));
+        }
+        else {
+          throw new InvalidCommandException("Invalid date formats");
+        }
+      }
+      else {
+        throw new InvalidCommandException("Invalid copy events command format.");
+      }
+    } catch (InvalidCommandException e) {
+      throw e;
+    } catch (Exception e) {
+      throw new InvalidCommandException("Invalid command");
     }
   }
 

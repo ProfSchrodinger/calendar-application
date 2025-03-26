@@ -68,6 +68,84 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
     }
   }
 
+  @Override
+  public void copyEvents(String eventName, LocalDateTime copyDate, String targetCalendar,
+                         LocalDateTime targetDate){
+    if (!calendars.containsKey(targetCalendar)) {
+      throw new InvalidCommandException("Calendar with the given name does not exist.");
+    }
+
+    CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+
+    for (CalendarEvent event: currentCalendar.events) {
+      if (event instanceof SingleEvent){
+        if (event.subject.equals(eventName) && event.startDateTime.equals(copyDate)){
+          // Do something
+        }
+      }
+      if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent: recurringEvent.recurringEventList){
+          if (singleEvent.subject.equals(eventName) && singleEvent.startDateTime.equals(copyDate)){
+            // Do something
+          }
+        }
+      }
+    }
+  }
+
+  @Override
+  public void copyEvents(LocalDate copyDate, String targetCalendar, LocalDate targetDate){
+    if (!calendars.containsKey(targetCalendar)) {
+      throw new InvalidCommandException("Calendar with the given name does not exist.");
+    }
+
+    CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+
+    for (CalendarEvent event: currentCalendar.events) {
+      if (event instanceof SingleEvent){
+        if (event.startDateTime.toLocalDate().equals(copyDate)){
+          // Do something
+        }
+      }
+      if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent: recurringEvent.recurringEventList){
+          if (singleEvent.startDateTime.toLocalDate().equals(copyDate)){
+            // Do something
+          }
+        }
+      }
+    }
+  }
+
+  @Override
+  public void copyEvents(LocalDate copyDateStart, LocalDate copyDateEnd,
+                         String targetCalendar, LocalDate targetDate){
+    if (!calendars.containsKey(targetCalendar)) {
+      throw new InvalidCommandException("Calendar with the given name does not exist.");
+    }
+
+    CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+
+    for (CalendarEvent event: currentCalendar.events) {
+      if (event instanceof SingleEvent){
+        if (event.startDateTime.toLocalDate().isAfter(copyDateStart)
+                && event.startDateTime.toLocalDate().isBefore(copyDateEnd)){
+          // Do something
+        }
+      }
+      if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent: recurringEvent.recurringEventList){
+          if (singleEvent.startDateTime.toLocalDate().isAfter(copyDateStart)
+                  && singleEvent.startDateTime.toLocalDate().isBefore(copyDateEnd)){
+            // Do something
+          }
+        }
+      }
+    }
+  }
 
   @Override
   public void createSingleEvent(CalendarEvent event) throws EventConflictException {
