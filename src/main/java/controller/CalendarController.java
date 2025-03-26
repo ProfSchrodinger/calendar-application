@@ -1,7 +1,9 @@
 package controller;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +27,7 @@ import view.UserView;
  */
 
 public class CalendarController {
-  ICalendarModel model;
+  CalendarManager model;
   UserView view;
 
   /**
@@ -108,6 +110,10 @@ public class CalendarController {
         processExport(command);
         view.displayMessage("Command processed: " + command);
       }
+      else if (command.toLowerCase().startsWith("print calendars")) {
+        model.printCalendars();
+        view.displayMessage("Command processed: " + command);
+      }
       else {
         throw new InvalidCommandException("Invalid command");
       }
@@ -148,6 +154,27 @@ public class CalendarController {
     return tokens;
   }
 
+  /**
+   * Function to check if the passed value is a valid ZoneID.
+   * @param zoneID the string format of ZoneID passed.
+   * @return True is valid, false other cases.
+   */
+
+  private boolean checkValidZoneID(String zoneID) {
+    try {
+      ZoneId zone = ZoneId.of(zoneID);
+      return true;
+    }
+    catch (DateTimeException e) {
+      return false;
+    }
+  }
+
+  /**
+   * Function to create a Calendar
+   * @param command the list of commands.
+   */
+
   private void processCreateCalendar(String command) {
     List<String> tokens = extractDataFromCommand(command);
 
@@ -158,10 +185,78 @@ public class CalendarController {
     }
 
     try {
-      model.createCalendar(calName, timeZone);
+      if (checkValidZoneID(tokens.get(5))) {
+        model.createCalendar(tokens.get(3), ZoneId.of(tokens.get(5)));
+      }
+      else {
+        throw new InvalidCommandException("Invalid Zone ID.");
+      }
+    }
+    catch (InvalidCommandException e) {
+      throw e;
     }
     catch (Exception e) {
-      throw new InvalidCommandException();
+      throw new InvalidCommandException("Error creating calendar");
+    }
+  }
+
+  /**
+   * Function to edit a Calendar
+   * @param command the list of commands.
+   */
+
+  private void processEditCalendar(String command) {
+    List<String> tokens = extractDataFromCommand(command);
+
+    if (tokens.size() != 7
+            || !tokens.get(2).equalsIgnoreCase("--name")
+            || !tokens.get(4).equalsIgnoreCase("--property")) {
+      throw new InvalidCommandException("Invalid edit calendar command format.");
+    }
+
+    String calName = tokens.get(3);
+    String property = tokens.get(5).toLowerCase();
+    String newValue = tokens.get(6);
+
+    try{
+      if (property.equals("name")) {
+        model.changeCalendarName(calName, newValue);
+      }
+      else if (property.equals("timezone")
+              && checkValidZoneID(newValue)) {
+        model.changeCalendarTimeZone(calName, ZoneId.of(newValue));
+      }
+      else {
+        throw new InvalidCommandException("Invalid ZoneID.");
+      }
+    }
+    catch (InvalidCommandException e) {
+      throw e;
+    }
+    catch (Exception e) {
+      throw new InvalidCommandException("Error editing calendar");
+    }
+  }
+
+  /**
+   * Function to set a Calendar
+   * @param command the list of commands.
+   */
+
+  private void processUseCalendar(String command) {
+    List<String> tokens = extractDataFromCommand(command);
+
+    if (tokens.size() != 4
+            || !tokens.get(2).equalsIgnoreCase("--name")) {
+      throw new InvalidCommandException("Invalid use calendar command format.");
+    }
+
+    try {
+      String calName = tokens.get(3);
+      model.switchCalendar(calName);
+    }
+    catch (InvalidCommandException e) {
+      throw e;
     }
   }
 

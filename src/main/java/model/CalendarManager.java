@@ -2,6 +2,7 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,69 +10,118 @@ import java.util.Map;
 import exception.EventConflictException;
 import exception.InvalidCommandException;
 
-public class CalendarManager implements ICalendarModel{
+public class CalendarManager implements ICalendarModel, ICalendarManager{
 
   private Map<String, CalendarModel> calendars;
   private CalendarModel currentCalendar;
 
   public CalendarManager() {
     calendars = new HashMap<>();
-    currentCalendar = new CalendarModel();
+    currentCalendar = new CalendarModel("Default", ZoneId.of("America/New_York"));
+    calendars.put("Default", currentCalendar);
   }
 
-  public void createCalendar(String calendarName, String timeZone) throws InvalidCommandException {
+  @Override
+  public void createCalendar(String calendarName, ZoneId timeZone) throws InvalidCommandException {
     if (calendars.containsKey(calendarName)) {
       throw new InvalidCommandException("Calendar already exists with same name.");
     }
-    CalendarModel newCalendar = new CalendarModel();
-    // Optionally, set the timezone on newCalendar here
-    newCalendar.changeCalendarTimeZone(timeZone);
+    CalendarModel newCalendar = new CalendarModel(calendarName, timeZone);
     calendars.put(calendarName, newCalendar);
+  }
+
+  @Override
+  public void switchCalendar(String calendarName) throws InvalidCommandException {
+    if (!calendars.containsKey(calendarName)) {
+      throw new InvalidCommandException("Calendar with the given name does not exist.");
+    }
+    currentCalendar = calendars.get(calendarName);
+  }
+
+  @Override
+  public void changeCalendarName(String calendarName, String newName) throws InvalidCommandException {
+    if (calendars.containsKey(calendarName)) {
+      CalendarModel calendar = calendars.get(calendarName);
+
+      if (calendars.containsKey(newName)) {
+        throw new InvalidCommandException("Calendar with the given name already exists.");
+      }
+      else{
+        calendars.remove(calendarName);
+        calendar.changeCalendarName(newName);
+        calendars.put(newName, calendar);
+      }
+    }
+    else {
+      throw new InvalidCommandException("Calendar with the given name does not exist.");
+    }
+  }
+
+  @Override
+  public void changeCalendarTimeZone(String calendarName, ZoneId newTimeZone) {
+    if (calendars.containsKey(calendarName)) {
+      CalendarModel calendar = calendars.get(calendarName);
+      calendar.changeCalendarTimeZone(newTimeZone);
+    }
+    else {
+      throw new InvalidCommandException("Calendar with the given name does not exist.");
+    }
   }
 
 
   @Override
   public void createSingleEvent(CalendarEvent event) throws EventConflictException {
-
+    currentCalendar.createSingleEvent(event);
   }
 
   @Override
   public void createRecurringEvent(CalendarEvent event) throws EventConflictException {
-
+    currentCalendar.createRecurringEvent(event);
   }
 
   @Override
-  public void editEvents(String property, String eventName, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
-
+  public void editEvents(String property, String eventName, LocalDateTime startDateTime,
+                         LocalDateTime endDateTime, String newValue) throws Exception {
+    currentCalendar.editEvents(property, eventName, startDateTime, endDateTime, newValue);
   }
 
   @Override
-  public void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception {
-
+  public void editEvents(String property, String eventName, LocalDateTime startDateTime,
+                         String newValue) throws Exception {
+    currentCalendar.editEvents(property, eventName, startDateTime, newValue);
   }
 
   @Override
   public void editEvents(String property, String eventName, String newValue) throws Exception {
-
+    currentCalendar.editEvents(property, eventName, LocalDateTime.now(), newValue);
   }
 
   @Override
   public List<List> getEventsOn(LocalDate date) {
-    return List.of();
+    return currentCalendar.getEventsOn(date);
   }
 
   @Override
   public List<List> getEventsBetween(LocalDateTime start, LocalDateTime end) {
-    return List.of();
+    return currentCalendar.getEventsBetween(start, end);
   }
 
   @Override
   public boolean isBusy(LocalDateTime dateTime) {
-    return false;
+    return currentCalendar.isBusy(dateTime);
   }
 
   @Override
   public List<List> exportCalendar() throws Exception {
-    return List.of();
+    return currentCalendar.exportCalendar();
+  }
+
+  public void printCalendars(){
+    System.out.println(calendars);
+    for (CalendarModel calendar : calendars.values()) {
+      System.out.println(calendar.calendarName);
+      System.out.println(calendar.timeZone);
+      System.out.println(calendar.events);
+    }
   }
 }

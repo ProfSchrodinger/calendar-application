@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +19,8 @@ import exception.InvalidCommandException;
 public class CalendarModel implements ICalendarModel{
 
   List<CalendarEvent> events;
-  private String calendarName;
-  private ZoneId timeZone;
+  String calendarName;
+  ZoneId timeZone;
 
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
@@ -33,12 +34,50 @@ public class CalendarModel implements ICalendarModel{
     this.timeZone = timeZone;
   }
 
+  /**
+   * Function to change calendar name.
+   * @param newName new name of the calendar.
+   */
+
   public void changeCalendarName(String newName) {
     this.calendarName = newName;
   }
 
-  public void changeCalendarTimeZone(String newTimeZone) {
-    this.timeZone = ZoneId.of(newTimeZone);
+  /**
+   * Helper function to change start and end times
+   * of a single event according to the new timezones.
+   * @param event the single event to be changed.
+   * @param newTimeZone the new time zone to be set.
+   */
+
+  private void changeEventTime(CalendarEvent event, ZoneId newTimeZone) {
+    ZonedDateTime oldStartZdt = event.startDateTime.atZone(this.timeZone);
+    ZonedDateTime newStartZdt = oldStartZdt.withZoneSameInstant(newTimeZone);
+    event.startDateTime = newStartZdt.toLocalDateTime();
+
+    ZonedDateTime oldEndZdt = event.endDateTime.atZone(this.timeZone);
+    ZonedDateTime newEndZdt = oldEndZdt.withZoneSameInstant(newTimeZone);
+    event.endDateTime = newEndZdt.toLocalDateTime();
+  }
+
+  /**
+   * Function to change calendar Time Zone.
+   * @param newTimeZone new Time Zone for the calendar.
+   */
+
+  public void changeCalendarTimeZone(ZoneId newTimeZone) {
+    for (CalendarEvent event : events) {
+      if (event instanceof SingleEvent) {
+        changeEventTime(event, newTimeZone);
+      }
+      else if (event instanceof RecurringEvent) {
+        RecurringEvent recurringEvent = (RecurringEvent) event;
+        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
+          changeEventTime(singleEvent, newTimeZone);
+        }
+      }
+    }
+    this.timeZone = newTimeZone;
   }
 
   /**
