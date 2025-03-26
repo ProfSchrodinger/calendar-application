@@ -68,6 +68,20 @@ public class RecurringEvent extends CalendarEvent{
   }
 
   /**
+   * Copy Constructor.
+   * @param other other Recurring Event object.
+   */
+
+  public RecurringEvent(RecurringEvent other) {
+    super(other.subject, other.startDateTime, other.endDateTime,
+            other.description, other.location, other.isPublic);
+    this.recurringEventList = new ArrayList<>();
+    for (SingleEvent se : other.recurringEventList) {
+      this.recurringEventList.add(new SingleEvent(se));
+    }
+  }
+
+  /**
    * Checks if the given day is included in the specified pattern.
    * @param currentDay The name of the current day.
    * @param weekDays string representing valid recurrence days.

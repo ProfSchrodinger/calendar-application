@@ -3,6 +3,10 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,29 +72,52 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
     }
   }
 
+  private SingleEvent modifyEventHelper(ZoneId targetZoneID, SingleEvent modifiedEvent, LocalDateTime newStartDateTime) {
+    LocalDateTime newEndDateTime = newStartDateTime.plusMinutes(ChronoUnit.MINUTES.between(modifiedEvent.startDateTime, modifiedEvent.endDateTime));
+
+    ZonedDateTime sourceZdt = newStartDateTime.atZone(currentCalendar.timeZone);
+    ZonedDateTime targetZdt = sourceZdt.withZoneSameInstant(targetZoneID);
+    LocalDateTime modifiedStartDateTime = targetZdt.toLocalDateTime();
+    modifiedEvent.startDateTime = modifiedStartDateTime;
+
+    sourceZdt = newEndDateTime.atZone(currentCalendar.timeZone);
+    targetZdt = sourceZdt.withZoneSameInstant(targetZoneID);
+    LocalDateTime modifiedEndDateTime = targetZdt.toLocalDateTime();
+    modifiedEvent.endDateTime = modifiedEndDateTime;
+
+    return modifiedEvent;
+  }
+
   @Override
   public void copyEvents(String eventName, LocalDateTime copyDate, String targetCalendar,
-                         LocalDateTime targetDate){
+                         LocalDateTime targetDateTime) {
     if (!calendars.containsKey(targetCalendar)) {
       throw new InvalidCommandException("Calendar with the given name does not exist.");
     }
 
     CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+    List<CalendarEvent> eventsToBeAdded = new ArrayList<>();
 
     for (CalendarEvent event: currentCalendar.events) {
       if (event instanceof SingleEvent){
         if (event.subject.equals(eventName) && event.startDateTime.equals(copyDate)){
-          // Do something
+          eventsToBeAdded.add(event);
         }
       }
       if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent: recurringEvent.recurringEventList){
           if (singleEvent.subject.equals(eventName) && singleEvent.startDateTime.equals(copyDate)){
-            // Do something
+            eventsToBeAdded.add(singleEvent);
           }
         }
       }
+    }
+
+    for (CalendarEvent event: eventsToBeAdded){
+      SingleEvent modifiedEvent = new SingleEvent((SingleEvent) event);
+      modifyEventHelper(targetCalendarObject.timeZone, modifiedEvent, targetDateTime);
+      targetCalendarObject.events.add(modifiedEvent);
     }
   }
 
@@ -101,21 +128,29 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
     }
 
     CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+    List<CalendarEvent> eventsToBeAdded = new ArrayList<>();
 
     for (CalendarEvent event: currentCalendar.events) {
       if (event instanceof SingleEvent){
         if (event.startDateTime.toLocalDate().equals(copyDate)){
-          // Do something
+          eventsToBeAdded.add(event);
         }
       }
       if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent: recurringEvent.recurringEventList){
           if (singleEvent.startDateTime.toLocalDate().equals(copyDate)){
-            // Do something
+            eventsToBeAdded.add(singleEvent);
           }
         }
       }
+    }
+
+    for (CalendarEvent event: eventsToBeAdded){
+      SingleEvent modifiedEvent = new SingleEvent((SingleEvent) event);
+      LocalDateTime newStartDateTime = LocalDateTime.of(targetDate, modifiedEvent.startDateTime.toLocalTime());
+      modifyEventHelper(targetCalendarObject.timeZone, modifiedEvent, newStartDateTime);
+      targetCalendarObject.events.add(modifiedEvent);
     }
   }
 
@@ -127,12 +162,13 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
     }
 
     CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+    List<CalendarEvent> eventsToBeAdded = new ArrayList<>();
 
     for (CalendarEvent event: currentCalendar.events) {
       if (event instanceof SingleEvent){
         if (event.startDateTime.toLocalDate().isAfter(copyDateStart)
                 && event.startDateTime.toLocalDate().isBefore(copyDateEnd)){
-          // Do something
+          eventsToBeAdded.add(event);
         }
       }
       if (event instanceof RecurringEvent) {
@@ -140,10 +176,18 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
         for (SingleEvent singleEvent: recurringEvent.recurringEventList){
           if (singleEvent.startDateTime.toLocalDate().isAfter(copyDateStart)
                   && singleEvent.startDateTime.toLocalDate().isBefore(copyDateEnd)){
-            // Do something
+            eventsToBeAdded.add(singleEvent);
           }
         }
       }
+    }
+
+    for (CalendarEvent event: eventsToBeAdded){
+      SingleEvent modifiedEvent = new SingleEvent((SingleEvent) event);
+      LocalDateTime newStartDateTime = LocalDateTime.of(targetDate, modifiedEvent.startDateTime.toLocalTime())
+              .plusDays(ChronoUnit.DAYS.between(copyDateStart, event.startDateTime.toLocalDate()));
+      modifyEventHelper(targetCalendarObject.timeZone, modifiedEvent, newStartDateTime);
+      targetCalendarObject.events.add(modifiedEvent);
     }
   }
 
