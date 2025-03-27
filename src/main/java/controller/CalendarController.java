@@ -71,46 +71,46 @@ public class CalendarController {
 
   public void processCommand(String command) {
     if (command.trim().equalsIgnoreCase("exit")) {
-      // view.displayMessage("Exiting application.");
+       view.displayMessage("Exiting application.");
       System.exit(0);
     }
 
     try {
       if (command.toLowerCase().startsWith("create calendar")) {
         processCreateCalendar(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("edit calendar")) {
         processEditCalendar(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("use calendar")) {
         processUseCalendar(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("create event")) {
         processCreate(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("edit event")) {
         processEdit(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("print events")) {
         processPrint(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("show status")) {
         processShow(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("export cal")) {
         processExport(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("copy event")) {
         processCopyEvents(command);
-        // view.displayMessage("Command processed: " + command);
+         view.displayMessage("Command processed: " + command);
       }
       else {
         throw new InvalidCommandException("Invalid command");
@@ -712,9 +712,9 @@ public class CalendarController {
         String resultString = String.join("\n", returnResult(result));
         view.displayMessage(resultString);
       }
-      // else {
-      // view.displayMessage("No events found");
-      // }
+      else {
+        view.displayMessage("No events found");
+      }
     }
     catch (InvalidCommandException e) {
       throw e;
