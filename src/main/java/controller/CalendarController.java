@@ -53,7 +53,7 @@ public class CalendarController {
     description,
     location,
     isPublic
-  };
+  }
 
   /**
    * Constructs a calendar controller with model and view.
@@ -71,46 +71,46 @@ public class CalendarController {
 
   public void processCommand(String command) {
     if (command.trim().equalsIgnoreCase("exit")) {
-//      view.displayMessage("Exiting application.");
+      // view.displayMessage("Exiting application.");
       System.exit(0);
     }
 
     try {
       if (command.toLowerCase().startsWith("create calendar")) {
         processCreateCalendar(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("edit calendar")) {
         processEditCalendar(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("use calendar")) {
         processUseCalendar(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("create event")) {
         processCreate(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("edit event")) {
         processEdit(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("print events")) {
         processPrint(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("show status")) {
         processShow(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("export cal")) {
         processExport(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else if (command.toLowerCase().startsWith("copy event")) {
         processCopyEvents(command);
-//        view.displayMessage("Command processed: " + command);
+        // view.displayMessage("Command processed: " + command);
       }
       else {
         throw new InvalidCommandException("Invalid command");
@@ -169,7 +169,7 @@ public class CalendarController {
   }
 
   /**
-   * Function to create a Calendar
+   * Function to create a Calendar.
    * @param command the list of commands.
    */
 
@@ -199,7 +199,7 @@ public class CalendarController {
   }
 
   /**
-   * Function to edit a Calendar
+   * Function to edit a Calendar.
    * @param command the list of commands.
    */
 
@@ -216,7 +216,7 @@ public class CalendarController {
     String property = tokens.get(5).toLowerCase();
     String newValue = tokens.get(6);
 
-    try{
+    try {
       if (property.equals("name")) {
         model.changeCalendarName(calName, newValue);
       }
@@ -237,7 +237,7 @@ public class CalendarController {
   }
 
   /**
-   * Function to set a Calendar
+   * Function to set a Calendar.
    * @param command the list of commands.
    */
 
@@ -269,7 +269,8 @@ public class CalendarController {
         String targetDate = tokens.get(8);
 
         if (checkDateTimeValidity(copyDate) && checkDateTimeValidity(targetDate)) {
-          model.copyEvents(eventName, getDateTime(copyDate), targetCalendar, getDateTime(targetDate));
+          model.copyEvents(eventName, getDateTime(copyDate),
+                  targetCalendar, getDateTime(targetDate));
         }
         else {
           throw new InvalidCommandException("Invalid date formats");
@@ -432,7 +433,8 @@ public class CalendarController {
       if (tokens.contains("from")) {
         if (checkDateTimeValidity(tokens.get(4).toString())
                 && checkDateTimeValidity(tokens.get(6).toString())
-                && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))) {
+                && getDateTime(tokens.get(4).toString())
+                .isBefore(getDateTime(tokens.get(6).toString()))) {
 
           model.createSingleEvent(new SingleEvent(tokens.get(2).toString(),
                   getDateTime(tokens.get(4).toString()),
@@ -473,14 +475,17 @@ public class CalendarController {
    */
 
   private void recurringEventCreationHelper(List tokens) {
-    try{
+    try {
       if (tokens.contains("times")) {
         if (tokens.contains("to")) {
           if (checkDateTimeValidity(tokens.get(4).toString())
                   && checkDateTimeValidity(tokens.get(6).toString())
-                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
-                  && checkWeekDays(tokens.get(8).toString()) && checkNvalue(tokens.get(10).toString())
-                  && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
+                  && getDateTime(tokens.get(4).toString())
+                  .isBefore(getDateTime(tokens.get(6).toString()))
+                  && checkWeekDays(tokens.get(8).toString())
+                  && checkNvalue(tokens.get(10).toString())
+                  && getDateTime(tokens.get(4).toString()).toLocalDate()
+                  .isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())) {
 
             model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
                     getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
@@ -511,10 +516,14 @@ public class CalendarController {
         if (tokens.contains("to")) {
           if (checkDateTimeValidity(tokens.get(4).toString())
                   && checkDateTimeValidity(tokens.get(6).toString())
-                  && getDateTime(tokens.get(4).toString()).isBefore(getDateTime(tokens.get(6).toString()))
-                  && checkWeekDays(tokens.get(8).toString()) && checkDateTimeValidity(tokens.get(10).toString())
-                  && getDateTime(tokens.get(4).toString()).toLocalDate().isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())
-                  && getDateTime(tokens.get(6).toString()).isBefore(getDateTime(tokens.get(10).toString()))) {
+                  && getDateTime(tokens.get(4).toString())
+                  .isBefore(getDateTime(tokens.get(6).toString()))
+                  && checkWeekDays(tokens.get(8).toString())
+                  && checkDateTimeValidity(tokens.get(10).toString())
+                  && getDateTime(tokens.get(4).toString()).toLocalDate()
+                  .isEqual(getDateTime(tokens.get(6).toString()).toLocalDate())
+                  && getDateTime(tokens.get(6).toString())
+                  .isBefore(getDateTime(tokens.get(10).toString()))) {
 
             model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
                     getDateTime(tokens.get(4).toString()), getDateTime(tokens.get(6).toString()),
@@ -529,7 +538,8 @@ public class CalendarController {
           if (checkDateValidity(tokens.get(4).toString())
                   && checkWeekDays(tokens.get(6).toString())
                   && checkDateValidity(tokens.get(8).toString())
-                  && getDate(tokens.get(4).toString()).plusDays(1).isBefore(getDate(tokens.get(8).toString()))) {
+                  && getDate(tokens.get(4).toString()).plusDays(1)
+                  .isBefore(getDate(tokens.get(8).toString()))) {
 
             model.createRecurringEvent(new RecurringEvent(tokens.get(2).toString(),
                     getDate(tokens.get(4).toString()).atStartOfDay(),
@@ -592,7 +602,8 @@ public class CalendarController {
         if (checkDateTimeValidity(startDateTime)
                 && checkDateTimeValidity(endDateTime)
                 && checkValidPropertyValues(property, newValue)) {
-          model.editEvents(property, eventName, getDateTime(startDateTime), getDateTime(endDateTime), newValue);
+          model.editEvents(property, eventName,
+                  getDateTime(startDateTime), getDateTime(endDateTime), newValue);
         }
         else {
           throw new InvalidCommandException("Invalid datetime or property");
@@ -652,9 +663,12 @@ public class CalendarController {
       String startFormatted = startDateTime.format(DATE_TIME_FORMATTER);
       String endFormatted = endDateTime.format(DATE_TIME_FORMATTER);
 
-      String locationStr = (location != null && !location.trim().isEmpty()) ? " at " + location : "";
+      String locationStr = (location != null && !location.trim()
+              .isEmpty()) ? " at " + location : "";
 
-      printResult.add("• " + eventName + " (" + startFormatted + " - " + endFormatted + ")" + locationStr);
+      printResult.add("• " + eventName + " (" + startFormatted + " - "
+              + endFormatted + ")"
+              + locationStr);
     }
     return printResult;
   }
@@ -665,7 +679,7 @@ public class CalendarController {
    * @throws InvalidCommandException if command is invalid.
    */
 
-  private void processPrint(String command) throws InvalidCommandException{
+  private void processPrint(String command) throws InvalidCommandException {
     List tokens = extractDataFromCommand(command);
     List<List> result;
 
@@ -681,7 +695,8 @@ public class CalendarController {
       else if (tokens.contains("from")) {
         if (checkDateTimeValidity(tokens.get(3).toString())
                 && checkDateTimeValidity(tokens.get(5).toString())
-                && getDateTime(tokens.get(3).toString()).isBefore(getDateTime(tokens.get(5).toString()))) {
+                && getDateTime(tokens.get(3).toString())
+                .isBefore(getDateTime(tokens.get(5).toString()))) {
           result = model.getEventsBetween(getDateTime(tokens.get(3).toString()),
                   getDateTime(tokens.get(5).toString()));
         }
@@ -697,9 +712,9 @@ public class CalendarController {
         String resultString = String.join("\n", returnResult(result));
         view.displayMessage(resultString);
       }
-//      else {
-//        view.displayMessage("No events found");
-//      }
+      // else {
+      // view.displayMessage("No events found");
+      // }
     }
     catch (InvalidCommandException e) {
       throw e;
@@ -748,12 +763,13 @@ public class CalendarController {
     List<List> result;
 
     try {
-      if (tokens.get(2).toString().toLowerCase().endsWith(".csv") && tokens.get(2).toString().length() > 4) {
+      if (tokens.get(2).toString().toLowerCase().endsWith(".csv")
+              && tokens.get(2).toString().length() > 4) {
         result = model.exportCalendar();
         CSVExporter exporter = new CSVExporter();
         exporter.exportCSV(result, tokens.get(2).toString());
-//        String filePath = exporter.exportCSV(result, tokens.get(2).toString());
-//        view.displayMessage("File available at: " + filePath);
+        // String filePath = exporter.exportCSV(result, tokens.get(2).toString());
+        // view.displayMessage("File available at: " + filePath);
       }
       else {
         throw new InvalidCommandException("Invalid filename or extension");

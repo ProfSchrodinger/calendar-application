@@ -47,11 +47,9 @@ public class CalendarEvent {
     LocalDateTime otherStart = other.startDateTime;
     LocalDateTime otherEnd = other.endDateTime;
 
-    boolean condition =  (thisStart.compareTo(otherEnd) >= 0) || (thisEnd.compareTo(otherStart) <= 0 );
+    boolean condition =  (thisStart.compareTo(otherEnd) >= 0)
+            || (thisEnd.compareTo(otherStart) <= 0 );
 
-    if (condition) {
-      return false;
-    }
-    return true;
+    return !condition;
   }
 }

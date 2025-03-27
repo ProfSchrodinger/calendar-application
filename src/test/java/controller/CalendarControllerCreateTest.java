@@ -27,7 +27,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Test Random command
+   * Test Random command.
    */
 
   @Test
@@ -40,7 +40,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * No subject and start and end time
+   * No subject and start and end time.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -54,7 +54,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * No subject and start date and time
+   * No subject and start date and time.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -68,7 +68,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * No start date and time
+   * No start date and time.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -82,7 +82,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * No start date and time
+   * No start date and time.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -96,7 +96,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid start date and time
+   * Invalid start date and time.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -110,7 +110,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * No end date and time as from is present
+   * No end date and time as from is present.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -124,7 +124,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * No end date and time as from is present
+   * No end date and time as from is present.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -138,7 +138,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid end date and time
+   * Invalid end date and time.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -152,7 +152,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid end date and time
+   * Invalid end date and time.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -166,7 +166,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid create command using from
+   * Valid create command using from.
    */
 
   @Test
@@ -177,29 +177,31 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid create command using from and autoDecline
+   * Valid create command using from and autoDecline.
    */
 
   @Test
   public void testValidSingleCreateCommand2() {
-    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+    controller.processCommand("create event --autoDecline MeetingOne from "
+            + "2025-03-12T00:00 to 2025-03-12T01:00");
     Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
             controller.model.getEventsOn(LocalDate.of(2025, 3, 12)).toString());
   }
 
   /**
-   * Valid create command using from and spaced subject name
+   * Valid create command using from and spaced subject name.
    */
 
   @Test
   public void testValidSingleCreateCommand3() {
-    controller.processCommand("create event \"Meeting One\" from 2025-03-12T00:00 to 2025-03-12T01:00");
+    controller.processCommand("create event \"Meeting One\" from "
+            + "2025-03-12T00:00 to 2025-03-12T01:00");
     Assert.assertEquals("[[Meeting One, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
             controller.model.getEventsOn(LocalDate.of(2025, 3, 12)).toString());
   }
 
   /**
-   * Valid create command using from, multiple days
+   * Valid create command using from, multiple days.
    */
 
   @Test
@@ -210,7 +212,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid create command using on
+   * Invalid create command using on.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -224,7 +226,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid start date time create command using on
+   * Invalid start date time create command using on.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -238,7 +240,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid start date time create command using on
+   * Invalid start date time create command using on.
    */
 
   @Test (expected = InvalidCommandException.class)
@@ -258,7 +260,8 @@ public class CalendarControllerCreateTest {
   @Test (expected = InvalidCommandException.class)
   public void testInvalidSingleCreateCommand13() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-10T00:00");
+      controller.processCommand("create event MeetingOne from "
+              + "2025-03-12T00:00 to 2025-03-10T00:00");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -272,7 +275,8 @@ public class CalendarControllerCreateTest {
   @Test (expected = InvalidCommandException.class)
   public void testInvalidSingleCreateCommand14() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T00:00");
+      controller.processCommand("create event MeetingOne from "
+              + "2025-03-12T00:00 to 2025-03-12T00:00");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -280,7 +284,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid create command using on
+   * Valid create command using on.
    */
 
   @Test
@@ -291,7 +295,7 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid create command using on and autoDecline
+   * Valid create command using on and autoDecline.
    */
 
   @Test
@@ -302,45 +306,48 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid Recurring event create command using N times
+   * Valid Recurring event create command using N times.
    */
 
   @Test
   public void testValidRecurringCreateCommand1() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF for 3 times");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+            + "to 2025-03-12T01:00 repeats MWF for 3 times");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid Recurring event create command using N times
+   * Valid Recurring event create command using N times.
    */
 
   @Test
   public void testValidRecurringCreateCommand2() {
-    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF for 3 times");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 "
+            + "to 2025-03-12T01:00 repeats MWF for 3 times");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid Recurring event create command using N times on different start date
+   * Valid Recurring event create command using N times on different start date.
    */
 
   @Test
   public void testValidRecurringCreateCommand3() {
-    controller.processCommand("create event MeetingOne from 2025-03-13T00:00 to 2025-03-13T01:00 repeats MWF for 3 times");
-    Assert.assertEquals("[[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-                    "[MeetingOne, 2025-03-19T00:00, 2025-03-19T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event MeetingOne from 2025-03-13T00:00 to "
+            + "2025-03-13T01:00 repeats MWF for 3 times");
+    Assert.assertEquals("[[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], "
+                    + "[MeetingOne, 2025-03-19T00:00, 2025-03-19T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
@@ -350,7 +357,8 @@ public class CalendarControllerCreateTest {
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand1() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T01:00 to 2025-03-12T00:00 repeats MWF for 3 times");
+      controller.processCommand("create event MeetingOne from 2025-03-12T01:00 "
+              + "to 2025-03-12T00:00 repeats MWF for 3 times");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -364,7 +372,8 @@ public class CalendarControllerCreateTest {
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand2() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12 repeats MWF for 3 times");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+              + "to 2025-03-12 repeats MWF for 3 times");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -372,13 +381,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid weekdays
+   * Invalid weekdays.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand3() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats ZA for 3 times");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+              + "to 2025-03-12T01:00 repeats ZA for 3 times");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -386,13 +396,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid weekdays
+   * Invalid weekdays.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand4() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats for 3 times");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+              + "to 2025-03-12T01:00 repeats for 3 times");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -400,13 +411,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid 0 repeats
+   * Invalid 0 repeats.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand5() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW for 0 times");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+              + "to 2025-03-12T01:00 repeats MFW for 0 times");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -414,13 +426,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid negative repeats
+   * Invalid negative repeats.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand6() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW for -3 times");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+              + "to 2025-03-12T01:00 repeats MFW for -3 times");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -428,57 +441,61 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid Recurring event create command using until
+   * Valid Recurring event create command using until.
    */
 
   @Test
   public void testValidRecurringCreateCommand4() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF until 2025-03-20T00:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-                    "[MeetingOne, 2025-03-19T00:00, 2025-03-19T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+            + "to 2025-03-12T01:00 repeats MWF until 2025-03-20T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], "
+                    + "[MeetingOne, 2025-03-19T00:00, 2025-03-19T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid Recurring event create command using until but strict until time
+   * Valid Recurring event create command using until but strict until time.
    */
 
   @Test
   public void testValidRecurringCreateCommand5() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF until 2025-03-19T00:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+            + "to 2025-03-12T01:00 repeats MWF until 2025-03-19T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid Recurring event create command using until and --autoDecline
+   * Valid Recurring event create command using until and --autoDecline.
    */
 
   @Test
   public void testValidRecurringCreateCommand6() {
-    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF until 2025-03-20T00:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-                    "[MeetingOne, 2025-03-19T00:00, 2025-03-19T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 "
+            + "to 2025-03-12T01:00 repeats MWF until 2025-03-20T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], "
+                    + "[MeetingOne, 2025-03-19T00:00, 2025-03-19T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Invalid until date
+   * Invalid until date.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand7() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-12T00:00");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+              + "to 2025-03-12T01:00 repeats MFW until 2025-03-12T00:00");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -486,13 +503,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid until date 2
+   * Invalid until date 2.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand8() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-12T00:30");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to "
+              + "2025-03-12T01:00 repeats MFW until 2025-03-12T00:30");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -500,27 +518,28 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid Recurring full day event create command using N times
+   * Valid Recurring full day event create command using N times.
    */
 
   @Test
   public void testValidRecurringCreateCommand7() {
     controller.processCommand("create event MeetingOne on 2025-03-12 repeats MWF for 3 times");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-13T00:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-15T00:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-18T00:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-13T00:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-15T00:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-18T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Invalid Recurring full day event create command using N times, used DateTime instead of Date
+   * Invalid Recurring full day event create command using N times, used DateTime instead of Date.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand9() {
     try {
-      controller.processCommand("create event MeetingOne on 2025-03-12T00:00 repeats MWF for 3 times");
+      controller.processCommand("create event MeetingOne on 2025-03-12T00:00 "
+              + "repeats MWF for 3 times");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -528,28 +547,30 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid Recurring full day event create command using until
+   * Valid Recurring full day event create command using until.
    */
 
   @Test
   public void testValidRecurringCreateCommand8() {
-    controller.processCommand("create event MeetingOne on 2025-03-12 repeats TRSU until 2025-03-20");
-    Assert.assertEquals("[[MeetingOne, 2025-03-13T00:00, 2025-03-14T00:00, ], " +
-                    "[MeetingOne, 2025-03-15T00:00, 2025-03-16T00:00, ], " +
-                    "[MeetingOne, 2025-03-16T00:00, 2025-03-17T00:00, ], " +
-                    "[MeetingOne, 2025-03-18T00:00, 2025-03-19T00:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event MeetingOne on 2025-03-12 repeats "
+            + "TRSU until 2025-03-20");
+    Assert.assertEquals("[[MeetingOne, 2025-03-13T00:00, 2025-03-14T00:00, ], "
+                    + "[MeetingOne, 2025-03-15T00:00, 2025-03-16T00:00, ], "
+                    + "[MeetingOne, 2025-03-16T00:00, 2025-03-17T00:00, ], "
+                    + "[MeetingOne, 2025-03-18T00:00, 2025-03-19T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Invalid Recurring full day event create command using until, used DateTime instead of Date
+   * Invalid Recurring full day event create command using until, used DateTime instead of Date.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand10() {
     try {
-      controller.processCommand("create event MeetingOne on 2025-03-12T00:00 repeats MWF until 2025-03-20");
+      controller.processCommand("create event MeetingOne on 2025-03-12T00:00 "
+              + "repeats MWF until 2025-03-20");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -557,13 +578,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid Recurring full day event create command using until, used DateTime instead of Date
+   * Invalid Recurring full day event create command using until, used DateTime instead of Date.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand11() {
     try {
-      controller.processCommand("create event MeetingOne on 2025-03-12 repeats MWF until 2025-03-20T00:00");
+      controller.processCommand("create event MeetingOne on 2025-03-12 "
+              + "repeats MWF until 2025-03-20T00:00");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -571,13 +593,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid Recurring full day event create command using until, used DateTime instead of Date
+   * Invalid Recurring full day event create command using until, used DateTime instead of Date.
    */
 
   @Test (expected = InvalidCommandException.class)
   public void testInvalidRecurringCreateCommand12() {
     try {
-      controller.processCommand("create event MeetingOne on 2025-03-12 repeats MWF until 2025-03-11");
+      controller.processCommand("create event MeetingOne on 2025-03-12 "
+              + "repeats MWF until 2025-03-11");
     } catch (Exception e) {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
@@ -585,86 +608,62 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid 2 Single events
+   * Valid 2 Single events.
    */
 
   @Test
   public void testValidSingleSingleCommand1() {
     controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
     controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid 2 Single events overlapping
-   * Became invalid as overlapping not allowed in Assignment 5.
-   */
-
-//  @Test
-//  public void testValidSingleSingleCommand2() {
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-//    controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
-//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
-//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-//  }
-
-  /**
-   * Valid 2 Single events overlapping (different commands)
-   * Became invalid as overlapping not allowed in Assignment 5.
-   */
-
-//  @Test
-//  public void testValidSingleSingleCommand3() {
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-//    controller.processCommand("create event MeetingTwo on 2025-03-12T00:00");
-//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-13T00:00, ]]",
-//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-//  }
-
-  /**
-   * Valid 2 Single events overlapping (same commands) MeetingOne < MeetingTwo
+   * Valid 2 Single events overlapping (same commands) MeetingOne < MeetingTwo.
    */
 
   @Test
   public void testValidSingleSingleCommand4() {
-    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-    controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-11T23:00 to 2025-03-12T00:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingTwo, 2025-03-11T23:00, 2025-03-12T00:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 11, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event --autoDecline MeetingOne from "
+            + "2025-03-12T00:00 to 2025-03-12T01:00");
+    controller.processCommand("create event --autoDecline MeetingTwo from "
+            + "2025-03-11T23:00 to 2025-03-12T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingTwo, 2025-03-11T23:00, 2025-03-12T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 11, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid 2 Single events overlapping (same commands) MeetingOne > MeetingTwo
+   * Valid 2 Single events overlapping (same commands) MeetingOne > MeetingTwo.
    */
 
   @Test
   public void testValidSingleSingleCommand5() {
-    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-    controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 11, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 "
+            + "to 2025-03-12T01:00");
+    controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-12T01:00 "
+            + "to 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 11, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Invalid 2 Single events overlapping declined due to autoDecline
+   * Invalid 2 Single events overlapping declined due to autoDecline.
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidSingleSingleCommand1() {
     try {
-      controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-      controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event --autoDecline MeetingOne from "
+              + "2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event --autoDecline MeetingTwo from "
+              + "2025-03-12T00:00 to 2025-03-12T01:00");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;
@@ -672,13 +671,14 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid 2 Single events overlapping declined due to autoDecline (different create)
+   * Invalid 2 Single events overlapping declined due to autoDecline (different create).
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidSingleSingleCommand2() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event MeetingOne from "
+              + "2025-03-12T00:00 to 2025-03-12T01:00");
       controller.processCommand("create event --autoDecline MeetingTwo on 2025-03-12T00:00");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
@@ -687,14 +687,16 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid 2 Single events overlapping declined due to autoDecline
+   * Invalid 2 Single events overlapping declined due to autoDecline.
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidSingleSingleCommand3() {
     try {
-      controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-      controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-11T23:30 to 2025-03-12T00:30");
+      controller.processCommand("create event --autoDecline MeetingOne from "
+              + "2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event --autoDecline MeetingTwo from "
+              + "2025-03-11T23:30 to 2025-03-12T00:30");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;
@@ -702,14 +704,16 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid 2 Single events overlapping declined due to autoDecline
+   * Invalid 2 Single events overlapping declined due to autoDecline.
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidSingleSingleCommand4() {
     try {
-      controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-      controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-12T00:30 to 2025-03-12T01:30");
+      controller.processCommand("create event --autoDecline MeetingOne from "
+              + "2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event --autoDecline MeetingTwo from "
+              + "2025-03-12T00:30 to 2025-03-12T01:30");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;
@@ -717,29 +721,31 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid Single event and recurring event no overlapping
+   * Valid Single event and recurring event no overlapping.
    */
 
   @Test
   public void testValidSingleRecurringCommand1() {
     controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
     controller.processCommand("create event MeetingTwo on 2025-03-13 repeats MFW until 2025-03-19");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingTwo, 2025-03-14T00:00, 2025-03-15T00:00, ], " +
-                    "[MeetingTwo, 2025-03-17T00:00, 2025-03-18T00:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingTwo, 2025-03-14T00:00, 2025-03-15T00:00, ], "
+                    + "[MeetingTwo, 2025-03-17T00:00, 2025-03-18T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Invalid Single event and recurring event due to overlapping
+   * Invalid Single event and recurring event due to overlapping.
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidSingleRecurringCommand1() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-      controller.processCommand("create event MeetingTwo on 2025-03-12 repeats MFW until 2025-03-19");
+      controller.processCommand("create event MeetingOne from "
+              + "2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event MeetingTwo on 2025-03-12"
+              + " repeats MFW until 2025-03-19");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;
@@ -747,49 +753,54 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid 2 recurring events no overlapping
+   * Valid 2 recurring events no overlapping.
    */
 
   @Test
   public void testValidRecurringRecurringCommand1() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00 repeats MFW until 2025-03-18T00:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ], " +
-                    "[MeetingTwo, 2025-03-14T01:00, 2025-03-14T02:00, ], " +
-                    "[MeetingTwo, 2025-03-17T01:00, 2025-03-17T02:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to "
+            + "2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to"
+            + " 2025-03-12T02:00 repeats MFW until 2025-03-18T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], "
+                    + "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ], "
+                    + "[MeetingTwo, 2025-03-14T01:00, 2025-03-14T02:00, ], "
+                    + "[MeetingTwo, 2025-03-17T01:00, 2025-03-17T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid 2 recurring events (timed and all day long) no overlapping
+   * Valid 2 recurring events (timed and all day long) no overlapping.
    */
 
   @Test
   public void testValidRecurringRecurringCommand2() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to "
+            + "2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
     controller.processCommand("create event MeetingTwo on 2025-03-13 repeats TR until 2025-03-19");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-                    "[MeetingTwo, 2025-03-13T00:00, 2025-03-14T00:00, ], " +
-                    "[MeetingTwo, 2025-03-18T00:00, 2025-03-19T00:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], "
+                    + "[MeetingTwo, 2025-03-13T00:00, 2025-03-14T00:00, ], "
+                    + "[MeetingTwo, 2025-03-18T00:00, 2025-03-19T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Invalid 2 recurring events due to overlapping
+   * Invalid 2 recurring events due to overlapping.
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidRecurringRecurringCommand1() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-      controller.processCommand("create event MeetingTwo on 2025-03-13 repeats FM until 2025-03-19");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to "
+              + "2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+      controller.processCommand("create event MeetingTwo on 2025-03-13 "
+              + "repeats FM until 2025-03-19");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;
@@ -797,14 +808,16 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Invalid 2 recurring events due to overlapping even if 1 event clashed
+   * Invalid 2 recurring events due to overlapping even if 1 event clashed.
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidRecurringRecurringCommand2() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-      controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-12T06:00");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 "
+              + "to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+      controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 "
+              + "to 2025-03-12T01:00 repeats MFW until 2025-03-12T06:00");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;
@@ -812,47 +825,34 @@ public class CalendarControllerCreateTest {
   }
 
   /**
-   * Valid Recurring event followed by Single event with autoDecline
+   * Valid Recurring event followed by Single event with autoDecline.
    */
 
   @Test
   public void testValidRecurringSingleCommand1() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-    controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to "
+            + "2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("create event --autoDecline MeetingTwo from "
+            + "2025-03-12T01:00 to 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], "
+                    + "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], "
+                    + "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], "
+                    + "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00),
+                    LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 
   /**
-   * Valid Recurring event followed by Single event collision without autoDecline
-   * Became invalid as overlapping not allowed in Assignment 5.
-   */
-
-//  @Test
-//  public void testValidRecurringSingleCommand2() {
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-//    controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
-//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-//                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
-//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 0, 0)
-//                    , LocalDateTime.of(2025, 3, 20, 0, 0)).toString());
-//  }
-
-  /**
-   * Invalid Recurring event followed by Single event collision with autoDecline
+   * Invalid Recurring event followed by Single event collision with autoDecline.
    */
 
   @Test (expected = EventConflictException.class)
   public void testInvalidRecurringSingleCommand1() {
     try {
-      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-      controller.processCommand("create event --autoDecline MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
+      controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to "
+              + "2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+      controller.processCommand("create event --autoDecline MeetingTwo from "
+              + "2025-03-12T00:00 to 2025-03-12T01:00");
     } catch (Exception e) {
       Assert.assertEquals("Event Conflict Occurred", e.getMessage());
       throw e;

@@ -15,14 +15,14 @@ import org.junit.Test;
 import exception.InvalidCommandException;
 
 /**
- * Tests for exporting calendar
+ * Tests for exporting calendar.
  */
 
 public class CSVExporterTest {
 
   /**
-   * Test to check header and import value match
-   * @throws Exception if errored when processing
+   * Test to check header and import value match.
+   * @throws Exception if errored when processing.
    */
 
   @Test
@@ -47,17 +47,19 @@ public class CSVExporterTest {
 
     List<String> lines = Files.readAllLines(tempFile);
 
-    String expectedHeader = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String expectedHeader = "Subject, Start Date, Start Time, End Date, "
+            + "End Time, Description, Location, Private";
     assertEquals("Header should match", expectedHeader, lines.get(0));
 
-    String expectedEventLine = "\"Meeting\",03/15/2024,10:00 AM,\"03/15/2024\",\"11:00 AM\",\"Project discussion\",\"Room 101\",true";
+    String expectedEventLine = "\"Meeting\",03/15/2024,10:00 AM,\"03/15/2024\",\"11:00 AM\","
+            + "\"Project discussion\",\"Room 101\",true";
     assertEquals("Event line should match", expectedEventLine, lines.get(1));
 
     Files.deleteIfExists(tempFile);
   }
 
   /**
-   * Invalid file name
+   * Invalid file name.
    */
 
   @Test(expected = InvalidCommandException.class)

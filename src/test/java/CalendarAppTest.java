@@ -1,4 +1,5 @@
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -29,21 +30,23 @@ public class CalendarAppTest {
   private static class NoExitSecurityManager extends SecurityManager {
 
     /**
-     * Allow all permissions
+     * Allow all permissions.
      * @param perm   the requested permission.
      */
 
     @Override
     public void checkPermission(java.security.Permission perm) {
+      // Allow all permissions.
     }
 
     /**
-     * Allow all permissions
+     * Allow all permissions.
      * @param perm   the requested permission.
      */
 
     @Override
     public void checkPermission(java.security.Permission perm, Object context) {
+      // Allow all permissions.
     }
 
     /**
@@ -59,7 +62,7 @@ public class CalendarAppTest {
   }
 
   /**
-   * Setup of the securityManager object
+   * Setup of the securityManager object.
    */
   @Before
   public void setUp() {
@@ -93,7 +96,8 @@ public class CalendarAppTest {
     } catch (SecurityException e) {
       assertTrue(e.getMessage().contains("System.exit(1)"));
       String output = outContent.toString();
-      assertTrue(output.contains("Invalid mode, use: --mode interactive OR --mode headless <commandFile>"));
+      assertTrue(output.contains("Invalid mode, use: --mode interactive "
+              + "OR --mode headless <commandFile>"));
     }
   }
 
@@ -147,7 +151,8 @@ public class CalendarAppTest {
   }
 
   /**
-   * Test headless mode with a file that does not contain at least 2 commands or does not end with "exit".
+   * Test headless mode with a file that does not contain at least
+   * 2 commands or does not end with "exit".
    */
 
   @Test

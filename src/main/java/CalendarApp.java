@@ -26,8 +26,8 @@ public class CalendarApp {
     CalendarController controller = new CalendarController();
 
     if (args.length < 2) {
-      view.displayMessage("Invalid mode, use: --mode interactive " +
-              "OR --mode headless <commandFile>");
+      view.displayMessage("Invalid mode, use: --mode interactive "
+              + "OR --mode headless <commandFile>");
       System.exit(1);
     }
 
@@ -61,7 +61,7 @@ public class CalendarApp {
 
         if (lines.size() >= 2
                 && lines.get(lines.size() - 1).trim().equalsIgnoreCase("exit")) {
-          try{
+          try {
             for (String command : lines) {
               controller.processCommand(command);
             }

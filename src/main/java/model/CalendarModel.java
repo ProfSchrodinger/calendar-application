@@ -14,7 +14,7 @@ import exception.InvalidCommandException;
  * It implements the ICalendarModel interface.
  */
 
-public class CalendarModel implements ICalendarModel{
+public class CalendarModel implements ICalendarModel {
 
   List<CalendarEvent> events;
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
@@ -95,7 +95,8 @@ public class CalendarModel implements ICalendarModel{
    * @throws EventConflictException if conflict occurs due to editing.
    */
 
-  private void editHelper (String property, String newValue, CalendarEvent event, String eventType) throws EventConflictException {
+  private void editHelper(String property, String newValue, CalendarEvent event,
+                          String eventType) throws EventConflictException {
     switch (property) {
       case "subject":
         event.subject = newValue;
@@ -111,7 +112,8 @@ public class CalendarModel implements ICalendarModel{
           LocalDateTime originalStartDateTime = event.startDateTime;
 
           if (eventType.equals("Recurring")
-                  && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.startDateTime.toLocalDate())) {
+                  && LocalDateTime.parse(newValue, formatter)
+                  .toLocalDate().equals(event.startDateTime.toLocalDate())) {
             event.startDateTime = LocalDateTime.parse(newValue, formatter);
 
             if (checkConflict(event)) {
@@ -131,7 +133,8 @@ public class CalendarModel implements ICalendarModel{
           LocalDateTime originalEndDateTime = event.endDateTime;
 
           if (eventType.equals("Recurring")
-                  && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.endDateTime.toLocalDate())) {
+                  && LocalDateTime.parse(newValue, formatter)
+                  .toLocalDate().equals(event.endDateTime.toLocalDate())) {
             event.endDateTime = LocalDateTime.parse(newValue, formatter);
 
             if (checkConflict(event)) {
@@ -190,7 +193,8 @@ public class CalendarModel implements ICalendarModel{
    */
 
   @Override
-  public void editEvents(String property, String eventName, LocalDateTime startDateTime, LocalDateTime endDateTime, String newValue) throws Exception {
+  public void editEvents(String property, String eventName, LocalDateTime startDateTime,
+                         LocalDateTime endDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
         if (event.startDateTime.isEqual(startDateTime) && event.endDateTime.isEqual(endDateTime)) {
@@ -202,7 +206,8 @@ public class CalendarModel implements ICalendarModel{
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
-          if (singleEvent.startDateTime.isEqual(startDateTime) && singleEvent.endDateTime.isEqual(endDateTime)) {
+          if (singleEvent.startDateTime.isEqual(startDateTime)
+                  && singleEvent.endDateTime.isEqual(endDateTime)) {
             if (singleEvent.subject.equals(eventName)) {
               editHelper(property, newValue, singleEvent, "Recurring");
             }
@@ -222,7 +227,8 @@ public class CalendarModel implements ICalendarModel{
    */
 
   @Override
-  public void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception {
+  public void editEvents(String property, String eventName,
+                         LocalDateTime startDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
         if (event.startDateTime.compareTo(startDateTime) >= 0) {
@@ -359,16 +365,16 @@ public class CalendarModel implements ICalendarModel{
   public boolean isBusy(LocalDateTime dateTime) {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
-        if (event.startDateTime.compareTo(dateTime) <= 0 &&
-                event.endDateTime.compareTo(dateTime) > 0) {
+        if (event.startDateTime.compareTo(dateTime) <= 0
+                && event.endDateTime.compareTo(dateTime) > 0) {
           return true;
         }
       }
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
-          if (singleEvent.startDateTime.compareTo(dateTime) <= 0 &&
-                  singleEvent.endDateTime.compareTo(dateTime) > 0) {
+          if (singleEvent.startDateTime.compareTo(dateTime) <= 0
+                  && singleEvent.endDateTime.compareTo(dateTime) > 0) {
             return true;
           }
         }

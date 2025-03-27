@@ -43,7 +43,7 @@ public interface ICalendarModel {
    */
 
   void editEvents(String property, String eventName, LocalDateTime startDateTime,
-                 LocalDateTime endDateTime, String newValue) throws Exception;
+                  LocalDateTime endDateTime, String newValue) throws Exception;
 
   /**
    * Edits an event by modifying a specific property for an event.
@@ -55,7 +55,8 @@ public interface ICalendarModel {
    * @throws Exception If an error occurs during event modification.
    */
 
-  void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception;
+  void editEvents(String property, String eventName,
+                  LocalDateTime startDateTime, String newValue) throws Exception;
 
   /**
    * Edits all events with the specified name by modifying a specific property.
@@ -66,7 +67,8 @@ public interface ICalendarModel {
    * @throws Exception If an error occurs during event modification.
    */
 
-  void editEvents(String property, String eventName, String newValue) throws Exception;
+  void editEvents(String property, String eventName,
+                  String newValue) throws Exception;
 
   /**
    * Retrieves all events occurring on a given date.

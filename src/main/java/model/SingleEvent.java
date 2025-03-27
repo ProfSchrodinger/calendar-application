@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * This class represents a single event.
  */
 
-public class SingleEvent extends CalendarEvent{
+public class SingleEvent extends CalendarEvent {
 
   /**
    * Constructs a SingleEvent with the specified details.

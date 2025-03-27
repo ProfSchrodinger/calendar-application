@@ -7,7 +7,7 @@ import java.util.Scanner;
  * interacting with calendar app.
  */
 
-public class ConsoleView extends UserView{
+public class ConsoleView extends UserView {
   private Scanner scanner;
 
   /**

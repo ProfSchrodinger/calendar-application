@@ -9,7 +9,7 @@ import java.util.List;
  * Class represents a recurring event in the calendar.
  */
 
-public class RecurringEvent extends CalendarEvent{
+public class RecurringEvent extends CalendarEvent {
   List<SingleEvent> recurringEventList;
 
   /**
@@ -30,7 +30,8 @@ public class RecurringEvent extends CalendarEvent{
                         int n, LocalDateTime untilDateTime) {
     super(subject, startDateTime, endDateTime, description, location, isPublic);
 
-    boolean isEntireDay = startDateTime.toLocalTime().equals(LocalTime.MIDNIGHT) && endDateTime.toLocalTime().equals(LocalTime.MIDNIGHT);
+    boolean isEntireDay = startDateTime.toLocalTime().equals(LocalTime.MIDNIGHT)
+            && endDateTime.toLocalTime().equals(LocalTime.MIDNIGHT);
     recurringEventList = new ArrayList<SingleEvent>();
     LocalDateTime currentDateTime = startDateTime;
 
@@ -38,12 +39,18 @@ public class RecurringEvent extends CalendarEvent{
       while (currentDateTime.isBefore(untilDateTime)) {
         if (checkWeekDayValidity(currentDateTime.getDayOfWeek().toString(), weekDays)) {
           if (isEntireDay) {
-            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
-                    LocalDateTime.of(currentDateTime.plusDays(1).toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+            recurringEventList.add(new SingleEvent(subject, LocalDateTime
+                    .of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.plusDays(1)
+                            .toLocalDate(), endDateTime.toLocalTime()),
+                    description, location, isPublic));
           }
           else {
-            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
-                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+            recurringEventList.add(new SingleEvent(subject,
+                    LocalDateTime.of(currentDateTime.toLocalDate(),
+                            startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()),
+                    description, location, isPublic));
           }
         }
         currentDateTime = currentDateTime.plusDays(1);
@@ -53,12 +60,19 @@ public class RecurringEvent extends CalendarEvent{
       while (n > 0) {
         if (checkWeekDayValidity(currentDateTime.getDayOfWeek().toString(), weekDays)) {
           if (isEntireDay) {
-            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
-                    LocalDateTime.of(currentDateTime.plusDays(1).toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+            recurringEventList.add(new SingleEvent(subject,
+                    LocalDateTime.of(currentDateTime.toLocalDate(),
+                            startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.plusDays(1).toLocalDate(),
+                            endDateTime.toLocalTime()),
+                    description, location, isPublic));
           }
           else {
-            recurringEventList.add(new SingleEvent(subject, LocalDateTime.of(currentDateTime.toLocalDate(), startDateTime.toLocalTime()),
-                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()), description, location, isPublic));
+            recurringEventList.add(new SingleEvent(subject,
+                    LocalDateTime.of(currentDateTime.toLocalDate(),
+                            startDateTime.toLocalTime()),
+                    LocalDateTime.of(currentDateTime.toLocalDate(), endDateTime.toLocalTime()),
+                    description, location, isPublic));
           }
           n--;
         }
@@ -93,6 +107,8 @@ public class RecurringEvent extends CalendarEvent{
     else if (currentDay.equals("SATURDAY") && weekDays.contains(String.valueOf('S'))) {
       return true;
     }
-    else return currentDay.equals("SUNDAY") && weekDays.contains(String.valueOf('U'));
+    else {
+      return currentDay.equals("SUNDAY") && weekDays.contains(String.valueOf('U'));
+    }
   }
 }

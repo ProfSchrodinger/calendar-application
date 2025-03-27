@@ -29,7 +29,8 @@ public class CSVExporter {
     DateTimeFormatter csvTimeFormatter = DateTimeFormatter.ofPattern("hh:mm a");
 
     try (FileWriter writer = new FileWriter(absolutePath)) {
-      writer.write("Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private\n");
+      writer.write("Subject, Start Date, Start Time, End Date, "
+              + "End Time, Description, Location, Private\n");
 
       for (List<Object> eventDetails : eventList) {
         String subject = (String) eventDetails.get(0);
@@ -56,7 +57,7 @@ public class CSVExporter {
                 location,
                 isPublic));
       }
-//      return absolutePath;
+      // return absolutePath;
     }
     catch (IOException e) {
       throw new InvalidCommandException("Error writing CSV file");
