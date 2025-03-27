@@ -97,7 +97,6 @@ public class CalendarModel implements ICalendarModel{
 
   private void editHelper (String property, String newValue, CalendarEvent event, String eventType) throws EventConflictException {
     if (property.equals("subject")) {
-      System.out.println("Going to change sub");
       event.subject = newValue;
     }
     else if (property.equals("description")) {
@@ -257,11 +256,9 @@ public class CalendarModel implements ICalendarModel{
   @Override
   public void editEvents(String property, String eventName, String newValue) throws Exception {
 
-    System.out.println("Inside editEvents");
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
         if (event.subject.equals(eventName)) {
-          System.out.println("Match Found");
           editHelper(property, newValue, event, "Single");
         }
       }

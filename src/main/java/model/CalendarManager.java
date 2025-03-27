@@ -318,7 +318,6 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
 
   @Override
   public void editEvents(String property, String eventName, String newValue) throws Exception {
-    System.out.println("Inside Manager");
     currentCalendar.editEvents(property, eventName, newValue);
   }
 
