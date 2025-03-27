@@ -4,6 +4,10 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Class to include calendarName and timezone on top of the CalendarModel.
+ */
+
 public class CalendarModelV2 extends CalendarModel implements ICalendarModelV2 {
 
   String calendarName;
@@ -12,19 +16,31 @@ public class CalendarModelV2 extends CalendarModel implements ICalendarModelV2 {
 
   /**
    * Constructs an empty calendar model.
-   * @param calendarName
-   * @param timeZone
+   * @param calendarName The name of the calendar.
+   * @param timeZone The timezone designated to the calendar.
    */
+
   public CalendarModelV2(String calendarName, ZoneId timeZone) {
     super();
     this.calendarName = calendarName;
     this.timeZone = timeZone;
   }
 
+  /**
+   * Function to change calendar name.
+   * @param newName The new name for the calendar.
+   */
+
   @Override
   public void changeCalendarName(String newName) {
     this.calendarName = newName;
   }
+
+  /**
+   * Function to convert start and end times to the new timezone.
+   * @param event The event to be changed.
+   * @param newTimeZone The new timezone ID.
+   */
 
   private void changeEventTime(CalendarEvent event, ZoneId newTimeZone) {
     ZonedDateTime oldStartZdt = event.startDateTime.atZone(this.timeZone);
@@ -35,6 +51,11 @@ public class CalendarModelV2 extends CalendarModel implements ICalendarModelV2 {
     ZonedDateTime newEndZdt = oldEndZdt.withZoneSameInstant(newTimeZone);
     event.endDateTime = newEndZdt.toLocalDateTime();
   }
+
+  /**
+   * Function to change the time zone of the calendar.
+   * @param newTimeZone The new timezone ID.
+   */
 
   @Override
   public void changeCalendarTimeZone(ZoneId newTimeZone) {

@@ -2,7 +2,6 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.List;
 
 import exception.EventConflictException;

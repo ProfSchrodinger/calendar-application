@@ -93,9 +93,6 @@ public class RecurringEvent extends CalendarEvent{
     else if (currentDay.equals("SATURDAY") && weekDays.contains(String.valueOf('S'))) {
       return true;
     }
-    else if (currentDay.equals("SUNDAY") && weekDays.contains(String.valueOf('U'))) {
-      return true;
-    }
-    return false;
+    else return currentDay.equals("SUNDAY") && weekDays.contains(String.valueOf('U'));
   }
 }

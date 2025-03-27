@@ -12,8 +12,6 @@ import java.util.Locale;
 import exception.EventConflictException;
 import exception.InvalidCommandException;
 import model.CalendarManager;
-import model.CalendarModel;
-import model.ICalendarModel;
 import model.RecurringEvent;
 import model.SingleEvent;
 import utilities.CSVExporter;
@@ -112,10 +110,6 @@ public class CalendarController {
       }
       else if (command.toLowerCase().startsWith("copy event")) {
         processCopyEvents(command);
-        view.displayMessage("Command processed: " + command);
-      }
-      else if (command.toLowerCase().startsWith("print calendars")) {
-        model.printCalendars();
         view.displayMessage("Command processed: " + command);
       }
       else {
