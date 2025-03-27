@@ -135,13 +135,13 @@ public class CalendarModel implements ICalendarModel{
             event.endDateTime = LocalDateTime.parse(newValue, formatter);
 
             if (checkConflict(event)) {
-              event.startDateTime = originalEndDateTime;
+              event.endDateTime = originalEndDateTime;
             }
           } else if (eventType.equals("Single")) {
             event.endDateTime = LocalDateTime.parse(newValue, formatter);
 
             if (checkConflict(event)) {
-              event.startDateTime = originalEndDateTime;
+              event.endDateTime = originalEndDateTime;
             }
           }
         }

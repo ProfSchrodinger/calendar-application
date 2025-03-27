@@ -5,6 +5,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 
 public class CalendarControllerCreateEditUseCalendarTest {
   private CalendarController controller;
@@ -85,8 +88,31 @@ public class CalendarControllerCreateEditUseCalendarTest {
   @Test
   public void testEditCalendarTimezoneSuccess() {
     controller.processCommand("create calendar --name WorkCal --timezone America/New_York");
-    controller.processCommand("edit calendar --name WorkCal --property timezone Africa/Cairo");
-      controller.processCommand("use calendar --name WorkCal");
+    controller.processCommand("use calendar --name WorkCal");
+    controller.processCommand("create event Meeting1 on 2025-03-27T11:00");
+    Assert.assertEquals("[[Meeting1, 2025-03-27T11:00, 2025-03-28T00:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 3, 27)).toString());
+    controller.processCommand("edit calendar --name WorkCal --property timezone US/Pacific");
+    Assert.assertEquals("[[Meeting1, 2025-03-27T08:00, 2025-03-27T21:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 3, 27)).toString());
+  }
+
+  @Test
+  public void testEditCalendarTimezoneSuccessRecurring() {
+    controller.processCommand("create calendar --name WorkCal --timezone America/New_York");
+    controller.processCommand("use calendar --name WorkCal");
+    controller.processCommand("create event Meeting1 on 2025-03-27 repeats RFS for 3 times");
+    Assert.assertEquals("[[Meeting1, 2025-03-27T00:00, 2025-03-28T00:00, ], " +
+                    "[Meeting1, 2025-03-28T00:00, 2025-03-29T00:00, ], " +
+                    "[Meeting1, 2025-03-29T00:00, 2025-03-30T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 27, 0, 0),
+                    LocalDateTime.of(2025, 3, 31, 0, 0)).toString());
+    controller.processCommand("edit calendar --name WorkCal --property timezone US/Pacific");
+    Assert.assertEquals("[[Meeting1, 2025-03-26T21:00, 2025-03-27T21:00, ], " +
+                    "[Meeting1, 2025-03-27T21:00, 2025-03-28T21:00, ], " +
+                    "[Meeting1, 2025-03-28T21:00, 2025-03-29T21:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 26, 0, 0),
+                    LocalDateTime.of(2025, 3, 31, 0, 0)).toString());
   }
 
   @Test(expected = InvalidCommandException.class)

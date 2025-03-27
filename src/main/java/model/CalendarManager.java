@@ -110,10 +110,9 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
    * @param targetZoneID the target calendar's timezone ID.
    * @param modifiedEvent The event to be modified.
    * @param newStartDateTime The start time of the event.
-   * @return The modified event.
    */
 
-  private SingleEvent modifyEventHelper(ZoneId targetZoneID, SingleEvent modifiedEvent, LocalDateTime newStartDateTime) {
+  private void modifyEventHelper(ZoneId targetZoneID, SingleEvent modifiedEvent, LocalDateTime newStartDateTime) {
     LocalDateTime newEndDateTime = newStartDateTime.plusMinutes(ChronoUnit.MINUTES.between(modifiedEvent.startDateTime, modifiedEvent.endDateTime));
 
     ZonedDateTime sourceZdt = newStartDateTime.atZone(currentCalendar.timeZone);
@@ -125,8 +124,6 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
     targetZdt = sourceZdt.withZoneSameInstant(targetZoneID);
     LocalDateTime modifiedEndDateTime = targetZdt.toLocalDateTime();
     modifiedEvent.endDateTime = modifiedEndDateTime;
-
-    return modifiedEvent;
   }
 
   /**
@@ -144,7 +141,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
       throw new InvalidCommandException("Calendar with the given name does not exist.");
     }
 
-    CalendarModelV2 targetCalendarObject = (CalendarModelV2) calendars.get(targetCalendar);
+    CalendarModelV2 targetCalendarObject = calendars.get(targetCalendar);
     List<CalendarEvent> eventsToBeAdded = new ArrayList<>();
 
     for (CalendarEvent event: currentCalendar.events) {
@@ -231,15 +228,15 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
     for (CalendarEvent event: currentCalendar.events) {
       if (event instanceof SingleEvent){
         if (event.startDateTime.compareTo(copyDateStart.atStartOfDay()) >= 0
-                && event.startDateTime.compareTo(copyDateEnd.plusDays(1).atStartOfDay()) < 0){
+                && event.startDateTime.compareTo(copyDateEnd.atStartOfDay()) < 0){
           eventsToBeAdded.add(event);
         }
       }
       if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent: recurringEvent.recurringEventList){
-          if (singleEvent.startDateTime.toLocalDate().isAfter(copyDateStart)
-                  && singleEvent.startDateTime.toLocalDate().isBefore(copyDateEnd)){
+          if (singleEvent.startDateTime.compareTo(copyDateStart.atStartOfDay()) >= 0
+                  && singleEvent.startDateTime.compareTo(copyDateEnd.atStartOfDay()) < 0){
             eventsToBeAdded.add(singleEvent);
           }
         }

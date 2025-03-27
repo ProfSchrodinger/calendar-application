@@ -22,7 +22,7 @@ public class CSVExporter {
    * @param fileName The name of the CSV file to be created.
    */
 
-  public String exportCSV(List<List> eventList, String fileName) {
+  public void exportCSV(List<List> eventList, String fileName) {
 
     String absolutePath = Paths.get(fileName).toAbsolutePath().toString();
     DateTimeFormatter csvDateFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
@@ -56,7 +56,7 @@ public class CSVExporter {
                 location,
                 isPublic));
       }
-      return absolutePath;
+//      return absolutePath;
     }
     catch (IOException e) {
       throw new InvalidCommandException("Error writing CSV file");

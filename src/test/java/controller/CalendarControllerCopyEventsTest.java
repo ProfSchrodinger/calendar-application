@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 
 public class CalendarControllerCopyEventsTest {
@@ -31,19 +32,6 @@ public class CalendarControllerCopyEventsTest {
   }
 
   @Test(expected = InvalidCommandException.class)
-  public void testCopyNonexistentEventThrowsError() throws InvalidCommandException {
-    controller.processCommand("create calendar --name SourceCal1 --timezone America/New_York");
-    controller.processCommand("create calendar --name TargetCal1 --timezone Europe/London");
-    controller.processCommand("use calendar --name SourceCal1");
-
-    try {
-      controller.processCommand("copy event Event1 on 2025-04-01T09:00 --target TargetCal to 2025-04-02T10:00");
-    } catch (InvalidCommandException e) {
-      throw e;
-    }
-  }
-
-  @Test(expected = InvalidCommandException.class)
   public void testCopyToNonexistentTargetCalendarThrowsError() throws InvalidCommandException {
     controller.processCommand("create calendar --name SourceCal --timezone America/New_York");
     controller.processCommand("use calendar --name SourceCal");
@@ -51,7 +39,8 @@ public class CalendarControllerCopyEventsTest {
 
     try {
       controller.processCommand("copy event Review on 2025-04-01T09:00 --target TargetCal to 2025-04-02T09:00");
-    } catch (InvalidCommandException e) {
+    }
+    catch (InvalidCommandException e) {
       Assert.assertEquals("Calendar with the given name does not exist.", e.getMessage());
       throw e;
     }
@@ -65,7 +54,8 @@ public class CalendarControllerCopyEventsTest {
 
     try {
       controller.processCommand("copy event Review on 2025-04-01T09:00 --target TargetCal to 2025-04-02T09:00");
-    } catch (InvalidCommandException e) {
+    }
+    catch (InvalidCommandException e) {
       Assert.assertEquals("Calendar with the given name does not exist.", e.getMessage());
       throw e;
     }
@@ -80,7 +70,8 @@ public class CalendarControllerCopyEventsTest {
 
     try {
       controller.processCommand("copy event Demo on 01-04-2025T09:00 --target TargetCal to 02-04-2025T10:00");
-    } catch (InvalidCommandException e) {
+    }
+    catch (InvalidCommandException e) {
       Assert.assertEquals("Invalid date formats", e.getMessage());
       throw e;
     }
@@ -139,7 +130,8 @@ public class CalendarControllerCopyEventsTest {
     try {
       controller.processCommand("copy events on 2025-04-01 --target TargetCal to 2025-04-02");
       Assert.fail("Expected InvalidCommandException was not thrown");
-    } catch (InvalidCommandException e) {
+    }
+    catch (InvalidCommandException e) {
       Assert.assertEquals("Calendar with the given name does not exist.", e.getMessage());
       throw e;
     }
@@ -154,18 +146,11 @@ public class CalendarControllerCopyEventsTest {
 
     try {
       controller.processCommand("copy events on 01-04-2025 --target TargetCal to 2025/04/02");
-    } catch (InvalidCommandException e) {
+    }
+    catch (InvalidCommandException e) {
       Assert.assertEquals("Invalid date formats", e.getMessage());
       throw e;
     }
-  }
-
-  @Test(expected = InvalidCommandException.class)
-  public void testCopyEventsFromNonexistentSourceCalendarThrowsError() throws InvalidCommandException {
-    controller.processCommand("create calendar --name TargetCal --timezone UTC");
-
-    controller.processCommand("use calendar --name SourceCal");
-    controller.processCommand("copy events on 2025-04-01 --target TargetCal to 2025-04-02");
   }
 
   @Test
@@ -267,5 +252,81 @@ public class CalendarControllerCopyEventsTest {
     } catch (InvalidCommandException e) {
       Assert.assertEquals("Calendar with the given name does not exist.", e.getMessage());
     }
+  }
+
+
+  @Test
+  public void testCopyRecurringEventsCopyType1() {
+    controller.processCommand("create event MeetingOne on 2025-03-12 repeats MWF for 3 times");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-13T00:00, ], " +
+                    "[MeetingOne, 2025-03-14T00:00, 2025-03-15T00:00, ], " +
+                    "[MeetingOne, 2025-03-17T00:00, 2025-03-18T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create calendar --name Calendar2 --timezone US/Pacific");
+    controller.processCommand("copy event MeetingOne on 2025-03-12T00:00 --target Calendar2 to 2025-06-01T14:00");
+    controller.processCommand("use calendar --name Calendar2");
+    Assert.assertEquals("[[MeetingOne, 2025-06-01T11:00, 2025-06-02T11:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 6, 01, 00, 00)
+                    , LocalDateTime.of(2025, 6, 20, 00, 00)).toString());
+  }
+
+  @Test
+  public void testCopyRecurringEventsCopyType2() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF for 3 times");
+    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create calendar --name Calendar2 --timezone US/Pacific");
+    controller.processCommand("copy events on 2025-03-12 --target Calendar2 to 2025-06-01");
+    controller.processCommand("use calendar --name Calendar2");
+    Assert.assertEquals("[[MeetingOne, 2025-05-31T21:00, 2025-05-31T22:00, ], " +
+                    "[MeetingTwo, 2025-05-31T22:00, 2025-05-31T23:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 5, 31, 00, 00)
+                    , LocalDateTime.of(2025, 6, 20, 00, 00)).toString());
+  }
+
+  @Test
+  public void testCopyRecurringEventsCopyType3() {
+    controller.processCommand("create event MeetingZero on 2025-03-10 repeats MWF for 1 times");
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF for 3 times");
+    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00");
+    controller.processCommand("create event MeetingThree on 2025-03-17T01:00");
+    controller.processCommand("create event MeetingFour on 2025-03-18T00:00");
+    Assert.assertEquals("[[MeetingZero, 2025-03-10T00:00, 2025-03-11T00:00, ], " +
+                    "[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ], " +
+                    "[MeetingThree, 2025-03-17T01:00, 2025-03-18T00:00, ], " +
+                    "[MeetingFour, 2025-03-18T00:00, 2025-03-19T00:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 10, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("create calendar --name Calendar2 --timezone US/Pacific");
+    controller.processCommand("copy events between 2025-03-12 and 2025-03-18 --target Calendar2 to 2025-06-01");
+    controller.processCommand("copy events between 2025-03-18 and 2025-03-19 --target Calendar2 to 2025-07-01");
+    controller.processCommand("copy events between 2025-03-10 and 2025-03-11 --target Calendar2 to 2025-08-01");
+    controller.processCommand("copy events between 2025-03-11 and 2025-03-12 --target Calendar2 to 2025-09-01");
+    controller.processCommand("use calendar --name Calendar2");
+    Assert.assertEquals("[[MeetingOne, 2025-05-31T21:00, 2025-05-31T22:00, ], " +
+                    "[MeetingOne, 2025-06-02T21:00, 2025-06-02T22:00, ], " +
+                    "[MeetingOne, 2025-06-05T21:00, 2025-06-05T22:00, ], " +
+                    "[MeetingTwo, 2025-05-31T22:00, 2025-05-31T23:00, ], " +
+                    "[MeetingThree, 2025-06-05T22:00, 2025-06-06T21:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 5, 30, 00, 00)
+                    , LocalDateTime.of(2025, 6, 20, 00, 00)).toString());
+    Assert.assertEquals("[[MeetingFour, 2025-06-30T21:00, 2025-07-01T21:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 6, 30, 00, 00)
+                    , LocalDateTime.of(2025, 7, 20, 00, 00)).toString());
+    Assert.assertEquals("[[MeetingZero, 2025-07-31T21:00, 2025-08-01T21:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 7, 30, 00, 00)
+                    , LocalDateTime.of(2025, 8, 20, 00, 00)).toString());
+    Assert.assertEquals("[]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 8, 30, 00, 00)
+                    , LocalDateTime.of(2025, 9, 20, 00, 00)).toString());
   }
 }

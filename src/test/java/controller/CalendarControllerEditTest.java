@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -149,51 +150,44 @@ public class CalendarControllerEditTest {
    * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-//  @Test
-//  public void testValidEditCommand7() {
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T02:00");
-//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-//                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-//                    "[MeetingOne, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
-//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-//    controller.processCommand("edit events subject MeetingOne from 2025-03-12T00:00 with MeetingTwo");
-//    Assert.assertEquals("[[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-//                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
-//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-//  }
+  @Test
+  public void testValidEditCommand7() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("edit events subject MeetingOne from 2025-03-12T00:00 to 2025-03-12T02:00 with MeetingTwo");
+    Assert.assertEquals("[[MeetingTwo, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+  }
 
   /**
    * Valid edit command across events with specific start and end date times same eventNames (for subject)
    * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-//  @Test
-//  public void testValidEditCommand8() {
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T02:00");
-//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-//                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-//                    "[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingOne, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
-//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-//    controller.processCommand("edit events subject MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 with MeetingTwo");
-//    Assert.assertEquals("[[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-//                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-//                    "[MeetingOne, 2025-03-12T00:00, 2025-03-12T02:00, ]]",
-//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-//  }
+  @Test
+  public void testValidEditCommand8() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("create event MeetingOne from 2025-03-12T01:00 to 2025-03-12T02:00");
+    controller.processCommand("create event MeetingOne from 2025-03-12T02:00 to 2025-03-12T03:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
+                    "[MeetingOne, 2025-03-12T01:00, 2025-03-12T02:00, ], " +
+                    "[MeetingOne, 2025-03-12T02:00, 2025-03-12T03:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("edit events subject MeetingOne from 2025-03-13T00:00 with MeetingTwo");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingTwo, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
+                    "[MeetingOne, 2025-03-12T01:00, 2025-03-12T02:00, ], " +
+                    "[MeetingOne, 2025-03-12T02:00, 2025-03-12T03:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+  }
 
   /**
    * Valid edit command across events with specific start date times same eventNames (for subject)
@@ -409,5 +403,113 @@ public class CalendarControllerEditTest {
       Assert.assertEquals("Invalid datetime or property", e.getMessage());
       throw e;
     }
+  }
+
+  /**
+   * Valid test command.
+   */
+
+  @Test
+  public void testValidEditCommand11() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("edit events subject MeetingOne from 2025-03-14T00:00 to 2025-03-14T01:00 with MeetingTwo");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+  }
+
+  /**
+   * Conflicted events should not change - startDateTime, singleEvent.
+   */
+
+  @Test
+  public void testValidEditCommand12() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+    controller.processCommand("edit events startDateTime MeetingTwo 2025-03-12T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+  }
+
+  /**
+   * Conflicted events should not change - startDateTime, recurringEvent.
+   */
+
+  @Test
+  public void testValidEditCommand13() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00 repeats MFW until 2025-03-18T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+    controller.processCommand("edit events startDateTime MeetingTwo 2025-03-12T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+  }
+
+  /**
+   * Conflicted events should not change - endDateTime, recurringEvent.
+   */
+
+  @Test
+  public void testValidEditCommand14() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+    controller.processCommand("edit events endDateTime MeetingOne 2025-03-12T02:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+  }
+
+  /**
+   * Conflicted events should not change - endDateTime, singleEvent.
+   */
+
+  @Test
+  public void testValidEditCommand15() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+    controller.processCommand("create event MeetingTwo from 2025-03-12T01:00 to 2025-03-12T02:00 repeats MFW until 2025-03-18T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+    controller.processCommand("edit events endDateTime MeetingOne 2025-03-12T01:30");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-12T01:00, 2025-03-12T02:00, ]]",
+            controller.model.getEventsOn(LocalDate.of(2025, 03, 12)).toString());
+  }
+
+  /**
+   * Valid Edit event - Recurring event, edit form 2
+   */
+
+  @Test
+  public void testValidEditCommand16() {
+    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+    controller.processCommand("edit events subject MeetingOne from 2025-03-14T00:00 with MeetingTwo");
+    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+                    "[MeetingTwo, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+                    "[MeetingTwo, 2025-03-17T00:00, 2025-03-17T01:00, ]]",
+            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
   }
 }
