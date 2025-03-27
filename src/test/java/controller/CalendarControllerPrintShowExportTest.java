@@ -248,15 +248,16 @@ public class CalendarControllerPrintShowExportTest {
 
   /**
    * Exporting a calendar with a large number of events.
+   * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-  @Test
-  public void testExportCalendarWithLargeNumberOfEvents() {
-    for (int i = 1; i <= 1000; i++) {
-      controller.processCommand("create event Event" + i + " from 2025-03-15T10:00 to 2025-03-15T11:00");
-    }
-    controller.processCommand("export cal events.csv");
-  }
+//  @Test
+//  public void testExportCalendarWithLargeNumberOfEvents() {
+//    for (int i = 1; i <= 1000; i++) {
+//      controller.processCommand("create event Event" + i + " from 2025-03-15T10:00 to 2025-03-15T11:00");
+//    }
+//    controller.processCommand("export cal events.csv");
+//  }
 
   /**
    * Create, export, edit event, and export again (overwrite test).
@@ -414,17 +415,18 @@ public class CalendarControllerPrintShowExportTest {
 
   /**
    * Querying a time when multiple events overlap.
+   * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-  @Test
-  public void testShowStatusOverlappingEvents() {
-    controller.processCommand("create event Lunch from 2025-08-15T12:00 to 2025-08-15T13:00");
-    controller.processCommand("create event TeamMeeting from 2025-08-15T12:30 to 2025-08-15T14:00");
-
-    controller.processCommand("show status on 2025-08-15T12:45");
-
-    Assert.assertTrue(controller.model.isBusy(LocalDateTime.of(2025, 8, 15, 12, 45)));
-  }
+//  @Test
+//  public void testShowStatusOverlappingEvents() {
+//    controller.processCommand("create event Lunch from 2025-08-15T12:00 to 2025-08-15T13:00");
+//    controller.processCommand("create event TeamMeeting from 2025-08-15T12:30 to 2025-08-15T14:00");
+//
+//    controller.processCommand("show status on 2025-08-15T12:45");
+//
+//    Assert.assertTrue(controller.model.isBusy(LocalDateTime.of(2025, 8, 15, 12, 45)));
+//  }
 
   /**
    * Querying a date-time in the past.
@@ -441,27 +443,28 @@ public class CalendarControllerPrintShowExportTest {
 
   /**
    * Tests exporting calendar with multiple calendar events.
+   * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-  @Test
-  public void testCreateAndExportCalendarWithMultipleEvents() {
-    controller.processCommand("create event MeetingA from 2025-03-15T10:00 to 2025-03-15T12:00 at Office description 'Project discussion'");
-    controller.processCommand("create event MeetingB from 2025-03-16T14:00 to 2025-03-16T16:00 at Conference Room description 'Client meeting'");
-    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF for 3 times description 'Standup meeting' public");
-    controller.processCommand("create event Holiday from 2025-07-04T00:00 to 2025-07-05T00:00 description 'Independence Day' public");
-    controller.processCommand("create event FamilyTrip from 2025-08-20T00:00 to 2025-08-25T00:00 at BeachHouse description 'Vacation with family' private");
-    controller.processCommand("create event TeamLunch from 2025-04-10T12:00 to 2025-04-10T14:00 at Cafe description 'Team bonding' public");
-    controller.processCommand("create event Workshop from 2025-04-10T13:30 to 2025-04-10T15:30 at Auditorium description 'Skill development'");
-    controller.processCommand("create event EarlyMorningRun from 2025-05-01T06:00 to 2025-05-01T07:00 at Park description 'Morning fitness' private");
-    controller.processCommand("create event NightStudy from 2025-05-05T22:00 to 2025-05-06T00:00 at Library description 'Exam preparation' private");
-    controller.processCommand("create event FutureConference from 2030-09-12T09:00 to 2030-09-12T17:00 at Convention Center description 'Tech conference' public");
-    controller.processCommand("create event BiweeklySync from 2025-03-10T10:00 to 2025-03-10T11:00 repeats W for 4 times description 'Biweekly team sync' public");
-    controller.processCommand("create event Hackathon from 2025-06-01T10:00 to 2025-06-03T18:00 at Innovation Hub description '48-hour coding challenge' public");
-    controller.processCommand("create event SecretMeeting from 2025-03-20T16:00 to 2025-03-20T18:00 description 'Confidential Discussion' private");
-    controller.processCommand("create event PrivateDinner from 2025-10-12T19:00 to 2025-10-12T22:00 at Rooftop description 'Family dinner' private");
-    controller.processCommand("export cal events.csv");
-
-    Assert.assertTrue("Exported file should exist", Files.exists(Paths.get("events.csv")));
-  }
+//  @Test
+//  public void testCreateAndExportCalendarWithMultipleEvents() {
+//    controller.processCommand("create event MeetingA from 2025-03-15T10:00 to 2025-03-15T12:00 at Office description 'Project discussion'");
+//    controller.processCommand("create event MeetingB from 2025-03-16T14:00 to 2025-03-16T16:00 at Conference Room description 'Client meeting'");
+//    controller.processCommand("create event --autoDecline MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MWF for 3 times description 'Standup meeting' public");
+//    controller.processCommand("create event Holiday from 2025-07-04T00:00 to 2025-07-05T00:00 description 'Independence Day' public");
+//    controller.processCommand("create event FamilyTrip from 2025-08-20T00:00 to 2025-08-25T00:00 at BeachHouse description 'Vacation with family' private");
+//    controller.processCommand("create event TeamLunch from 2025-04-10T12:00 to 2025-04-10T14:00 at Cafe description 'Team bonding' public");
+//    controller.processCommand("create event Workshop from 2025-04-10T13:30 to 2025-04-10T15:30 at Auditorium description 'Skill development'");
+//    controller.processCommand("create event EarlyMorningRun from 2025-05-01T06:00 to 2025-05-01T07:00 at Park description 'Morning fitness' private");
+//    controller.processCommand("create event NightStudy from 2025-05-05T22:00 to 2025-05-06T00:00 at Library description 'Exam preparation' private");
+//    controller.processCommand("create event FutureConference from 2030-09-12T09:00 to 2030-09-12T17:00 at Convention Center description 'Tech conference' public");
+//    controller.processCommand("create event BiweeklySync from 2025-03-10T10:00 to 2025-03-10T11:00 repeats W for 4 times description 'Biweekly team sync' public");
+//    controller.processCommand("create event Hackathon from 2025-06-01T10:00 to 2025-06-03T18:00 at Innovation Hub description '48-hour coding challenge' public");
+//    controller.processCommand("create event SecretMeeting from 2025-03-20T16:00 to 2025-03-20T18:00 description 'Confidential Discussion' private");
+//    controller.processCommand("create event PrivateDinner from 2025-10-12T19:00 to 2025-10-12T22:00 at Rooftop description 'Family dinner' private");
+//    controller.processCommand("export cal events.csv");
+//
+//    Assert.assertTrue("Exported file should exist", Files.exists(Paths.get("events.csv")));
+//  }
 }
 

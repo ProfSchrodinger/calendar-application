@@ -6,7 +6,6 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +15,12 @@ import exception.InvalidCommandException;
 
 public class CalendarManager implements ICalendarModel, ICalendarManager{
 
-  private Map<String, CalendarModel> calendars;
-  private CalendarModel currentCalendar;
+  private Map<String, CalendarModelV2> calendars;
+  private CalendarModelV2 currentCalendar;
 
   public CalendarManager() {
     calendars = new HashMap<>();
-    currentCalendar = new CalendarModel("Default", ZoneId.of("America/New_York"));
+    currentCalendar = new CalendarModelV2("Default", ZoneId.of("America/New_York"));
     calendars.put("Default", currentCalendar);
   }
 
@@ -30,7 +29,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
     if (calendars.containsKey(calendarName)) {
       throw new InvalidCommandException("Calendar already exists with same name.");
     }
-    CalendarModel newCalendar = new CalendarModel(calendarName, timeZone);
+    CalendarModelV2 newCalendar = new CalendarModelV2(calendarName, timeZone);
     calendars.put(calendarName, newCalendar);
   }
 
@@ -45,7 +44,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
   @Override
   public void changeCalendarName(String calendarName, String newName) throws InvalidCommandException {
     if (calendars.containsKey(calendarName)) {
-      CalendarModel calendar = calendars.get(calendarName);
+      CalendarModelV2 calendar = calendars.get(calendarName);
 
       if (calendars.containsKey(newName)) {
         throw new InvalidCommandException("Calendar with the given name already exists.");
@@ -64,7 +63,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
   @Override
   public void changeCalendarTimeZone(String calendarName, ZoneId newTimeZone) {
     if (calendars.containsKey(calendarName)) {
-      CalendarModel calendar = calendars.get(calendarName);
+      CalendarModelV2 calendar = calendars.get(calendarName);
       calendar.changeCalendarTimeZone(newTimeZone);
     }
     else {
@@ -95,7 +94,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
       throw new InvalidCommandException("Calendar with the given name does not exist.");
     }
 
-    CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+    CalendarModelV2 targetCalendarObject = (CalendarModelV2) calendars.get(targetCalendar);
     List<CalendarEvent> eventsToBeAdded = new ArrayList<>();
 
     for (CalendarEvent event: currentCalendar.events) {
@@ -127,7 +126,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
       throw new InvalidCommandException("Calendar with the given name does not exist.");
     }
 
-    CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+    CalendarModelV2 targetCalendarObject = calendars.get(targetCalendar);
     List<CalendarEvent> eventsToBeAdded = new ArrayList<>();
 
     for (CalendarEvent event: currentCalendar.events) {
@@ -161,7 +160,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
       throw new InvalidCommandException("Calendar with the given name does not exist.");
     }
 
-    CalendarModel targetCalendarObject = calendars.get(targetCalendar);
+    CalendarModelV2 targetCalendarObject = calendars.get(targetCalendar);
     List<CalendarEvent> eventsToBeAdded = new ArrayList<>();
 
     for (CalendarEvent event: currentCalendar.events) {
@@ -215,7 +214,8 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
 
   @Override
   public void editEvents(String property, String eventName, String newValue) throws Exception {
-    currentCalendar.editEvents(property, eventName, LocalDateTime.now(), newValue);
+    System.out.println("Inside Manager");
+    currentCalendar.editEvents(property, eventName, newValue);
   }
 
   @Override
@@ -240,7 +240,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager{
 
   public void printCalendars(){
     System.out.println(calendars);
-    for (CalendarModel calendar : calendars.values()) {
+    for (CalendarModelV2 calendar : calendars.values()) {
       System.out.println(calendar.calendarName);
       System.out.println(calendar.timeZone);
       System.out.println(calendar.events);

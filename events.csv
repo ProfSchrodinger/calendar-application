@@ -1,20 +1,4 @@
 Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private
-"MeetingA",03/15/2025,10:00 AM,"03/15/2025","12:00 PM","","",true
-"MeetingB",03/16/2025,02:00 PM,"03/16/2025","04:00 PM","","",true
-"MeetingOne",03/12/2025,12:00 AM,"03/12/2025","01:00 AM","","",false
-"MeetingOne",03/14/2025,12:00 AM,"03/14/2025","01:00 AM","","",false
-"MeetingOne",03/17/2025,12:00 AM,"03/17/2025","01:00 AM","","",false
-"Holiday",07/04/2025,12:00 AM,"07/05/2025","12:00 AM","","",true
-"FamilyTrip",08/20/2025,12:00 AM,"08/25/2025","12:00 AM","","",true
-"TeamLunch",04/10/2025,12:00 PM,"04/10/2025","02:00 PM","","",true
-"Workshop",04/10/2025,01:30 PM,"04/10/2025","03:30 PM","","",true
-"EarlyMorningRun",05/01/2025,06:00 AM,"05/01/2025","07:00 AM","","",true
-"NightStudy",05/05/2025,10:00 PM,"05/06/2025","12:00 AM","","",true
-"FutureConference",09/12/2030,09:00 AM,"09/12/2030","05:00 PM","","",true
-"BiweeklySync",03/12/2025,10:00 AM,"03/12/2025","11:00 AM","","",false
-"BiweeklySync",03/19/2025,10:00 AM,"03/19/2025","11:00 AM","","",false
-"BiweeklySync",03/26/2025,10:00 AM,"03/26/2025","11:00 AM","","",false
-"BiweeklySync",04/02/2025,10:00 AM,"04/02/2025","11:00 AM","","",false
-"Hackathon",06/01/2025,10:00 AM,"06/03/2025","06:00 PM","","",true
-"SecretMeeting",03/20/2025,04:00 PM,"03/20/2025","06:00 PM","","",true
-"PrivateDinner",10/12/2025,07:00 PM,"10/12/2025","10:00 PM","","",true
+"MeetingA",03/17/2025,12:00 AM,"03/18/2025","12:00 AM","","",true
+"MeetingA",03/19/2025,12:00 AM,"03/20/2025","12:00 AM","","",true
+"MeetingA",03/21/2025,12:00 AM,"03/22/2025","12:00 AM","","",true

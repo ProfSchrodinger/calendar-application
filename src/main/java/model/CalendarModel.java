@@ -19,65 +19,14 @@ import exception.InvalidCommandException;
 public class CalendarModel implements ICalendarModel{
 
   List<CalendarEvent> events;
-  String calendarName;
-  ZoneId timeZone;
-
   DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
   /**
    * Constructs an empty calendar model.
    */
 
-  public CalendarModel(String calendarName, ZoneId timeZone) {
+  public CalendarModel() {
     this.events = new ArrayList<CalendarEvent>();
-    this.calendarName = calendarName;
-    this.timeZone = timeZone;
-  }
-
-  /**
-   * Function to change calendar name.
-   * @param newName new name of the calendar.
-   */
-
-  public void changeCalendarName(String newName) {
-    this.calendarName = newName;
-  }
-
-  /**
-   * Helper function to change start and end times
-   * of a single event according to the new timezones.
-   * @param event the single event to be changed.
-   * @param newTimeZone the new time zone to be set.
-   */
-
-  private void changeEventTime(CalendarEvent event, ZoneId newTimeZone) {
-    ZonedDateTime oldStartZdt = event.startDateTime.atZone(this.timeZone);
-    ZonedDateTime newStartZdt = oldStartZdt.withZoneSameInstant(newTimeZone);
-    event.startDateTime = newStartZdt.toLocalDateTime();
-
-    ZonedDateTime oldEndZdt = event.endDateTime.atZone(this.timeZone);
-    ZonedDateTime newEndZdt = oldEndZdt.withZoneSameInstant(newTimeZone);
-    event.endDateTime = newEndZdt.toLocalDateTime();
-  }
-
-  /**
-   * Function to change calendar Time Zone.
-   * @param newTimeZone new Time Zone for the calendar.
-   */
-
-  public void changeCalendarTimeZone(ZoneId newTimeZone) {
-    for (CalendarEvent event : events) {
-      if (event instanceof SingleEvent) {
-        changeEventTime(event, newTimeZone);
-      }
-      else if (event instanceof RecurringEvent) {
-        RecurringEvent recurringEvent = (RecurringEvent) event;
-        for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
-          changeEventTime(singleEvent, newTimeZone);
-        }
-      }
-    }
-    this.timeZone = newTimeZone;
   }
 
   /**
@@ -150,6 +99,7 @@ public class CalendarModel implements ICalendarModel{
 
   private void editHelper (String property, String newValue, CalendarEvent event, String eventType) throws EventConflictException {
     if (property.equals("subject")) {
+      System.out.println("Going to change sub");
       event.subject = newValue;
     }
     else if (property.equals("description")) {
@@ -217,14 +167,14 @@ public class CalendarModel implements ICalendarModel{
   private boolean checkConflict(CalendarEvent changedEvent) {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
-        if (changedEvent.conflictsWith(event)) {
+        if (changedEvent.conflictsWith(event) && event != changedEvent) {
           return true;
         }
       }
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringExistingEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringExistingEvent.recurringEventList) {
-          if (changedEvent.conflictsWith(singleEvent)) {
+          if (changedEvent.conflictsWith(singleEvent) && singleEvent != changedEvent) {
             return true;
           }
         }
@@ -279,7 +229,7 @@ public class CalendarModel implements ICalendarModel{
   public void editEvents(String property, String eventName, LocalDateTime startDateTime, String newValue) throws Exception {
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
-        if (event.startDateTime.isAfter(startDateTime)) {
+        if (event.startDateTime.compareTo(startDateTime) >= 0) {
           if (event.subject.equals(eventName)) {
             editHelper(property, newValue, event, "Single");
           }
@@ -288,7 +238,7 @@ public class CalendarModel implements ICalendarModel{
       else if (event instanceof RecurringEvent) {
         RecurringEvent recurringEvent = (RecurringEvent) event;
         for (SingleEvent singleEvent : recurringEvent.recurringEventList) {
-          if (singleEvent.startDateTime.isAfter(startDateTime)) {
+          if (singleEvent.startDateTime.compareTo(startDateTime) >= 0) {
             if (singleEvent.subject.equals(eventName)) {
               editHelper(property, newValue, singleEvent, "Recurring");
             }
@@ -308,9 +258,12 @@ public class CalendarModel implements ICalendarModel{
 
   @Override
   public void editEvents(String property, String eventName, String newValue) throws Exception {
+
+    System.out.println("Inside editEvents");
     for (CalendarEvent event : events) {
       if (event instanceof SingleEvent) {
         if (event.subject.equals(eventName)) {
+          System.out.println("Match Found");
           editHelper(property, newValue, event, "Single");
         }
       }

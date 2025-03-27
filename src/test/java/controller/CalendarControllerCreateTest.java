@@ -600,31 +600,33 @@ public class CalendarControllerCreateTest {
 
   /**
    * Valid 2 Single events overlapping
+   * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-  @Test
-  public void testValidSingleSingleCommand2() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-    controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-  }
+//  @Test
+//  public void testValidSingleSingleCommand2() {
+//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+//    controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
+//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
+//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+//  }
 
   /**
    * Valid 2 Single events overlapping (different commands)
+   * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-  @Test
-  public void testValidSingleSingleCommand3() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
-    controller.processCommand("create event MeetingTwo on 2025-03-12T00:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-13T00:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
-                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
-  }
+//  @Test
+//  public void testValidSingleSingleCommand3() {
+//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00");
+//    controller.processCommand("create event MeetingTwo on 2025-03-12T00:00");
+//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-13T00:00, ]]",
+//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 00, 00)
+//                    , LocalDateTime.of(2025, 3, 20, 00, 00)).toString());
+//  }
 
   /**
    * Valid 2 Single events overlapping (same commands) MeetingOne < MeetingTwo
@@ -827,19 +829,20 @@ public class CalendarControllerCreateTest {
 
   /**
    * Valid Recurring event followed by Single event collision without autoDecline
+   * Became invalid as overlapping not allowed in Assignment 5.
    */
 
-  @Test
-  public void testValidRecurringSingleCommand2() {
-    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
-    controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
-    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
-                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
-                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
-                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
-            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 0, 0)
-                    , LocalDateTime.of(2025, 3, 20, 0, 0)).toString());
-  }
+//  @Test
+//  public void testValidRecurringSingleCommand2() {
+//    controller.processCommand("create event MeetingOne from 2025-03-12T00:00 to 2025-03-12T01:00 repeats MFW until 2025-03-18T00:00");
+//    controller.processCommand("create event MeetingTwo from 2025-03-12T00:00 to 2025-03-12T01:00");
+//    Assert.assertEquals("[[MeetingOne, 2025-03-12T00:00, 2025-03-12T01:00, ], " +
+//                    "[MeetingOne, 2025-03-14T00:00, 2025-03-14T01:00, ], " +
+//                    "[MeetingOne, 2025-03-17T00:00, 2025-03-17T01:00, ], " +
+//                    "[MeetingTwo, 2025-03-12T00:00, 2025-03-12T01:00, ]]",
+//            controller.model.getEventsBetween(LocalDateTime.of(2025, 3, 12, 0, 0)
+//                    , LocalDateTime.of(2025, 3, 20, 0, 0)).toString());
+//  }
 
   /**
    * Invalid Recurring event followed by Single event collision with autoDecline
