@@ -96,62 +96,61 @@ public class CalendarModel implements ICalendarModel{
    */
 
   private void editHelper (String property, String newValue, CalendarEvent event, String eventType) throws EventConflictException {
-    if (property.equals("subject")) {
-      event.subject = newValue;
-    }
-    else if (property.equals("description")) {
-      event.description = newValue;
-    }
-    else if (property.equals("location")) {
-      event.location = newValue;
-    }
-    else if (property.equals("startDateTime")) {
-      if (LocalDateTime.parse(newValue, formatter).isBefore(event.endDateTime)) {
-        LocalDateTime originalStartDateTime = event.startDateTime;
+    switch (property) {
+      case "subject":
+        event.subject = newValue;
+        break;
+      case "description":
+        event.description = newValue;
+        break;
+      case "location":
+        event.location = newValue;
+        break;
+      case "startDateTime":
+        if (LocalDateTime.parse(newValue, formatter).isBefore(event.endDateTime)) {
+          LocalDateTime originalStartDateTime = event.startDateTime;
 
-        if (eventType.equals("Recurring")
-                && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.startDateTime.toLocalDate())) {
-          event.startDateTime = LocalDateTime.parse(newValue, formatter);
+          if (eventType.equals("Recurring")
+                  && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.startDateTime.toLocalDate())) {
+            event.startDateTime = LocalDateTime.parse(newValue, formatter);
 
-          if (checkConflict(event)) {
-            event.startDateTime = originalStartDateTime;
+            if (checkConflict(event)) {
+              event.startDateTime = originalStartDateTime;
+            }
+          } else if (eventType.equals("Single")) {
+            event.startDateTime = LocalDateTime.parse(newValue, formatter);
+
+            if (checkConflict(event)) {
+              event.startDateTime = originalStartDateTime;
+            }
           }
         }
-        else if (eventType.equals("Single")){
-          event.startDateTime = LocalDateTime.parse(newValue, formatter);
+        break;
+      case "endDateTime":
+        if (LocalDateTime.parse(newValue, formatter).isAfter(event.startDateTime)) {
+          LocalDateTime originalEndDateTime = event.endDateTime;
 
-          if (checkConflict(event)) {
-            event.startDateTime = originalStartDateTime;
+          if (eventType.equals("Recurring")
+                  && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.endDateTime.toLocalDate())) {
+            event.endDateTime = LocalDateTime.parse(newValue, formatter);
+
+            if (checkConflict(event)) {
+              event.startDateTime = originalEndDateTime;
+            }
+          } else if (eventType.equals("Single")) {
+            event.endDateTime = LocalDateTime.parse(newValue, formatter);
+
+            if (checkConflict(event)) {
+              event.startDateTime = originalEndDateTime;
+            }
           }
         }
-      }
-    }
-    else if (property.equals("endDateTime")) {
-      if (LocalDateTime.parse(newValue, formatter).isAfter(event.startDateTime)) {
-        LocalDateTime originalEndDateTime = event.endDateTime;
-
-        if (eventType.equals("Recurring")
-                && LocalDateTime.parse(newValue, formatter).toLocalDate().equals(event.endDateTime.toLocalDate())) {
-          event.endDateTime = LocalDateTime.parse(newValue, formatter);
-
-          if (checkConflict(event)) {
-            event.startDateTime = originalEndDateTime;
-          }
-        }
-        else if (eventType.equals("Single")){
-          event.endDateTime = LocalDateTime.parse(newValue, formatter);
-
-          if (checkConflict(event)) {
-            event.startDateTime = originalEndDateTime;
-          }
-        }
-      }
-    }
-    else if (property.equals("isPublic")) {
-      event.isPublic = Boolean.parseBoolean(newValue);
-    }
-    else {
-      throw new InvalidCommandException("Invalid property: " + property);
+        break;
+      case "isPublic":
+        event.isPublic = Boolean.parseBoolean(newValue);
+        break;
+      default:
+        throw new InvalidCommandException("Invalid property: " + property);
     }
   }
 
