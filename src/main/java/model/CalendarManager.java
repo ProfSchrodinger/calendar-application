@@ -230,8 +230,8 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
 
     for (CalendarEvent event: currentCalendar.events) {
       if (event instanceof SingleEvent){
-        if (event.startDateTime.toLocalDate().isAfter(copyDateStart)
-                && event.startDateTime.toLocalDate().isBefore(copyDateEnd)){
+        if (event.startDateTime.compareTo(copyDateStart.atStartOfDay()) >= 0
+                && event.startDateTime.compareTo(copyDateEnd.plusDays(1).atStartOfDay()) < 0){
           eventsToBeAdded.add(event);
         }
       }
