@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -28,7 +29,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
 
   public CalendarManager() {
     calendars = new HashMap<>();
-    currentCalendar = new CalendarModelV2("Default", ZoneId.of("America/New_York"));
+    currentCalendar = new CalendarModelV2("Default", ZoneId.of("US/Eastern"), Color.RED);
     calendars.put("Default", currentCalendar);
   }
 
@@ -44,7 +45,8 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
     if (calendars.containsKey(calendarName)) {
       throw new InvalidCommandException("Calendar already exists with same name.");
     }
-    CalendarModelV2 newCalendar = new CalendarModelV2(calendarName, timeZone);
+    Color randomColor = new Color((int)(Math.random()*256), (int)(Math.random()*256), (int)(Math.random()*256));
+    CalendarModelV2 newCalendar = new CalendarModelV2(calendarName, timeZone, randomColor);
     calendars.put(calendarName, newCalendar);
   }
 
@@ -365,5 +367,21 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
   @Override
   public List<List> exportCalendar() throws Exception {
     return currentCalendar.exportCalendar();
+  }
+
+  public List<String> getCalendarNames() {
+    return new ArrayList<>(calendars.keySet());
+  }
+
+  public String getActiveCalendarName() {
+    return currentCalendar.calendarName;
+  }
+
+  public String getActiveCalendarTimeZone() {
+    return currentCalendar.timeZone.getId();
+  }
+
+  public Color getActiveCalendarColor() {
+    return currentCalendar.calendarColor;
   }
 }

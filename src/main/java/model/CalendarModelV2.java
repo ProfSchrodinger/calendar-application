@@ -1,5 +1,6 @@
 package model;
 
+import java.awt.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -12,6 +13,8 @@ public class CalendarModelV2 extends CalendarModel implements ICalendarModelV2 {
 
   String calendarName;
   ZoneId timeZone;
+  Color calendarColor;
+
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
   /**
@@ -20,10 +23,12 @@ public class CalendarModelV2 extends CalendarModel implements ICalendarModelV2 {
    * @param timeZone The timezone designated to the calendar.
    */
 
-  public CalendarModelV2(String calendarName, ZoneId timeZone) {
+  public CalendarModelV2(String calendarName, ZoneId timeZone, Color calendarColor) {
     super();
     this.calendarName = calendarName;
     this.timeZone = timeZone;
+    this.calendarColor = calendarColor;
+
   }
 
   /**

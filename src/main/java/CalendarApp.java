@@ -6,6 +6,7 @@ import java.util.List;
 import exception.InvalidCommandException;
 import view.ConsoleView;
 import controller.CalendarController;
+import view.SwingView;
 import view.UserView;
 
 /**
@@ -34,7 +35,10 @@ public class CalendarApp {
     String mode = args[1].toLowerCase();
 
     if (args[0].equalsIgnoreCase("--mode")) {
-      if (mode.equals("interactive")) {
+      if (mode.equals("gui")) {
+        new SwingView(controller);
+      }
+      else if (mode.equals("interactive")) {
         view.displayMessage("Interactive mode on. Type 'exit' to quit");
         try {
           while (true) {
