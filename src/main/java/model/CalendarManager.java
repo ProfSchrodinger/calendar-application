@@ -364,6 +364,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
    * @return The list of events to be exported.
    * @throws Exception sent back from CalendarModel.
    */
+
   @Override
   public List<List> exportCalendar() throws Exception {
     return currentCalendar.exportCalendar();

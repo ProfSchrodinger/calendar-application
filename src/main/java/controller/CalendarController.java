@@ -725,31 +725,6 @@ public class CalendarController {
     }
   }
 
-  public List<List> getEventsOn(LocalDate date) {
-    return model.getEventsOn(date);
-  }
-
-  public List<List> getEventsBetween(LocalDateTime startDate, LocalDateTime endDate) {
-    return model.getEventsBetween(startDate, endDate);
-  }
-
-  public List<String> getCalendarNames() {
-    return model.getCalendarNames();
-  }
-
-  // In CalendarController.java
-  public String getActiveCalendarName() {
-    return model.getActiveCalendarName(); // Assumes CalendarManager/CalendarModelV2 provide this method.
-  }
-
-  public String getActiveCalendarTimeZone() {
-    return model.getActiveCalendarTimeZone(); // Assumes it returns a String (or ZoneId.toString()).
-  }
-
-  public Color getActiveCalendarColor() {
-    return model.getActiveCalendarColor();
-  }
-
   /**
    * Processes command to check if user is busy at a specific date and time.
    * @param command the show status command.
@@ -807,5 +782,29 @@ public class CalendarController {
     catch (Exception e) {
       throw new InvalidCommandException("Invalid command");
     }
+  }
+
+  public List<List> getEventsOn(LocalDate date) {
+    return model.getEventsOn(date);
+  }
+
+  public List<List> getEventsBetween(LocalDateTime startDate, LocalDateTime endDate) {
+    return model.getEventsBetween(startDate, endDate);
+  }
+
+  public List<String> getCalendarNames() {
+    return model.getCalendarNames();
+  }
+
+  public String getActiveCalendarName() {
+    return model.getActiveCalendarName();
+  }
+
+  public String getActiveCalendarTimeZone() {
+    return model.getActiveCalendarTimeZone();
+  }
+
+  public Color getActiveCalendarColor() {
+    return model.getActiveCalendarColor();
   }
 }
