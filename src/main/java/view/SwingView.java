@@ -219,13 +219,13 @@ public class SwingView extends UserView {
         String subject = JOptionPane.showInputDialog(frame, "Enter event subject:");
         if (subject == null || subject.trim().isEmpty()) return;
         if (timeChoice == 0) { // Timed Event
-          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-dd'T'HH:mm):");
+          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-ddTHH:mm):");
           if (startStr == null || startStr.trim().isEmpty()) return;
-          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-dd'T'HH:mm):");
+          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-ddTHH:mm):");
           if (endStr == null || endStr.trim().isEmpty()) return;
           command = "create event " + subject + " from " + startStr + " to " + endStr;
         } else { // All-Day Event
-          String dateStr = JOptionPane.showInputDialog(frame, "Enter date (yyyy-MM-dd):");
+          String dateStr = JOptionPane.showInputDialog(frame, "Enter date (yyyy-MM-ddTHH:mm):");
           if (dateStr == null || dateStr.trim().isEmpty()) return;
           command = "create event " + subject + " on " + dateStr;
         }
@@ -253,9 +253,9 @@ public class SwingView extends UserView {
         String subject = JOptionPane.showInputDialog(frame, "Enter event subject:");
         if (subject == null || subject.trim().isEmpty()) return;
         if (timeChoice == 0) { // Timed Event
-          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-dd'T'HH:mm):");
+          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-ddTHH:mm):");
           if (startStr == null || startStr.trim().isEmpty()) return;
-          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-dd'T'HH:mm):");
+          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-ddTHH:mm):");
           if (endStr == null || endStr.trim().isEmpty()) return;
           String weekDays = JOptionPane.showInputDialog(frame, "Enter weekdays (e.g., MTWRFSU):");
           if (weekDays == null || weekDays.trim().isEmpty()) return;
@@ -265,7 +265,7 @@ public class SwingView extends UserView {
             command = "create event " + subject + " from " + startStr + " to " + endStr +
                     " repeats " + weekDays + " for " + nValue + " times";
           } else { // Until Date
-            String untilStr = JOptionPane.showInputDialog(frame, "Enter until datetime (yyyy-MM-dd'T'HH:mm):");
+            String untilStr = JOptionPane.showInputDialog(frame, "Enter until datetime (yyyy-MM-ddTHH:mm):");
             if (untilStr == null || untilStr.trim().isEmpty()) return;
             command = "create event " + subject + " from " + startStr + " to " + endStr +
                     " repeats " + weekDays + " until " + untilStr;
@@ -302,9 +302,9 @@ public class SwingView extends UserView {
 
     // ---------- Show Events Button Listener ----------
     showEventsButton.addActionListener(e -> {
-      String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-dd'T'HH:mm):");
+      String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-ddTHH:mm):");
       if (startStr == null || startStr.trim().isEmpty()) return;
-      String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-dd'T'HH:mm):");
+      String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-ddTHH:mm):");
       if (endStr == null || endStr.trim().isEmpty()) return;
       try {
         LocalDateTime startDT = LocalDateTime.parse(startStr, dateTimeFormatter);
