@@ -23,8 +23,9 @@ public class SwingView extends UserView {
   private JButton createCalendarButton;
   private JButton newEventButton;
   private JButton editCalendarButton;
+  private JButton editAcrossCalendarButton; // New Edit Across Calendar button
   private JButton showEventsButton;
-  private JButton editAcrossCalendarButton; // New "Edit across Calendar" button
+  private JButton exportCalendarButton;
   private CalendarController controller;
   private LocalDate currentDate;
 
@@ -59,15 +60,15 @@ public class SwingView extends UserView {
     createCalendarButton = new JButton("Create Calendar");
     newEventButton = new JButton("New Event");
     editCalendarButton = new JButton("Edit Calendar");
+    editAcrossCalendarButton = new JButton("Edit Across Calendar"); // New button
     showEventsButton = new JButton("Show Events");
-    editAcrossCalendarButton = new JButton("Edit across Calendar"); // new button added here
     managementPanel.add(new JLabel("Select Calendar:"));
     managementPanel.add(calendarComboBox);
     managementPanel.add(createCalendarButton);
     managementPanel.add(newEventButton);
     managementPanel.add(editCalendarButton);
-    managementPanel.add(showEventsButton);
     managementPanel.add(editAcrossCalendarButton);
+    managementPanel.add(showEventsButton);
 
     JPanel combinedTopPanel = new JPanel(new BorderLayout());
     combinedTopPanel.add(navigationPanel, BorderLayout.NORTH);
@@ -85,7 +86,9 @@ public class SwingView extends UserView {
     bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
     bottomLabel = new JLabel("Calendar: " + controller.getActiveCalendarName() +
             " | Timezone: " + controller.getActiveCalendarTimeZone());
+    exportCalendarButton = new JButton("Export Calendar");
     bottomPanel.add(bottomLabel);
+    bottomPanel.add(exportCalendarButton);
     frame.add(bottomPanel, BorderLayout.SOUTH);
 
     // ---------- Action Listeners ----------
@@ -164,33 +167,30 @@ public class SwingView extends UserView {
       }
     });
 
-    // New "Edit across Calendar" button listener
+    // New Edit Across Calendar button listener
     editAcrossCalendarButton.addActionListener(e -> {
       String eventName = JOptionPane.showInputDialog(frame, "Enter event name to edit across calendar:");
       if (eventName == null || eventName.trim().isEmpty()) return;
-      Object[] props = {"subject", "startDateTime", "endDateTime", "description", "location", "isPublic"};
-      String property = (String) JOptionPane.showInputDialog(frame, "Select property to edit:",
-              "Edit across Calendar", JOptionPane.QUESTION_MESSAGE, null, props, props[0]);
+      Object[] propOptions = {"subject", "startDateTime", "endDateTime", "description", "location", "isPublic"};
+      String property = (String) JOptionPane.showInputDialog(frame,
+              "Select property to edit:",
+              "Edit Across Calendar",
+              JOptionPane.QUESTION_MESSAGE,
+              null,
+              propOptions,
+              propOptions[0]);
       if (property == null || property.trim().isEmpty()) return;
       String newValue = JOptionPane.showInputDialog(frame, "Enter new value for " + property + ":");
       if (newValue == null || newValue.trim().isEmpty()) return;
       String command = "edit events " + property + " " + eventName + " " + newValue;
       try {
         controller.processCommand(command);
-        JOptionPane.showMessageDialog(frame, "Calendar events updated successfully across calendar.");
+        JOptionPane.showMessageDialog(frame, "Events updated successfully across calendar.");
         drawMonthView();
       } catch (Exception ex) {
-        JOptionPane.showMessageDialog(frame, "Error updating events: " + ex.getMessage());
+        JOptionPane.showMessageDialog(frame, "Error editing events across calendar: " + ex.getMessage());
       }
     });
-
-    // Modify day button listener: show events dialog with edit options
-    // Instead of a simple message, when a day is clicked, show a dialog with three options:
-    // Cancel, Edit Specific Event, Edit Events After [date].
-    // For "Edit Specific Event", allow the user to select one event from the list,
-    // then choose the property to edit and enter a new value.
-    // For "Edit Events After", prompt for event name, then property and new value; the clicked date is used as the starting timestamp.
-    // We'll update the drawMonthView() method's dayButton listener accordingly.
 
     newEventButton.addActionListener(e -> {
       Object[] eventTypes = {"Single Event", "Recurring Event"};
@@ -219,13 +219,13 @@ public class SwingView extends UserView {
         String subject = JOptionPane.showInputDialog(frame, "Enter event subject:");
         if (subject == null || subject.trim().isEmpty()) return;
         if (timeChoice == 0) { // Timed Event
-          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-ddTHH:mm):");
+          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-dd'T'HH:mm):");
           if (startStr == null || startStr.trim().isEmpty()) return;
-          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-ddTHH:mm):");
+          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-dd'T'HH:mm):");
           if (endStr == null || endStr.trim().isEmpty()) return;
           command = "create event " + subject + " from " + startStr + " to " + endStr;
         } else { // All-Day Event
-          String dateStr = JOptionPane.showInputDialog(frame, "Enter date (yyyy-MM-ddTHH:mm):");
+          String dateStr = JOptionPane.showInputDialog(frame, "Enter date (yyyy-MM-dd):");
           if (dateStr == null || dateStr.trim().isEmpty()) return;
           command = "create event " + subject + " on " + dateStr;
         }
@@ -253,9 +253,9 @@ public class SwingView extends UserView {
         String subject = JOptionPane.showInputDialog(frame, "Enter event subject:");
         if (subject == null || subject.trim().isEmpty()) return;
         if (timeChoice == 0) { // Timed Event
-          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-ddTHH:mm):");
+          String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-dd'T'HH:mm):");
           if (startStr == null || startStr.trim().isEmpty()) return;
-          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-ddTHH:mm):");
+          String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-dd'T'HH:mm):");
           if (endStr == null || endStr.trim().isEmpty()) return;
           String weekDays = JOptionPane.showInputDialog(frame, "Enter weekdays (e.g., MTWRFSU):");
           if (weekDays == null || weekDays.trim().isEmpty()) return;
@@ -265,7 +265,7 @@ public class SwingView extends UserView {
             command = "create event " + subject + " from " + startStr + " to " + endStr +
                     " repeats " + weekDays + " for " + nValue + " times";
           } else { // Until Date
-            String untilStr = JOptionPane.showInputDialog(frame, "Enter until datetime (yyyy-MM-ddTHH:mm):");
+            String untilStr = JOptionPane.showInputDialog(frame, "Enter until datetime (yyyy-MM-dd'T'HH:mm):");
             if (untilStr == null || untilStr.trim().isEmpty()) return;
             command = "create event " + subject + " from " + startStr + " to " + endStr +
                     " repeats " + weekDays + " until " + untilStr;
@@ -300,11 +300,10 @@ public class SwingView extends UserView {
       }
     });
 
-    // ---------- Show Events Button Listener ----------
     showEventsButton.addActionListener(e -> {
-      String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-ddTHH:mm):");
+      String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-dd'T'HH:mm):");
       if (startStr == null || startStr.trim().isEmpty()) return;
-      String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-ddTHH:mm):");
+      String endStr = JOptionPane.showInputDialog(frame, "Enter end datetime (yyyy-MM-dd'T'HH:mm):");
       if (endStr == null || endStr.trim().isEmpty()) return;
       try {
         LocalDateTime startDT = LocalDateTime.parse(startStr, dateTimeFormatter);
@@ -318,11 +317,16 @@ public class SwingView extends UserView {
       }
     });
 
-    // ---------- Day Button Listener Modification ----------
-    // Instead of directly showing a message, when a day is clicked, show a dialog with three options:
-    // 1) Cancel, 2) Edit Specific Event, 3) Edit Events After [date].
-    // We build a custom dialog for this purpose.
-    // The day buttons are created in drawMonthView() below.
+    exportCalendarButton.addActionListener(e -> {
+      String activeName = controller.getActiveCalendarName();
+      String fileName = activeName + "Events.csv";
+      try {
+        controller.processCommand("export cal " + fileName);
+        JOptionPane.showMessageDialog(frame, "Export successful. File created as: " + fileName);
+      } catch (Exception ex) {
+        JOptionPane.showMessageDialog(frame, "Error exporting calendar: " + ex.getMessage());
+      }
+    });
 
     drawMonthView();
     frame.setVisible(true);
@@ -366,7 +370,6 @@ public class SwingView extends UserView {
           if (events.isEmpty()) {
             JOptionPane.showMessageDialog(frame, "No events on " + date.toString());
           } else {
-            // Show events with edit options
             Object[] options = {"Cancel", "Edit Specific Event", "Edit Events After " + date.toString()};
             int choice = JOptionPane.showOptionDialog(frame,
                     "Select an option for events on " + date.toString() + ":\n" +
@@ -378,7 +381,6 @@ public class SwingView extends UserView {
                     options,
                     options[0]);
             if (choice == 1) { // Edit Specific Event
-              // Let user select an event from the list
               Object selected = JOptionPane.showInputDialog(frame,
                       "Select event to edit:",
                       "Select Event",
@@ -388,11 +390,8 @@ public class SwingView extends UserView {
                       controller.returnResult(events).get(0));
               if (selected == null) return;
               String eventStr = selected.toString();
-              // Assuming event string format: "• <subject> (<start> - <end>)[ at <location>]"
-              // Parse out the subject and the datetime range
-              // For simplicity, we assume subject is the first token.
               String subject = eventStr.substring(2, eventStr.indexOf(" ("));
-              String range = eventStr.substring(eventStr.indexOf("(")+1, eventStr.indexOf(")"));
+              String range = eventStr.substring(eventStr.indexOf("(") + 1, eventStr.indexOf(")"));
               String[] parts = range.split(" - ");
               String startDT = parts[0].trim();
               String endDT = parts[1].trim();
@@ -411,7 +410,7 @@ public class SwingView extends UserView {
               controller.processCommand(command);
               JOptionPane.showMessageDialog(frame, "Event updated successfully.");
               drawMonthView();
-            } else if (choice == 2) { // Edit Events After date
+            } else if (choice == 2) { // Edit Events After [date]
               String eventName = JOptionPane.showInputDialog(frame, "Enter event name to edit (applies to events after " + date.toString() + "):");
               if (eventName == null || eventName.trim().isEmpty()) return;
               Object[] propOptions = {"subject", "startDateTime", "endDateTime", "description", "location", "isPublic"};
@@ -425,14 +424,12 @@ public class SwingView extends UserView {
               if (property == null || property.trim().isEmpty()) return;
               String newValue = JOptionPane.showInputDialog(frame, "Enter new value for " + property + ":");
               if (newValue == null || newValue.trim().isEmpty()) return;
-              // Use the clicked date as the starting timestamp (formatted using dateTimeFormatter)
               String startTimestamp = date.atStartOfDay().format(dateTimeFormatter);
               String command = "edit events " + property + " " + eventName + " from " + startTimestamp + " with " + newValue;
               controller.processCommand(command);
               JOptionPane.showMessageDialog(frame, "Events updated successfully.");
               drawMonthView();
             }
-            // else Cancel does nothing.
           }
         } catch (Exception ex) {
           JOptionPane.showMessageDialog(frame, "Error: " + ex.getMessage());
