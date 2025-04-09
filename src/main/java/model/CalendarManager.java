@@ -109,6 +109,41 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
   }
 
   /**
+   * Function to modify the event and add it to the target calendar if no conflicts occur.
+   * @param targetCalendarObject The target calendar.
+   * @param modifiedEvent The copy of the event to be added.
+   * @param newStartDateTime The new startDateTime of the event to be copied.
+   */
+
+  private void AddEventToTargetCalendar(CalendarModelV2 targetCalendarObject,
+                                        SingleEvent modifiedEvent, LocalDateTime newStartDateTime)
+  {
+    modifyEventHelper(targetCalendarObject.timeZone, modifiedEvent, newStartDateTime);
+
+    boolean addEvent = true;
+    for (CalendarEvent targetCalendarEvent: targetCalendarObject.events) {
+      if (targetCalendarEvent instanceof SingleEvent) {
+        if (targetCalendarEvent.conflictsWith(modifiedEvent)) {
+          addEvent = false;
+        }
+      }
+      if (targetCalendarEvent instanceof RecurringEvent) {
+        RecurringEvent targetCalendarRecurringEvent = (RecurringEvent) targetCalendarEvent;
+        for (SingleEvent targetCalendarSingleEvent:
+                targetCalendarRecurringEvent.recurringEventList) {
+          if (targetCalendarSingleEvent.conflictsWith(modifiedEvent)) {
+            addEvent = false;
+          }
+        }
+      }
+    }
+
+    if (addEvent) {
+      targetCalendarObject.events.add(modifiedEvent);
+    }
+  }
+
+  /**
    * Function to change the new event's time according to the target calendar's timezone.
    * @param targetZoneID the target calendar's timezone ID.
    * @param modifiedEvent The event to be modified.
@@ -167,8 +202,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
 
     for (CalendarEvent event: eventsToBeAdded) {
       SingleEvent modifiedEvent = new SingleEvent((SingleEvent) event);
-      modifyEventHelper(targetCalendarObject.timeZone, modifiedEvent, targetDateTime);
-      targetCalendarObject.events.add(modifiedEvent);
+      AddEventToTargetCalendar(targetCalendarObject, modifiedEvent, targetDateTime);
     }
   }
 
@@ -208,8 +242,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
       SingleEvent modifiedEvent = new SingleEvent((SingleEvent) event);
       LocalDateTime newStartDateTime = LocalDateTime.of(targetDate,
               modifiedEvent.startDateTime.toLocalTime());
-      modifyEventHelper(targetCalendarObject.timeZone, modifiedEvent, newStartDateTime);
-      targetCalendarObject.events.add(modifiedEvent);
+      AddEventToTargetCalendar(targetCalendarObject, modifiedEvent, newStartDateTime);
     }
   }
 
@@ -254,8 +287,7 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
       LocalDateTime newStartDateTime = LocalDateTime.of(targetDate,
                       modifiedEvent.startDateTime.toLocalTime())
               .plusDays(ChronoUnit.DAYS.between(copyDateStart, event.startDateTime.toLocalDate()));
-      modifyEventHelper(targetCalendarObject.timeZone, modifiedEvent, newStartDateTime);
-      targetCalendarObject.events.add(modifiedEvent);
+      AddEventToTargetCalendar(targetCalendarObject, modifiedEvent, newStartDateTime);
     }
   }
 
