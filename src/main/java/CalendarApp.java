@@ -40,15 +40,14 @@ public class CalendarApp {
       }
       else if (mode.equals("interactive")) {
         view.displayMessage("Interactive mode on. Type 'exit' to quit");
-        try {
           while (true) {
-            String command = view.getInput();
-            controller.processCommand(command);
+            try {
+              String command = view.getInput();
+              controller.processCommand(command);
+            }
+            catch (Exception e) {
+              view.displayMessage(e.getMessage());
           }
-        }
-        catch (Exception e) {
-          view.displayMessage(e.getMessage());
-          controller.processCommand("exit");
         }
       }
       else if (mode.equals("headless")) {
