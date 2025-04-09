@@ -55,21 +55,25 @@ public class SwingView extends UserView {
     navigationPanel.add(monthYearLabel, BorderLayout.CENTER);
     navigationPanel.add(nextButton, BorderLayout.EAST);
 
-    JPanel managementPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+    JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
     calendarComboBox = new JComboBox<>();
     updateCalendarComboBox();
     createCalendarButton = new JButton("Create Calendar");
-    newEventButton = new JButton("New Event");
-    editCalendarButton = new JButton("Edit Calendar");
+    leftPanel.add(new JLabel("Select Calendar:"));
+    leftPanel.add(calendarComboBox);
+    leftPanel.add(createCalendarButton);
+
+    JPanel rightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+    newEventButton = new JButton("Create Event");
     showEventsButton = new JButton("Show Events");
-    editAcrossEventsButton = new JButton("Edit Across Events");
-    managementPanel.add(new JLabel("Select Calendar:"));
-    managementPanel.add(calendarComboBox);
-    managementPanel.add(createCalendarButton);
-    managementPanel.add(newEventButton);
-    managementPanel.add(editCalendarButton);
-    managementPanel.add(showEventsButton);
-    managementPanel.add(editAcrossEventsButton);
+    editAcrossEventsButton = new JButton("Edit Across Calendar");
+    rightPanel.add(newEventButton);
+    rightPanel.add(showEventsButton);
+    rightPanel.add(editAcrossEventsButton);
+
+    JPanel managementPanel = new JPanel(new BorderLayout());
+    managementPanel.add(leftPanel, BorderLayout.WEST);
+    managementPanel.add(rightPanel, BorderLayout.EAST);
 
     JPanel combinedTopPanel = new JPanel(new BorderLayout());
     combinedTopPanel.add(navigationPanel, BorderLayout.NORTH);
@@ -85,6 +89,8 @@ public class SwingView extends UserView {
 
     // ---------- Bottom Panel ----------
     bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+    editCalendarButton = new JButton("Edit Calendar");
+    bottomPanel.add(editCalendarButton);
     bottomLabel = new JLabel("Calendar: " + controller.getActiveCalendarName() +
             " | Timezone: " + controller.getActiveCalendarTimeZone());
     exportCalendarButton = new JButton("Export Calendar");
