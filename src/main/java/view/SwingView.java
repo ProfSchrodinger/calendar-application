@@ -23,9 +23,10 @@ public class SwingView extends UserView {
   private JButton createCalendarButton;
   private JButton newEventButton;
   private JButton editCalendarButton;
-  private JButton editAcrossCalendarButton; // New Edit Across Calendar button
   private JButton showEventsButton;
   private JButton exportCalendarButton;
+  private JButton importCalendarButton;
+  private JButton editAcrossEventsButton;  // New "Edit Across Events" button
   private CalendarController controller;
   private LocalDate currentDate;
 
@@ -60,15 +61,15 @@ public class SwingView extends UserView {
     createCalendarButton = new JButton("Create Calendar");
     newEventButton = new JButton("New Event");
     editCalendarButton = new JButton("Edit Calendar");
-    editAcrossCalendarButton = new JButton("Edit Across Calendar"); // New button
     showEventsButton = new JButton("Show Events");
+    editAcrossEventsButton = new JButton("Edit Across Events");
     managementPanel.add(new JLabel("Select Calendar:"));
     managementPanel.add(calendarComboBox);
     managementPanel.add(createCalendarButton);
     managementPanel.add(newEventButton);
     managementPanel.add(editCalendarButton);
-    managementPanel.add(editAcrossCalendarButton);
     managementPanel.add(showEventsButton);
+    managementPanel.add(editAcrossEventsButton);
 
     JPanel combinedTopPanel = new JPanel(new BorderLayout());
     combinedTopPanel.add(navigationPanel, BorderLayout.NORTH);
@@ -87,11 +88,14 @@ public class SwingView extends UserView {
     bottomLabel = new JLabel("Calendar: " + controller.getActiveCalendarName() +
             " | Timezone: " + controller.getActiveCalendarTimeZone());
     exportCalendarButton = new JButton("Export Calendar");
+    importCalendarButton = new JButton("Import Calendar");
     bottomPanel.add(bottomLabel);
     bottomPanel.add(exportCalendarButton);
+    bottomPanel.add(importCalendarButton);
     frame.add(bottomPanel, BorderLayout.SOUTH);
 
     // ---------- Action Listeners ----------
+
     prevButton.addActionListener(e -> {
       currentDate = currentDate.minusMonths(1);
       updateMonthYearLabel();
@@ -164,31 +168,6 @@ public class SwingView extends UserView {
         } catch (Exception ex) {
           JOptionPane.showMessageDialog(frame, "Error updating calendar: " + ex.getMessage());
         }
-      }
-    });
-
-    // New Edit Across Calendar button listener
-    editAcrossCalendarButton.addActionListener(e -> {
-      String eventName = JOptionPane.showInputDialog(frame, "Enter event name to edit across calendar:");
-      if (eventName == null || eventName.trim().isEmpty()) return;
-      Object[] propOptions = {"subject", "startDateTime", "endDateTime", "description", "location", "isPublic"};
-      String property = (String) JOptionPane.showInputDialog(frame,
-              "Select property to edit:",
-              "Edit Across Calendar",
-              JOptionPane.QUESTION_MESSAGE,
-              null,
-              propOptions,
-              propOptions[0]);
-      if (property == null || property.trim().isEmpty()) return;
-      String newValue = JOptionPane.showInputDialog(frame, "Enter new value for " + property + ":");
-      if (newValue == null || newValue.trim().isEmpty()) return;
-      String command = "edit events " + property + " " + eventName + " " + newValue;
-      try {
-        controller.processCommand(command);
-        JOptionPane.showMessageDialog(frame, "Events updated successfully across calendar.");
-        drawMonthView();
-      } catch (Exception ex) {
-        JOptionPane.showMessageDialog(frame, "Error editing events across calendar: " + ex.getMessage());
       }
     });
 
@@ -300,6 +279,7 @@ public class SwingView extends UserView {
       }
     });
 
+    // ---------- Show Events Button Listener ----------
     showEventsButton.addActionListener(e -> {
       String startStr = JOptionPane.showInputDialog(frame, "Enter start datetime (yyyy-MM-dd'T'HH:mm):");
       if (startStr == null || startStr.trim().isEmpty()) return;
@@ -317,6 +297,7 @@ public class SwingView extends UserView {
       }
     });
 
+    // ---------- Export Calendar Button Listener ----------
     exportCalendarButton.addActionListener(e -> {
       String activeName = controller.getActiveCalendarName();
       String fileName = activeName + "Events.csv";
@@ -325,6 +306,45 @@ public class SwingView extends UserView {
         JOptionPane.showMessageDialog(frame, "Export successful. File created as: " + fileName);
       } catch (Exception ex) {
         JOptionPane.showMessageDialog(frame, "Error exporting calendar: " + ex.getMessage());
+      }
+    });
+
+    // ---------- Import Calendar Button Listener ----------
+    importCalendarButton.addActionListener(e -> {
+      String filePath = JOptionPane.showInputDialog(frame, "Enter absolute path to CSV file:");
+      if (filePath == null || filePath.trim().isEmpty()) return;
+      try {
+        controller.processCommand("import cal " + filePath);
+        JOptionPane.showMessageDialog(frame, "Import successful.");
+        drawMonthView();
+      }
+      catch (Exception ex) {
+        JOptionPane.showMessageDialog(frame, "Error importing calendar: " + ex.getMessage());
+      }
+    });
+
+    // ---------- Edit Across Events Button Listener ----------
+    editAcrossEventsButton.addActionListener(e -> {
+      String eventName = JOptionPane.showInputDialog(frame, "Enter event name to edit across calendar:");
+      if (eventName == null || eventName.trim().isEmpty()) return;
+      Object[] propOptions = {"subject", "startDateTime", "endDateTime", "description", "location", "isPublic"};
+      String property = (String) JOptionPane.showInputDialog(frame,
+              "Select property to edit:",
+              "Edit Across Events",
+              JOptionPane.QUESTION_MESSAGE,
+              null,
+              propOptions,
+              propOptions[0]);
+      if (property == null || property.trim().isEmpty()) return;
+      String newValue = JOptionPane.showInputDialog(frame, "Enter new value for " + property + ":");
+      if (newValue == null || newValue.trim().isEmpty()) return;
+      String command = "edit events " + property + " " + eventName + " " + newValue;
+      try {
+        controller.processCommand(command);
+        JOptionPane.showMessageDialog(frame, "Events updated successfully.");
+        drawMonthView();
+      } catch (Exception ex) {
+        JOptionPane.showMessageDialog(frame, "Error updating events: " + ex.getMessage());
       }
     });
 

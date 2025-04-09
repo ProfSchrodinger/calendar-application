@@ -402,17 +402,37 @@ public class CalendarManager implements ICalendarModel, ICalendarManager {
     return currentCalendar.exportCalendar();
   }
 
+  /**
+   * Function to get the list of calendars created.
+   * @return The list of calendars available.
+   */
+
   public List<String> getCalendarNames() {
     return new ArrayList<>(calendars.keySet());
   }
+
+  /**
+   * Function to get the current calendar's name.
+   * @return The current calendar's name.
+   */
 
   public String getActiveCalendarName() {
     return currentCalendar.calendarName;
   }
 
+  /**
+   * Function to get the current calendar's timezone.
+   * @return The current calendar's timezone.
+   */
+
   public String getActiveCalendarTimeZone() {
     return currentCalendar.timeZone.getId();
   }
+
+  /**
+   * Function to get the current calendar's color.
+   * @return The current calendar's color.
+   */
 
   public Color getActiveCalendarColor() {
     return currentCalendar.calendarColor;

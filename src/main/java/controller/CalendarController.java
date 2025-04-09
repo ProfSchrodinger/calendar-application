@@ -4,6 +4,7 @@ import java.awt.*;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import model.CalendarManager;
 import model.RecurringEvent;
 import model.SingleEvent;
 import utilities.CSVExporter;
+import utilities.CSVImporter;
 import view.ConsoleView;
 import view.UserView;
 
@@ -113,6 +115,10 @@ public class CalendarController {
         processCopyEvents(command);
          view.displayMessage("Command processed: " + command);
       }
+      else if (command.startsWith("import cal")) {
+        processImport(command);
+        view.displayMessage("Import completed successfully.");
+      }
       else {
         throw new InvalidCommandException("Invalid command");
       }
@@ -121,7 +127,7 @@ public class CalendarController {
       throw e;
     }
     catch (Exception e) {
-      throw new InvalidCommandException("Invalid command");
+      throw new InvalidCommandException("Invalid command" + e.getMessage());
     }
   }
 
@@ -784,25 +790,112 @@ public class CalendarController {
     }
   }
 
+  /**
+   * Processes the import events from a CSV file to the calendar system.
+   * @param command The command used.
+   */
+
+  private void processImport(String command) {
+    List<String> tokens = extractDataFromCommand(command);
+
+    if (tokens.size() != 3) {
+      throw new InvalidCommandException("Invalid command. Use: import cal <absoluteFilePath>");
+    }
+
+    String filePath = tokens.get(2);
+    CSVImporter importer = new CSVImporter();
+    List<List> importedEvents = importer.importEvents(filePath);
+
+    for (List eventDetails : importedEvents) {
+      String subject = (String) eventDetails.get(0);
+      LocalDate startDate = (LocalDate) eventDetails.get(1);
+      LocalTime startTime = (LocalTime) eventDetails.get(2);
+      LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
+      LocalDateTime endDateTime;
+
+      if (eventDetails.get(3) instanceof LocalDate && eventDetails.get(4) instanceof LocalTime) {
+        LocalDate endDate = (LocalDate) eventDetails.get(3);
+        LocalTime endTime = (LocalTime) eventDetails.get(4);
+        endDateTime = LocalDateTime.of(endDate, endTime);
+      }
+      else {
+        endDateTime = LocalDateTime.of(startDate.plusDays(1),
+                LocalTime.of(0, 0));
+      }
+
+      String description = eventDetails.get(5) != null ? eventDetails.get(5).toString() : "";
+      String location = eventDetails.get(6) != null ? eventDetails.get(6).toString() : "";
+      boolean isPrivate = false;
+      if (eventDetails.get(7) != null && !eventDetails.get(7).toString().isEmpty()) {
+        isPrivate = Boolean.parseBoolean(eventDetails.get(7).toString());
+      }
+      boolean isPublic = !isPrivate;
+
+      try {
+        model.createSingleEvent(new model.SingleEvent(subject, startDateTime,
+                endDateTime, description, location, isPublic));
+      }
+      catch (EventConflictException e) {
+        System.out.println("Conflict for event occurred for \"" + subject +".");
+      }
+      catch (InvalidCommandException e) {
+        System.out.println("Invalid event data for \"" + subject + "\".");
+      }
+    }
+  }
+
+  /**
+   * Function to get the list on events on a particular date (Swing view).
+   * @param date The date for which the list of events are to be collected.
+   * @return List of list containing the events to be displayed.
+   */
+
   public List<List> getEventsOn(LocalDate date) {
     return model.getEventsOn(date);
   }
+
+  /**
+   * Function to get the list on events between 2 dates (Swing view).
+   * @param startDate The start date.
+   * @param endDate The end date.
+   * @return List of list containing the events to be displayed.
+   */
 
   public List<List> getEventsBetween(LocalDateTime startDate, LocalDateTime endDate) {
     return model.getEventsBetween(startDate, endDate);
   }
 
+  /**
+   * Function to get the list of calendars created.
+   * @return The list of calendars available.
+   */
+
   public List<String> getCalendarNames() {
     return model.getCalendarNames();
   }
+
+  /**
+   * Function to get the current calendar's name.
+   * @return The current calendar's name.
+   */
 
   public String getActiveCalendarName() {
     return model.getActiveCalendarName();
   }
 
+  /**
+   * Function to get the current calendar's timezone.
+   * @return The current calendar's timezone.
+   */
+
   public String getActiveCalendarTimeZone() {
     return model.getActiveCalendarTimeZone();
   }
+
+  /**
+   * Function to get the current calendar's color.
+   * @return The current calendar's color.
+   */
 
   public Color getActiveCalendarColor() {
     return model.getActiveCalendarColor();
