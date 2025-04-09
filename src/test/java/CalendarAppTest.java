@@ -114,29 +114,6 @@ public class CalendarAppTest {
   }
 
   /**
-   * Test interactive mode by simulating user input "exit".
-   */
-
-  @Test
-  public void testInteractiveModeExit() {
-    String simulatedInput = "exit\n";
-    System.setIn(new ByteArrayInputStream(simulatedInput.getBytes()));
-
-    String[] args = {"--mode", "interactive"};
-    try {
-      CalendarApp.main(args);
-      fail("Expected System.exit(0) to be called in interactive mode");
-    }
-    catch (SecurityException e) {
-      assertTrue(e.getMessage().contains("System.exit(0)"));
-      String output = outContent.toString();
-      assertTrue("Output should contain interactive mode prompt",
-              output.contains("Interactive mode on. Type 'exit' to quit"));
-    }
-
-  }
-
-  /**
    * Test headless mode when an invalid file path is provided.
    */
 

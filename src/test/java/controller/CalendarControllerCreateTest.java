@@ -858,4 +858,11 @@ public class CalendarControllerCreateTest {
       throw e;
     }
   }
+
+  @Test
+  public void exportCalendar() throws Exception {
+    controller.processCommand("create event Meeting1 on 2025-03-10T10:00");
+    Assert.assertEquals("[[Meeting1, 2025-03-10, 10:00, 2025-03-11, 00:00, , , true]]",
+            controller.model.exportCalendar().toString());
+  }
 }

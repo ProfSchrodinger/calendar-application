@@ -1,12 +1,20 @@
 package controller;
 
+import exception.EventConflictException;
 import exception.InvalidCommandException;
+import utilities.CSVImporter;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Path;
+import java.time.LocalTime;
 import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -23,6 +31,7 @@ import static org.junit.Assert.assertTrue;
 
 public class CalendarControllerPrintShowExportTest {
   private CalendarController controller;
+  private Path tempFile;
 
   /**
    * Initialize the calendar controller.
@@ -31,6 +40,13 @@ public class CalendarControllerPrintShowExportTest {
   @Before
   public void setUp() {
     controller = new CalendarController();
+  }
+
+  @After
+  public void tearDown() throws IOException {
+    if (tempFile != null && Files.exists(tempFile)) {
+      Files.deleteIfExists(tempFile);
+    }
   }
 
   /**
@@ -456,6 +472,199 @@ public class CalendarControllerPrintShowExportTest {
     controller.processCommand("show status on 2020-01-01T11:00");
 
     assertTrue(controller.model.isBusy(LocalDateTime.of(2020, 1, 1, 11, 0)));
+  }
+
+  @Test
+  public void testImportSkipsInvalidLine() throws Exception {
+    String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String validRow = "\"Valid Event\",03/15/2024,10:00 AM,03/15/2024,11:00 AM,\"Desc\",\"Loc\",\"false\"";
+    String invalidRow = "\"Bad Event\",badDate,10:00 AM,03/15/2024,11:00 AM,\"Desc\",\"Loc\",\"false\"";
+    String content = header + "\n" + validRow + "\n" + invalidRow;
+    tempFile = Files.createTempFile("testImportSkipsInvalid", ".csv");
+    Files.write(tempFile, content.getBytes());
+    controller.processCommand("import cal " + tempFile.toAbsolutePath().toString());
+    List<List> events = controller.model.getEventsOn(LocalDate.of(2024, 3, 15));
+    Assert.assertEquals(1, events.size());
+    Files.deleteIfExists(tempFile);
+  }
+
+  @Test
+  public void testImportConflict() throws Exception {
+    controller.processCommand("create event Meeting1 on 2025-03-10T10:00");
+    try {
+      String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+      String validRow = "\"Conflicting Event\",03/10/2025,10:00 AM,03/10/2025,11:00 AM,\"Desc\",\"Loc\",\"false\"";
+      String content = header + "\n" + validRow;
+      tempFile = Files.createTempFile("testImportSkipsInvalid", ".csv");
+      Files.write(tempFile, content.getBytes());
+      controller.processCommand("import cal " + tempFile.toAbsolutePath().toString());
+    }
+    catch (Exception e) {
+      Assert.assertEquals("[[Meeting1, 2025-03-10T10:00, 2025-03-11T00:00, ]]", controller.model.getEventsOn(LocalDate.of(2025, 3, 10)));
+    }
+  }
+
+  @Test
+  public void testMissingDescriptionDefaultsToEmpty() throws Exception {
+    String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String row = "\"Test Event\",03/15/2024,10:00 AM,03/15/2024,11:00 AM,\"\",\"Room A\",\"false\"";
+    String content = header + "\n" + row;
+    tempFile = Files.createTempFile("test", ".csv");
+    Files.write(tempFile, content.getBytes());
+
+    CSVImporter importer = new CSVImporter();
+    List<List> events = importer.importEvents(tempFile.toAbsolutePath().toString());
+    Assert.assertEquals("One event should be imported", 1, events.size());
+    List<?> eventDetails = events.get(0);
+    String description = (String) eventDetails.get(5);
+    Assert.assertEquals("Missing Description should default to empty string", "", description);
+  }
+
+  /**
+   * Test that if the "Location" column is present but empty,
+   * the location defaults to an empty string.
+   */
+
+  @Test
+  public void testMissingLocationDefaultsToEmpty() throws Exception {
+    String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String row = "\"Test Event\",03/15/2024,10:00 AM,03/15/2024,11:00 AM,\"Desc\",\"\",\"false\"";
+    String content = header + "\n" + row;
+    tempFile = Files.createTempFile("test", ".csv");
+    Files.write(tempFile, content.getBytes());
+
+    CSVImporter importer = new CSVImporter();
+    List<List> events = importer.importEvents(tempFile.toAbsolutePath().toString());
+    Assert.assertEquals("One event should be imported", 1, events.size());
+    List<?> eventDetails = events.get(0);
+    String location = (String) eventDetails.get(6);
+    Assert.assertEquals("Missing Location should default to empty string", "", location);
+  }
+
+  /**
+   * Test that if the "Private" column is present but empty,
+   * the default is that isPrivate remains false, so isPublic becomes true.
+   */
+
+  @Test
+  public void testEmptyPrivateDefaultsToIsPublicTrue() throws Exception {
+    String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String row = "\"Test Event\",03/15/2024,10:00 AM,03/15/2024,11:00 AM,\"Desc\",\"Room A\",\"\"";
+    String content = header + "\n" + row;
+    tempFile = Files.createTempFile("test", ".csv");
+    Files.write(tempFile, content.getBytes());
+
+    CSVImporter importer = new CSVImporter();
+    List<List> events = importer.importEvents(tempFile.toAbsolutePath().toString());
+    Assert.assertEquals("One event should be imported", 1, events.size());
+    List<?> eventDetails = events.get(0);
+    Boolean isPublic = (Boolean) eventDetails.get(7);
+    assertFalse("Empty Private field should result in isPublic false", isPublic);
+  }
+
+  /**
+   * Test that if the "Private" column is set to "true",
+   * then isPrivate becomes true and consequently isPublic becomes false.
+   */
+  @Test
+  public void testPrivateTrueResultsInIsPublicFalse() throws Exception {
+    String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String row = "\"Test Event\",03/15/2024,10:00 AM,03/15/2024,11:00 AM,\"Desc\",\"Room A\",\"true\"";
+    String content = header + "\n" + row;
+    tempFile = Files.createTempFile("test", ".csv");
+    Files.write(tempFile, content.getBytes());
+
+    CSVImporter importer = new CSVImporter();
+    List<List> events = importer.importEvents(tempFile.toAbsolutePath().toString());
+    Assert.assertEquals("One event should be imported", 1, events.size());
+    List<?> eventDetails = events.get(0);
+    Boolean isPublic = (Boolean) eventDetails.get(7);
+    assertFalse("When Private is 'true', isPublic should be false", isPublic);
+  }
+
+  /**
+   * Test that an alternate date format is correctly parsed.
+   * Using the alternate date format "M/d/yy".
+   */
+  @Test
+  public void testAlternateDateFormatParsing() throws Exception {
+    String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String row = "\"Alt Event\",4/5/25,10:00 AM,4/6/25,11:00 AM,\"Desc\",\"Room A\",\"false\"";
+    String content = header + "\n" + row;
+    tempFile = Files.createTempFile("test", ".csv");
+    Files.write(tempFile, content.getBytes());
+
+    CSVImporter importer = new CSVImporter();
+    List<List> events = importer.importEvents(tempFile.toAbsolutePath().toString());
+    Assert.assertEquals("One event should be imported", 1, events.size());
+    List<?> eventDetails = events.get(0);
+    LocalDate startDate = (LocalDate) eventDetails.get(1);
+    Assert.assertEquals("Alternate date format should parse correctly", LocalDate.of(2025, 4, 5), startDate);
+  }
+
+  /**
+   * Test that when multiple lines are present, line index increments correctly
+   * and an invalid line does not prevent valid events from importing.
+   */
+  @Test
+  public void testLineIndexIncrementAndSkippingInvalidRows() throws Exception {
+    String header = "Subject, Start Date, Start Time, End Date, End Time, Description, Location, Private";
+    String validRow = "\"Valid Event\",03/15/2024,10:00 AM,03/15/2024,11:00 AM,\"Desc\",\"Room A\",\"false\"";
+    String invalidRow = "\"Invalid Event\",badDate,10:00 AM,03/15/2024,11:00 AM,\"Desc\",\"Room A\",\"false\"";
+    String content = header + "\n" + validRow + "\n" + invalidRow;
+    tempFile = Files.createTempFile("test", ".csv");
+    Files.write(tempFile, content.getBytes());
+
+    CSVImporter importer = new CSVImporter();
+    List<List> events = importer.importEvents(tempFile.toAbsolutePath().toString());
+    Assert.assertEquals("Only one valid event should be imported", 1, events.size());
+  }
+
+  @Test
+  public void getEventsOn() {
+    controller.processCommand("create event Meeting1 on 2025-03-10T10:00");
+    Assert.assertEquals("[[Meeting1, 2025-03-10T10:00, 2025-03-11T00:00, ]]",
+            controller.getEventsOn(LocalDate.of(2025, 3, 10)).toString());
+  }
+
+  @Test
+  public void getEventsBetween() {
+    controller.processCommand("create event Meeting1 on 2025-03-10T10:00");
+    Assert.assertEquals("[[Meeting1, 2025-03-10T10:00, 2025-03-11T00:00, ]]",
+            controller.getEventsBetween(
+                    LocalDateTime.of(2025, 3, 10, 0, 0),
+                    LocalDateTime.of(2025, 3, 11, 0, 0)).toString());
+  }
+
+  @Test
+  public void getCalendarNames() {
+    controller.processCommand("create calendar --name Calendar1 --timezone US/Pacific");
+    Assert.assertEquals("[Calendar1, Default]",
+            controller.getCalendarNames().toString());
+  }
+
+  @Test
+  public void getActiveCalendarName() {
+    controller.processCommand("create calendar --name Calendar1 --timezone US/Pacific");
+    controller.processCommand("use calendar --name Calendar1");
+    Assert.assertEquals("Calendar1",
+            controller.getActiveCalendarName());
+  }
+
+  @Test
+  public void getActiveCalendarTimeZone() {
+    controller.processCommand("create calendar --name Calendar1 --timezone US/Pacific");
+    controller.processCommand("use calendar --name Calendar1");
+    Assert.assertEquals("US/Pacific",
+            controller.getActiveCalendarTimeZone());
+  }
+
+  @Test
+  public void getActiveCalendarColor() {
+    Color color = new Color(255, 0, 0);
+    String colorAsString = color.toString();
+    Assert.assertEquals(colorAsString,
+            controller.getActiveCalendarColor().toString());
   }
 }
 

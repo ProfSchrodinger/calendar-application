@@ -127,7 +127,7 @@ public class CalendarController {
       throw e;
     }
     catch (Exception e) {
-      throw new InvalidCommandException("Invalid command" + e.getMessage());
+      throw new InvalidCommandException("Invalid command");
     }
   }
 
@@ -813,15 +813,9 @@ public class CalendarController {
       LocalDateTime startDateTime = LocalDateTime.of(startDate, startTime);
       LocalDateTime endDateTime;
 
-      if (eventDetails.get(3) instanceof LocalDate && eventDetails.get(4) instanceof LocalTime) {
-        LocalDate endDate = (LocalDate) eventDetails.get(3);
-        LocalTime endTime = (LocalTime) eventDetails.get(4);
-        endDateTime = LocalDateTime.of(endDate, endTime);
-      }
-      else {
-        endDateTime = LocalDateTime.of(startDate.plusDays(1),
-                LocalTime.of(0, 0));
-      }
+      LocalDate endDate = (LocalDate) eventDetails.get(3);
+      LocalTime endTime = (LocalTime) eventDetails.get(4);
+      endDateTime = LocalDateTime.of(endDate, endTime);
 
       String description = eventDetails.get(5) != null ? eventDetails.get(5).toString() : "";
       String location = eventDetails.get(6) != null ? eventDetails.get(6).toString() : "";
@@ -836,10 +830,10 @@ public class CalendarController {
                 endDateTime, description, location, isPublic));
       }
       catch (EventConflictException e) {
-        System.out.println("Conflict for event occurred for \"" + subject +".");
+        System.out.println("Conflict for event occurred for " + subject);
       }
       catch (InvalidCommandException e) {
-        System.out.println("Invalid event data for \"" + subject + "\".");
+        System.out.println("Invalid event data for " + subject);
       }
     }
   }
